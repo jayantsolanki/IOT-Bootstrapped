@@ -6,7 +6,7 @@
 *This is the valve control page of the website, which will basically show the maunal control options
 *for different sensors
 */
-include_once 'iotdb.php';
+include_once 'settings/iotdb.php';
 
 ?>
 <!DOCTYPE html>
@@ -30,7 +30,7 @@ include_once 'iotdb.php';
 
     <!-- Custom CSS -->
     <link href="../dist/css/sb-admin-2.css" rel="stylesheet">
-
+    <link rel="stylesheet" href="../dist/css/bootstrap-switch.min.css">
     <!-- Custom Fonts -->
     <link href="../bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
@@ -45,7 +45,7 @@ include_once 'iotdb.php';
     </noscript>
 </head>
 
-<body>
+<body onload='showgrp(1)'>
 
     <div id="wrapper">
 
@@ -57,41 +57,49 @@ include_once 'iotdb.php';
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-12">
-                        <h1 class="page-header">IOT Based Valve control</h1>
+                        <h1 class="page-header text-center">IOT Based Valve control</h1>
                     </div>
                     <!-- /.col-lg-12 -->
                 </div>
                 <div class="row">
                     <div class="header" >
-                      <h2>Valve Controls</h2>
+                      <h2 class="text-center">Valve Controls</h2>
                     </div>
-                        <div class="content">
-
-                            <b>Select group </b><select name='groups' id='groups' onchange='showgrp(this.value)'>
-                            <option selected="true" disabled='disabled'>Choose</option>
-                            <?php 
-                            mysql_select_db($dbname) or die(mysql_error());
-                            $query="SELECT * FROM groups"; //displaying groups
-                            $results=mysql_query($query);
-                            if (mysql_num_rows($results) > 0) 
-                                {       
-                                    while($row=mysql_fetch_assoc($results)) 
-                                    {   //$id=$row['id'];
-                                        $group=$row['name'];
-                                        $id=$row['id'];
-                                        echo "<option value='$id'>$group</option>";
+                      <div class=" col-md-6 content">
+                        <label class="text text-info">Select group</label>
+                        <div class="row">
+                            <div class="col-md-4 btn-group">
+                            <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange='showgrp(this.value)'>
+                              Choose <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                              <?php 
+                                mysql_select_db($dbname) or die(mysql_error());
+                                $query="SELECT * FROM groups"; //displaying groups
+                                $results=mysql_query($query);
+                                if (mysql_num_rows($results) > 0) 
+                                    {       
+                                        while($row=mysql_fetch_assoc($results)) 
+                                        {   //$id=$row['id'];
+                                            $group=$row['name'];
+                                            $id=$row['id'];
+                                            echo "<li class='text-center list-group-item'><a href='javascript:showgrp($id)'>$group</a></li>";
+                                        }
                                     }
-                                }
-                            ?>
-                            </select>&nbsp; &nbsp;</br></br>
-                            <div id='controls'>
+                                ?>
+                            </ul>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <hr>
+                          <div class="col-md-6" id='controls'>
 
-                            </div>
+                          </div>
+                         </div>
 
-                        </div><!-- end of content div -->
+                      </div><!-- end of content div -->
                         
-                    </div><!-- end of main div -->
-                </div>
+                    </div>
                 <!-- /.row -->
 
             </div>
@@ -119,6 +127,7 @@ include_once 'iotdb.php';
 
     <!-- Custom Theme JavaScript -->
     <script src="../dist/js/sb-admin-2.js"></script>
+    <script src="../dist/js/bootstrap-switch.min.js"></script>
     <script type='text/javascript'>
 /*
  *
@@ -154,6 +163,11 @@ xmlhttp.onreadystatechange=function()
   if (xmlhttp.readyState==4 && xmlhttp.status==200)
     {
     document.getElementById('controls').innerHTML=xmlhttp.responseText;
+        $('.BSswitch').bootstrapSwitch('state') //loading buttons
+          $('#TheCheckBox').on('switchChange.bootstrapSwitch', function () {
+            //var mac=$('#TheCheckBox').val();
+            update($('#TheCheckBox').val());
+        });
     }
   }
 xmlhttp.open('GET','control.php?grp='+grp,true);
@@ -173,6 +187,7 @@ xmlhttp.send();
  */
 function update(str)
 {
+ // alert(str);
 var duration=document.getElementById('duration').value;
 //alert(duration);
 if (window.XMLHttpRequest)
@@ -248,6 +263,12 @@ xmlhttp.onreadystatechange=function()
 xmlhttp.open('GET','com.php?q='+str+'&gid='+gid+'&duration='+duration,true);
 xmlhttp.send();
 }
+</script>
+<script type="text/javascript">
+$('.BSswitch').bootstrapSwitch('state')
+$('#TheCheckBox').on('switchChange.bootstrapSwitch', function () {
+  alert(2);
+  });
 </script>
 
 </body>

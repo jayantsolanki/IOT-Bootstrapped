@@ -5,7 +5,7 @@
 *Author: Jayant Solanki
 *This is the sensor data page of the website, which will basically show graphical view of the data gathered from various sensors
 */
-include_once 'iotdb.php';
+include_once 'settings/iotdb.php';
 
 ?>
 <!DOCTYPE html>

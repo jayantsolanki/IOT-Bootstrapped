@@ -1,8 +1,21 @@
-<div class="navbar navbar-default navbar-fixed-bottom">
-    <div class="container">
+ <style>
+ body 
+    .navbar-transparent {
+        background: none;
+    }
+
+    .navbar-transparent{
+        background: rgba(184, 187, 188, 0.26)!important;
+    }
+
+    }
+</style>
+<div class="navbar navbar-default navbar-fixed-bottom navbar-transparent">
+
       <p class="navbar-text pull-left">© 2016 - Site Built By Jay
-           <p class="text-center"><a href="index.php">Greenhouse-IOT</a></p>
+           <p class=" navbar-text pull-right"><a href="index.php">Greenhouse-IOT- </a>(c) IIT Bombay</p>
       </p>
       
-	</div>
+      
+	
 </div>

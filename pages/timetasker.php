@@ -6,7 +6,7 @@
 *Author: Jayant Solanki
 *It is called in ajax mode, performing time entries for tasks scheduled.
 */
-include_once 'iotdb.php';
+include_once 'settings/iotdb.php';
 mysql_select_db($dbname) or die(mysql_error());
 //echo "Hello".$_GET['stoph'];
 if(isset($_GET['grp']))

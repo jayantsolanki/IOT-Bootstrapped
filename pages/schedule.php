@@ -6,7 +6,7 @@
 *display options to user for time scheduling
 *options are, period, duration and frequency
 */
-include_once 'iotdb.php';?>
+include_once 'settings/iotdb.php';?>
 <?php
 date_default_timezone_set('Asia/Kolkata');//setting IST
 //echo "Time is ".date('Hi');?>
