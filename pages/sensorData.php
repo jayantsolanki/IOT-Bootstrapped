@@ -42,7 +42,7 @@ include_once 'settings/iotdb.php';
 
 </head>
 
-<body>
+<body onload='showgrp(1)'>
 
     <div id="wrapper">
 
@@ -57,6 +57,43 @@ include_once 'settings/iotdb.php';
                         <h1 class="page-header">Sensors Data</h1>
                     </div>
                     <!-- /.col-lg-12 -->
+                </div>
+                <div class="row">
+                    <div class=" col-md-12 content">
+                        <label class="text text-info">Select group</label>
+                        <div class="row">
+                            <div class="col-md-4 btn-group">
+                            <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+                              Click here <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                              <?php 
+                                mysql_select_db($dbname) or die(mysql_error());
+                                $query="SELECT * FROM groups"; //displaying groups
+                                $results=mysql_query($query);
+                                if (mysql_num_rows($results) > 0) 
+                                    {       
+                                        while($row=mysql_fetch_assoc($results)) 
+                                        {   //$id=$row['id'];
+                                            $group=$row['name'];
+                                            $id=$row['id'];
+                                            echo "<li class='text-center list-group-item'><a href='javascript:showgrp($id)'>$group</a></li>";
+                                        }
+                                    }
+                                ?>
+                            </ul>
+                          </div>
+                         <div class="well col-md-7 col-md-offset-1" id='charts'>
+                                    <cite>Select group and the device for the Chart</cite>
+                          </div>
+                         </div>
+                         <div class="row">
+                            <div class="well col-md-4" id='controls'>
+                                    <cite>Select group and the device for the Chart</cite>
+                          </div>
+                         </div>
+
+                      </div><!-- end of content div -->
                 </div>
                 <!-- /.row -->
             </div>
@@ -82,6 +119,53 @@ include_once 'settings/iotdb.php';
 
     <!-- Custom Theme JavaScript -->
     <script src="../dist/js/sb-admin-2.js"></script>
+    <script type='text/javascript'>
+        /*
+         *
+         * Function Name: showgrp(grp)
+         * Input: grp, stores group id
+         * Output: returns the sensors under the group id
+         * Logic: It is a AJAX call
+         * Example Call: showgrp(34)
+         *
+         */
+        function showgrp(grp)
+        {
+            
+        if (grp=='')
+          {
+          document.getElementById('controls').innerHTML='';
+          return;
+          } 
+        if (window.XMLHttpRequest)
+          {
+          xmlhttp=new XMLHttpRequest();
+          }
+        else
+          {
+          xmlhttp=new ActiveXObject('Microsoft.XMLHTTP');
+          }
+        xmlhttp.onreadystatechange=function()
+          {
+            if (xmlhttp.readyState==3 && xmlhttp.status==200)
+              {
+              document.getElementById('controls').innerHTML="<span class='push-5'><img src='images/ajax.gif'/></span>";
+              }
+          if (xmlhttp.readyState==4 && xmlhttp.status==200)
+            {
+            document.getElementById('controls').innerHTML=xmlhttp.responseText;
+                $('.BSswitch').bootstrapSwitch('state') //loading buttons
+                  $('#TheCheckBox').on('switchChange.bootstrapSwitch', function () {
+                    //var mac=$('#TheCheckBox').val();
+                    update($('#TheCheckBox').val());
+                });
+            }
+          }
+        xmlhttp.open('GET','sensors.php?grp='+grp,true);
+        //alert(grp);
+        xmlhttp.send();
+        }
+    </script>
 
 </body>
 
