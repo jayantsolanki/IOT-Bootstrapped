@@ -6,6 +6,7 @@
 *This is the valve control page of the website, which will basically show the maunal control options
 *for different sensors
 */
+session_start();
 include_once 'settings/iotdb.php';
 
 ?>

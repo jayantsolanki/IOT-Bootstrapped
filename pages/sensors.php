@@ -1,11 +1,11 @@
 <?php 
 /*
-*Project: eYSIP_2015_IoT-Connected-valves-for-irrigation-of-greenhouse
-*Team members: Jayant Solanki, Kevin D'Souza
-*File name: control.php
+*Project: IoT-Connected-valves-for-irrigation-of-greenhouse
+*File name: sensors.php
 *Author: Jayant Solanki
-*this is the page called in AJAX mode, displaying all the manual switch controls for esp modules
+*this is the page called in AJAX mode, displaying relevent devices graph
 */
+session_start();
 include_once 'settings/iotdb.php';
 error_reporting(-1); //for suppressing errors and notices
 
@@ -28,7 +28,7 @@ if(isset($_GET['grp']))
 	if (mysql_num_rows($results) > 0) 
 	{	$i=0;
 		
-		echo "<ol class='list-group'>";
+		echo "<table class='table table-striped'><tbody>";
 		while($row=mysql_fetch_assoc($results)) 
 		{	
 			$i++;
@@ -42,23 +42,16 @@ if(isset($_GET['grp']))
 			$sen=mysql_fetch_assoc($sens);
 			$sname=$sen['name'];
 			// getting feeds
-			if($type=='bthm'){
-
-			}
-			else if($type=='bthm'){
-				
-			}
-
-
 			echo "
-			<li class='list-group-item'><strong class='text text-info'>".$i.". $sname sensor: $name </strong>&nbsp; &nbsp;<strong class='text text-info'>Group:</b> $gname &nbsp;";
-			if($action=='OFF')
-				echo "<input id='TheCheckBox' type='checkbox' onclick='update(this.value)' data-off-text='OFF' data-on-text='ON' checked='true' class='BSswitch' value='$macid'></li>";
-			else
-				echo "<input id='TheCheckBox' type='checkbox' onclick='update(this.value)' data-off-text='OFF' data-on-text='ON' checked='false' class='BSswitch' value='$macid'></li>";
+			<tr>
+			<td ><strong class='text text-info'>".$i.". $sname Sensor: $name </strong>&nbsp; <strong class='text text-info'>Device Id:</strong> $macid</td>
+			<td ><button type='button' class='btn btn-primary' value=$macid onclick='showgraphBattery(this.value)'>Show graph</button>
+			</td>
+			</tr>";
+			
 		
 		}
-		echo "</ol>";
+		echo "</tbody></table>";
 	}
 	else
 	{

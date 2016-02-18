@@ -27,7 +27,7 @@ if(isset($_GET['grp']))
 
 	echo " <button id='1' type='button' onclick='updateall(this.value)' value='1'>Switch all ON</button>";
 	echo " <button id='0' type='button' onclick='updateall(this.value)' value='0'>Switch all OFF</button>";
-	echo "</br></br><label class=''>Duration:(mm)</span></br>";
+	echo "</br></br><label class=''>Duration:(mm)</label></br>";
 	echo "<div class='row'>";
 	echo "<div class='col-xs-5'>";
 	echo "Mins:<select class='form-control' id='duration' name='duration'>";
@@ -72,7 +72,7 @@ if(isset($_GET['grp']))
 				$status="<span class='label label-info'>New Device Found</span>";
 
 			echo "
-			<li class='list-group-item'><strong class='text text-info'>".$i.". $sname sensor: $name </strong>&nbsp; &nbsp;<strong class='text text-info'>Group:</b> $gname &nbsp;";
+			<li class='list-group-item'><strong class='text text-info'>".$i.". $sname sensor: $name </strong>&nbsp; &nbsp;<strong class='text text-info'>MacId:</b> $macid &nbsp;";
 			if($action=='OFF')
 				echo "<input id='TheCheckBox' type='checkbox' onclick='update(this.value)' data-off-text='OFF' data-on-text='ON' checked='true' class='BSswitch' value='$macid'></li>";
 			else
