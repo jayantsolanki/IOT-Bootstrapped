@@ -95,7 +95,7 @@ include_once 'settings/iotdb.php';
                             </div>
                             <div class="panel-body">
                                 <ul class="nav nav-tabs" role="tablist">
-                                    <li name='battery' role="presentation" class="active">
+                                    <li name='battery' role="presentation">
                                     <a id="batval" href="javascript:showgraphBattery('<?php echo $_SESSION['devId'];?>')">Battery</a></li>
                                     <li name="temperature" role="presentation">
                                     <a href="javascript:showgraphTemp('temperature')">Temperature</a></li>
@@ -333,8 +333,7 @@ include_once 'settings/iotdb.php';
                     "yAxisName": "Battery Value in mV",
                     "rotatevalues": "1",
                     "theme": "zune",
-                    "yAxisMaxValue": "3800",
-                    "setAdaptiveYMin": "0",
+                     "setAdaptiveYMin": "1",
                     "showValues": "1",
                     "drawAnchors": "1"
                   };   
@@ -388,11 +387,10 @@ include_once 'settings/iotdb.php';
             var chartProperties = {
                     "caption": "Temperature Value",
                     "xAxisName": "Time",
-                    "yAxisName": "Temperature Value in Celsius",
+                    "yAxisName": "Temperature in °C ",
                     "rotatevalues": "1",
                     "theme": "zune",
-                    "yAxisMaxValue": "55",
-                    "setAdaptiveYMin": "0",
+                    "setAdaptiveYMin": "1",
                     "showValues": "1",
                     "drawAnchors": "1"
                   };   
@@ -446,8 +444,7 @@ include_once 'settings/iotdb.php';
                         "yAxisName": "Humidity Value in mV",
                         "rotatevalues": "1",
                         "theme": "zune",
-                        "yAxisMaxValue": "150",
-                        "setAdaptiveYMin": "0",
+                        "setAdaptiveYMin": "1",
                         "showValues": "1",
                         "drawAnchors": "1"
                       };   
@@ -501,8 +498,7 @@ include_once 'settings/iotdb.php';
                         "yAxisName": "Moisture Value in #",
                         "rotatevalues": "1",
                         "theme": "zune",
-                        "yAxisMaxValue": "350",
-                        "setAdaptiveYMin": "0",
+                        "setAdaptiveYMin": "1",
                         "showValues": "1",
                         "drawAnchors": "1"
                       };   

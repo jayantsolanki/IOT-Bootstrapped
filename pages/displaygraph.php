@@ -18,11 +18,12 @@ if(isset($_GET['q']))
 	//echo $macid;
 	$_SESSION["devId"] = $macid;
 	$jsonArray = array();
-	if($type=='temperature'){//battery
+	if($type=='temperature'){//temperature
 
 		mysql_select_db($dbname) or die(mysql_error());
-		$query="SELECT * FROM feeds WHERE feeds.device_id='$macid'Order by id DESC limit 30"; //device id similar to macid
+		$query="(SELECT feeds.created_at ,avg(temp_value) as avg_value FROM feeds WHERE feeds.device_id= '$macid' GROUP BY DATE_FORMAT(created_at, '%H') order by created_at desc limit 24) order by created_at asc"; //device id similar to macid
 		$feeds=mysql_query($query);
+		//echo mysql_num_rows($feeds);
 		//initialize the array to store the processed data
 		
 		//check if there is any data returned by the SQL Query
@@ -31,11 +32,11 @@ if(isset($_GET['q']))
 		  //Converting the results into an associative array
 		  while($row=mysql_fetch_assoc($feeds)) {
 		    $jsonArrayItem = array();
-		   	$datetime = new DateTime($row['created_at']);
-		   	$mdhms = explode('-',$datetime->format('H'));
-		    $jsonArrayItem['label'] = $mdhms;
+		   /*	$datetime = new DateTime($row['created_at']);
+		   	$mdhms = explode('-',$datetime->format('H'));*/
+		    $jsonArrayItem['label'] = $row['created_at'];
 		    
-		    $jsonArrayItem['value'] = $row['temp_value'];
+		    $jsonArrayItem['value'] = $row['avg_value'];
 		    //append the above created object into the main array.
 		    array_push($jsonArray, $jsonArrayItem);
 		  }
@@ -45,7 +46,7 @@ if(isset($_GET['q']))
 	else if($type=='humidity'){
 
 		mysql_select_db($dbname) or die(mysql_error());
-		$query="SELECT * FROM feeds WHERE feeds.device_id='$macid'Order by id DESC limit 30"; //device id similar to macid
+		$query="(SELECT feeds.created_at ,avg(humidity_value) as avg_value FROM feeds WHERE feeds.device_id= '$macid' GROUP BY DATE_FORMAT(created_at, '%H') order by created_at desc limit 24) order by created_at asc"; //device id similar to macid
 		$feeds=mysql_query($query);
 		//initialize the array to store the processed data
 		
@@ -55,11 +56,11 @@ if(isset($_GET['q']))
 		  //Converting the results into an associative array
 		  while($row=mysql_fetch_assoc($feeds)) {
 		    $jsonArrayItem = array();
-		   	$datetime = new DateTime($row['created_at']);
-		   	$mdhms = explode('-',$datetime->format('H'));
-		    $jsonArrayItem['label'] = $mdhms;
+		   	/*	$datetime = new DateTime($row['created_at']);
+		   	$mdhms = explode('-',$datetime->format('H'));*/
+		    $jsonArrayItem['label'] = $row['created_at'];
 		    
-		    $jsonArrayItem['value'] = $row['humidity_value'];
+		    $jsonArrayItem['value'] = $row['avg_value'];
 		    //append the above created object into the main array.
 		    array_push($jsonArray, $jsonArrayItem);
 		  }
@@ -68,7 +69,7 @@ if(isset($_GET['q']))
 	else if($type=='moisture'){
 		
 		mysql_select_db($dbname) or die(mysql_error());
-		$query="SELECT * FROM feeds WHERE feeds.device_id='$macid'Order by id DESC limit 30"; //device id similar to macid
+		$query="(SELECT feeds.created_at ,avg(moist_value) as avg_value FROM feeds WHERE feeds.device_id= '$macid' GROUP BY DATE_FORMAT(created_at, '%H') order by created_at desc limit 24) order by created_at asc"; //device id similar to macid
 		$feeds=mysql_query($query);
 		//initialize the array to store the processed data
 		
@@ -78,11 +79,11 @@ if(isset($_GET['q']))
 		  //Converting the results into an associative array
 		  while($row=mysql_fetch_assoc($feeds)) {
 		    $jsonArrayItem = array();
-		   	$datetime = new DateTime($row['created_at']);
-		   	$mdhms = explode('-',$datetime->format('H'));
-		    $jsonArrayItem['label'] = $mdhms;
+		   	/*	$datetime = new DateTime($row['created_at']);
+		   	$mdhms = explode('-',$datetime->format('H'));*/
+		    $jsonArrayItem['label'] = $row['created_at'];
 		    
-		    $jsonArrayItem['value'] = $row['moist_value'];
+		    $jsonArrayItem['value'] = $row['avg_value'];
 		    //append the above created object into the main array.
 		    array_push($jsonArray, $jsonArrayItem);
 		  }
@@ -91,7 +92,7 @@ if(isset($_GET['q']))
 	else{//battery
 
 		mysql_select_db($dbname) or die(mysql_error());
-		$query="SELECT * FROM feeds WHERE feeds.device_id='$macid'Order by id DESC limit 30"; //device id similar to macid
+		$query="(SELECT feeds.created_at ,avg(battery_value) as avg_value FROM feeds WHERE feeds.device_id= '$macid' GROUP BY DATE_FORMAT(created_at, '%H') order by created_at desc limit 24) order by created_at asc"; //device id similar to macid
 		$feeds=mysql_query($query);
 		//initialize the array to store the processed data
 		
@@ -101,11 +102,11 @@ if(isset($_GET['q']))
 		  //Converting the results into an associative array
 		  while($row=mysql_fetch_assoc($feeds)) {
 		    $jsonArrayItem = array();
-		   	$datetime = new DateTime($row['created_at']);
-		   	$mdhms = explode('-',$datetime->format('H'));
-		    $jsonArrayItem['label'] = $mdhms;
+		   	/*	$datetime = new DateTime($row['created_at']);
+		   	$mdhms = explode('-',$datetime->format('H'));*/
+		    $jsonArrayItem['label'] = $row['created_at'];
 		    
-		    $jsonArrayItem['value'] = $row['battery_value'];
+		    $jsonArrayItem['value'] = $row['avg_value'];
 		    //append the above created object into the main array.
 		    array_push($jsonArray, $jsonArrayItem);
 		  }
