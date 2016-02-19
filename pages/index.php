@@ -1,4 +1,24 @@
-<?php session_start();?>
+<?php session_start();
+    include_once 'settings/iotdb.php';
+
+    mysql_select_db($dbname) or die(mysql_error());
+  $query="SELECT name FROM groups WHERE id='$grp'";
+  $grps=mysql_query($query);
+  $rows=mysql_fetch_assoc($grps);
+  $gname=$rows['name'];
+  //echo "<h4>Valves grouped under <label class='badge'>".$gname."</label></h4>";
+  $query="SELECT * FROM devices WHERE devices.status=2";
+  $results=mysql_query($query);
+  $newdev=0;
+  if(mysql_num_rows($results)>0)
+    $newdev=mysql_num_rows($results);
+  $query="SELECT * FROM tasks ";    
+  $results=mysql_query($query);
+  $task=0;
+  if(mysql_num_rows($results)>0)
+    $task=mysql_num_rows($results);
+
+    ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -63,7 +83,7 @@
                                     <i class="glyphicon glyphicon-gift fa-5x"></i>
                                 </div>
                                 <div class="col-xs-9 text-right">
-                                    <div class="huge">26</div>
+                                    <div class="huge"><?php echo $newdev;?></div>
                                     <div>New Devices!</div>
                                 </div>
                             </div>
@@ -85,8 +105,8 @@
                                     <i class="glyphicon glyphicon-time fa-5x"></i>
                                 </div>
                                 <div class="col-xs-9 text-right">
-                                    <div class="huge">12</div>
-                                    <div>New Scheduled Tasks!</div>
+                                    <div class="huge"><?php echo $task;?></div>
+                                    <div>Scheduled Tasks!</div>
                                 </div>
                             </div>
                         </div>
@@ -156,17 +176,7 @@
                                     <span class="pull-right text-muted small"><em>11:32 AM</em>
                                     </span>
                                 </a>
-                                <a href="#" class="list-group-item">
-                                    <i class="fa fa-bolt fa-fw"></i> Server Crashed!
-                                    <span class="pull-right text-muted small"><em>11:13 AM</em>
-                                    </span>
-                                </a>
-                                <a href="#" class="list-group-item">
-                                    <i class="fa fa-warning fa-fw"></i> Server Not Responding
-                                    <span class="pull-right text-muted small"><em>10:57 AM</em>
-                                    </span>
-                                </a>
-                                                               
+                                                         
                             </div>
                             <!-- /.list-group -->
                             <a href="#" class="btn btn-default btn-block">View All Alerts</a>

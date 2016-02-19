@@ -86,7 +86,7 @@ function display($grp)
 {
 	$dbname='IOT';
 	mysql_select_db($dbname) or die(mysql_error());
-	echo "<button id='bat' type='button' onclick='checkbat(this.value)' value='$grp'>Check Battery status</button></br></br>";
+	//echo "<button id='bat' type='button' onclick='checkbat(this.value)' value='$grp'>Check Battery status</button></br></br>";
 	$query="SELECT * FROM devices WHERE devices.group=$grp";
 	$results=mysql_query($query);
 	if (mysql_num_rows($results) > 0) 
@@ -111,15 +111,15 @@ function display($grp)
 			$rows=mysql_fetch_assoc($grps);
 			$sensor=$rows['name'];
 			if($battery==1) //changing into user readable form
-				$batterymsg="<span style='color: #00CC00;'><b>Healthy</b></span>";
+				$batterymsg="<span class='label label-success' ><b>Healthy</b></span>";
 			elseif($battery==2)
-				$batterymsg="<span style='color: #FF0000;'><b>Status unavailable</b></span>";
+				$batterymsg="<span class='label label-danger'><b>Status unavailable</b></span>";
 			elseif($battery==3)
-				$batterymsg="<span style='color: #0000FF;'><b>Checking status...</b></span>";
+				$batterymsg="<span class='label label-warning''><b>Checking status...</b></span>";
 			elseif ($battery==0)
-				$batterymsg="<span style='color: #FF0000;'><b>Replace battery</b></span>";
+				$batterymsg="<span class='label label-danger''><b>Replace battery</b></span>";
 			
-			if($action==1) //changing into user readable form
+			/*if($action==1) //changing into user readable form
 				$action="<b><span style='color: #FFAA00;'>Device is ON</b></span>";
 			elseif($action==0)
 				$action="<b><span style='color: #AA6600;'>Device is OFF</span></b>";
@@ -130,15 +130,15 @@ function display($grp)
 				else
 				    $action="<b><span style='color: #AA6600;'>Soil is dry</span></b>";
 				
-			}
+			}*/
 			if($status==0) //offline
-				$status="<b><span style='color: #FF0000;'>Device offline, please check..</span></b>";
+				$status="<b><span class='label label-danger''>Device offline, please check..</span></b>";
 			elseif($status==1) //online
-				$status="<b><span style='color: #00CC00;'>ONLINE</span></b>";
+				$status="<b><span class='label label-success'>ONLINE</span></b>";
 			elseif($status==2) //new device
-				$status="<span style='color: #0088FF;'><b>New Device Found</b></span>";
+				$status="<span class='label label-info'><b>New Device Found</b></span>";
 
-			echo "<h4 style='color:#3B5998;font-weight:normal;'><b>".$i.". Name:</b>$dname :".$status."</h4><b style='color:#3B5998;font-weight:normal;'>Group: $name</b></br><b style='color:#3B5998;font-weight:normal;'>Type: $sensor</b></br><b style='color:#3B5998;font-weight:normal;'>Device MAC ID</b> :<span style='color:#3B5998;font-weight:normal;'> ".$macid. "</span></br>".$action."</br> <b style='color:#3B5998;font-weight:normal;'>Battery status : </b> ".$batterymsg." </br><b style='color:#3B5998;font-weight:normal;'>Last updated : </b>$seen <hr></span>";
+			echo "<h4 style='color:#3B5998;font-weight:normal;'><b>".$i.". Name:</b>$dname :".$status."</h4><b style='color:#3B5998;font-weight:normal;'>Group: $name</b></br><b style='color:#3B5998;font-weight:normal;'>Type: $sensor</b></br><b style='color:#3B5998;font-weight:normal;'>Device ID</b> :<span style='color:#3B5998;font-weight:normal;'> ".$macid. "</span></br> <b style='color:#3B5998;font-weight:normal;'>Battery status : </b> ".$batterymsg." </br><b style='color:#3B5998;font-weight:normal;'>Last updated : </b>$seen <hr></span>";
 			$i++;
 		
 		

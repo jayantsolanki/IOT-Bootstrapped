@@ -1,7 +1,6 @@
 <?php
 /*
-*Project: eYSIP_2015_IoT-Connected-valves-for-irrigation-of-greenhouse
-*Team members: Jayant Solanki, Kevin D'Souza
+*Project: IoT-Connected-valves-for-irrigation-of-greenhouse
 *File name: com.php
 *Author: Jayant Solanki
 *sends manual on/off command to esp devices, and also sets timeout for them
@@ -34,12 +33,11 @@ $results=mysql_query($query);
 		{
 			$macid=$row['macid'];
 			$action=$row['action'];
-			//$status=$row['status'];
 			if($action==0)//checking valve is off or not
 			{
 				command($macid,1);	//switch ON			
 				echo "Switch OFF"; //update button status
-				$query = "UPDATE devices SET action ='1' WHERE macid='$macid'"; //updating action status in device table and also chanign new device status
+				$query = "UPDATE devices SET action ='1', status='1' WHERE macid='$macid'"; //updating action status in device table and also chanign new device status
 				//echo "</br>".$query;
 				if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))
 					echo "UPDATE failed: $query<br/>".mysql_error()."<br/><br/>";
@@ -129,7 +127,7 @@ function command($macid,$action) //for sending mqtt commands
 $mqtt = new spMQTT('tcp://10.129.28.181:1880/');
 $connected = $mqtt->connect();
 if (!$connected) {
-    die("<span class='error'> Mosca MQTT Server is Offline\n</span>");
+    die("<span class='text text-danger'> Mosca MQTT Server is Offline\n</span>");
 }
 
 $mqtt->ping();

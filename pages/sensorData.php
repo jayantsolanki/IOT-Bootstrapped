@@ -89,7 +89,7 @@ include_once 'settings/iotdb.php';
                                     <cite>Select group and the device for the Chart</cite>
                           </div>
 
-                         <div class="panel panel-info col-md-7">
+                         <div class="panel panel-info col-md-8">
                             <div class="panel-heading">
                                 For Device <span id="devId"><?php if($_SESSION["devId"]!=null) echo $_SESSION["devId"];?></span>
                             </div>
@@ -112,7 +112,7 @@ include_once 'settings/iotdb.php';
                         </div>
 
                          </div>
-                         <div id='dump'>
+                         <div id='dumps'>
                                 <cite>Select group and the device for the Chart</cite>
                             </div>
                       </div><!-- end of content div -->
@@ -186,7 +186,7 @@ include_once 'settings/iotdb.php';
           var apiChart = new FusionCharts({
                 type: 'line',
                 renderAt: 'chart-container',
-                width: '650',
+                width: '700',
                 height: '400',
                 dataFormat: 'json',
                 dataSource: {
@@ -333,7 +333,7 @@ include_once 'settings/iotdb.php';
                     "yAxisName": "Battery Value in mV",
                     "rotatevalues": "1",
                     "theme": "zune",
-                     "setAdaptiveYMin": "1",
+                    "setAdaptiveYMin": "1",
                     "showValues": "1",
                     "drawAnchors": "1"
                   };   

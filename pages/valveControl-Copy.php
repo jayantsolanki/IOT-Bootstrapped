@@ -215,7 +215,7 @@ xmlhttp.send();
  */
 function update(str)
 {
-  //alert(str);
+  alert(str);
 var duration=document.getElementById('duration').value;
 //alert(duration);
 if (window.XMLHttpRequest)

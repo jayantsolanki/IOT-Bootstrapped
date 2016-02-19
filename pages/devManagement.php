@@ -145,16 +145,17 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
                         $results=mysql_query($query);
                         if (mysql_num_rows($results) > 0) 
                         {   $i=1;
-                            echo "</br></br><h2>Items available</h2>";      
+                            echo "</br></br><h2>Devices available</h2>";      
                             while($row=mysql_fetch_assoc($results)) 
                             {   $macid=$row['macid'];
                                 $group=$row['group'];
+                                $status=$row['status'];
                                 //$group=$row['name'];
                                 $query="SELECT name FROM groups WHERE id='$group'";
                                 $grps=mysql_query($query);
                                 $grp=mysql_fetch_assoc($grps);
                                 $name=$grp['name'];
-                                if($name=='')
+                                if($status==2)
                                     $name="<span style='color: #0088FF;'><b>New Device Found</b></span>";
                                 
                                 echo "".$i.". <span id='$macid' style='color:#3B5998;font-weight:normal;'><b></b><b>MAC id:</b> $macid &nbsp; &nbsp;<b>Group:</b> $name &nbsp; &nbsp;<a href="."javascript:edit('$macid')".">edit</a>&nbsp; &nbsp;<a href="."javascript:ddel('$macid')".">Delete</a></span><hr>";

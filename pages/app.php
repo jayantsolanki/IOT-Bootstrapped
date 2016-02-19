@@ -12,8 +12,8 @@
 </style>
 <div class="navbar navbar-default navbar-bottom navbar-transparent">
 
-      <p class="navbar-text pull-left">© 2016 - Site Built By Jay
-           <p class=" navbar-text pull-right"><a href="index.php">Greenhouse-IOT- </a>(c) IIT Bombay</p>
+      <p class="navbar-text pull-left">Site Built By Jayant
+           <p class=" navbar-text pull-right"><a href="index.php">Greenhouse-IOT- </a>© IIT Bombay 2016</p>
       </p>
       
       

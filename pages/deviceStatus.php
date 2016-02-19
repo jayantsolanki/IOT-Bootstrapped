@@ -34,6 +34,7 @@ error_reporting(-1); //for suppressing errors and notices
 
     <!-- Custom Fonts -->
     <link href="../bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="../dist/css/bootstrap-fullscreen-select.css" />
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -46,7 +47,7 @@ error_reporting(-1); //for suppressing errors and notices
     </noscript>
 </head>
 
-<body>
+<body onload='showgrp(1)'>
 
     <div id="wrapper">
 
@@ -63,12 +64,13 @@ error_reporting(-1); //for suppressing errors and notices
                     <!-- /.col-lg-12 -->
                 </div>
                 <div class="row">
-                    <div class="header"
-                          <h2>Registered Devices</h2>
+                  <div class="panel panel-info">
+                    <div class="panel panel-heading">
+                          <h4 class='text text-center'>Registered Devices</h4>
                         </div>
-                        <div class="content">
+                        <div class="panel panel-body">
 
-                    <b>Select group</b> <select name='groups' id='groups' onchange='showgrp(this.value)'>
+                    <b>Select group</b> <select name='groups' class='mobileSelect'>
                     <option selected="true" disabled='disabled'>Choose</option>
                     <?php 
                     mysql_select_db($dbname) or die(mysql_error());
@@ -80,6 +82,9 @@ error_reporting(-1); //for suppressing errors and notices
                             {   //$id=$row['id'];
                                 $group=$row['name'];
                                 $id=$row['id'];
+                                if($id==1)
+                                echo " <option selected='selected' value='$id'>$group</option>";
+                                else
                                 echo " <option value='$id'>$group</option>";
                             }
                         }
@@ -89,6 +94,8 @@ error_reporting(-1); //for suppressing errors and notices
 
                     </div>
                       </div><!-- end of content div -->
+                    </div>
+                    </div>
                 </div>
                 <!-- /.row -->
             </div>
@@ -114,6 +121,32 @@ error_reporting(-1); //for suppressing errors and notices
 
     <!-- Custom Theme JavaScript -->
     <script src="../dist/js/sb-admin-2.js"></script>
+     <script type="text/javascript" src="../dist/js/bootstrap-fullscreen-select.js"></script>
+    <script>
+        $('.mobileSelect').mobileSelect({
+        title: 'Select a Group',
+            buttonSave: 'Done',
+            buttonClear: 'Clear',
+            buttonCancel: 'Cancel',
+            padding: {
+                'top': '20%',
+                'left': '20%',
+                'right': '20%',
+                'bottom': '20%'
+            },
+            animation: 'scale',
+            animationSpeed: 400,
+            theme: 'white',
+            onOpen: function () {
+            },
+            onClose: function () {
+                if($('.mobileSelect').val()!=null)
+                     showgrp($('.mobileSelect').val());
+            },
+            style: 'btn-info'
+        });
+        $('.mobileSelect').mobileSelect();
+    </script>
     <script type='text/javascript'>
         /*
          *
