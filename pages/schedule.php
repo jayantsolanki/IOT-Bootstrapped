@@ -70,8 +70,7 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
                             </div>
 
                             <div class="content">
-
-                        <b>Choose Group</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<select id="grps">
+                        <b>Choose Group</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<select class="col-md-2 form-control" id="grps">
                         <option selected="true" disabled='disabled'>Choose</option>
                         <?php
                         mysql_select_db($dbname) or die(mysql_error());
@@ -90,8 +89,9 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
                         ?>
 
                         </select>
+                         </div>
                         <div class='choose'>
-                        <b>Type of Schedule</b>&nbsp;&nbsp;&nbsp;<select id="time">
+                        <b>Type of Schedule</b>&nbsp;&nbsp;&nbsp;<select class="col-xs-5 form-control" id="time">
                         <option selected="true" disabled='disabled'>Choose</option>
                           <option value="period">Period</option>
                           <option value="duration">Duration</option>
@@ -103,7 +103,7 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
                         <span style='color:#3B5998;font-weight:normal;'>Start time:(hhmm)</span>
 
                         <?php
-                        echo "Hrs:<select id='starth' name='starth'>";
+                        echo "Hrs:<select class='form-control' id='starth' name='starth'>";
                         $i=0; 
                         while($i<=24)
                         {
@@ -111,7 +111,7 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
                         $i++;
                         } 
                         echo "</select>";
-                        echo " Mins:<select id='startm' name='startm'>";
+                        echo " Mins:<select class='form-control' id='startm' name='startm'>";
                         $j=0; 
                         while($j<=60)
                         {
@@ -124,7 +124,7 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
                         </br><span style='color:#3B5998;font-weight:normal;
                             '>Stop time:(hhmm)</span></br>
                         <?php
-                        echo "Hrs:<select id='stoph' name='stoph'>";
+                        echo "Hrs:<select class='form-control' id='stoph' name='stoph'>";
                         $i=0; 
                         while($i<=24)
                         {
@@ -132,7 +132,7 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
                         $i++;
                         } 
                         echo "</select>";
-                        echo " Mins:<select id='stopm' name='stopm'>";
+                        echo " Mins:<select class='form-control' id='stopm' name='stopm'>";
                         $j=0; 
                         while($j<=60)
                         {
@@ -151,7 +151,7 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
 
                         <span style='color:#3B5998;font-weight:normal;'>Start time:(hhmm)</span></br>
                         <?php
-                        echo "Hrs:<select id='dstarth' name='starth'>";
+                        echo "Hrs:<select class='form-control' id='dstarth' name='starth'>";
                         $i=0; 
                         while($i<=24)
                         {
@@ -171,7 +171,7 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
                         </br></br><span style='color:#3B5998;font-weight:normal;'>Duration:(mm)</span></br>
                         <?php
 
-                        echo "Mins:<select id='dduration' name='duration'>";
+                        echo "Mins:<select class='form-control' id='dduration' name='duration'>";
                         $j=5; 
                         while($j<=60)
                         {
@@ -191,7 +191,7 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
 
                         <span style='color:#3B5998;font-weight:normal;'>Start time:(hhmm)</span></br>
                         <?php
-                        echo "Hrs:<select id='fstarth' name='starth'>";
+                        echo "Hrs:<select class='form-control' id='fstarth' name='starth'>";
                         $i=0; 
                         while($i<=24)
                         {
@@ -200,7 +200,7 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
                         } 
                         echo "</select>";
                         echo "</br></br><span style='color:#3B5998;font-weight:normal;'>Duration:(mm)</span></br>";
-                        echo "Mins:<select id='fduration' name='duration'>";
+                        echo "Mins:<select class='form-control' id='fduration' name='duration'>";
                         $j=5; 
                         while($j<=60)
                         {
@@ -228,10 +228,11 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
                         </pre>
                         </div>
                         </div>
-
-                        <div id='display'>
+                        <div class='row'>
+                        <div class='col-md-6' id='display'>
                         <?php display();?>
                         </div>
+                         </div>
                           </div><!-- end of content div -->
                         <?php
                         include_once "app.php";?>
@@ -260,25 +261,34 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
                             $results=mysql_query($query);
                             if (mysql_num_rows($results) > 0) 
                             {   $i=1;
-                                echo "</br></br><h2>Scheduled Tasks</h2>";      
+                                echo "</br></br><h2>Scheduled Tasks</h2>";
+                                echo "<table class='table table-striped'><tbody>";      
                                 while($row=mysql_fetch_assoc($results)) 
                                 {   $id=$row['id'];
                                     $start=$row['start'];
                                     $stop=$row['stop']; //online offline or new, 1, 0, 2
                                     $item=$row['item'];
                                     if($start>=2100 or $start<=300)
-                                        $status="<span style='color:#FF0000;font-weight:bold;'>Shouldn't water plants during night</span>";
+                                        $status="<span class='label label-warning'>Shouldn't water plants during night</span>";
                                     else
                                         $status='';
-                                    echo "<span style='color:#3B5998;font-weight:normal;'><b>Task ".$i."</b>&nbsp; &nbsp;<b>Item:</b> $item&nbsp; &nbsp; Start time : $start &nbsp; &nbsp; Stop time : $stop </span>&nbsp;<a href='javascript:del($id)'><b>DELETE</b></a> &nbsp; $status<hr>";
+                                    echo "<tr>
+                                    <td><b>Task ".$i."</b></td>
+                                    <td><b>Item:</b> $item</td>
+                                    <td> Start time : $start</td>
+                                    <td> Stop time : $stop</td>
+                                    <td><a class='label label-danger' href='javascript:del($id)'><b>DELETE</b></a> </td>
+                                    <td> $status</td>
+                                    </tr>";
                                     $i++;
                                 
                                 
                                 }
+                                echo "</tbody></table>";
                             }
                             else
                             {
-                                echo "</br><div class='notice'><b>No Tasks scheduled yet.</b></div>";
+                                echo "</br><div class='alert alert-danger'><b>No Tasks scheduled yet.</b></div>";
                             }
 
                         }

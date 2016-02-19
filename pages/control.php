@@ -64,11 +64,11 @@ if(isset($_GET['grp']))
 			
 		
 			if($status==0) //offline
-				$status="<span style='color: #FF0000;'>Device offline, please check..</span>";
+				$status="<span class='label label-danger'>OFFLINE</span>";
 			elseif($status==1) //online
-				$status="<span style='color: #00CC00;'>ONLINE</span>";
+				$status="<span class='label label-success'>ONLINE</span>";
 			elseif($status==2) //new device
-				$status="<span style='color: #0088FF;'>New Device Found</span>";
+				$status="<span class='label label-info'>New Device Found</span>";
 				echo "
 			<tr>
 			<td><strong class='text text-info'>".$i.". $sname sensor: $name </strong>&nbsp; &nbsp;<strong class='text text-info'>MacId:</b> $macid &nbsp;</td>";

@@ -132,7 +132,7 @@ function display($grp)
 				
 			}*/
 			if($status==0) //offline
-				$status="<b><span class='label label-danger''>Device offline, please check..</span></b>";
+				$status="<b><span class='label label-danger''>OFFLINE</span></b>";
 			elseif($status==1) //online
 				$status="<b><span class='label label-success'>ONLINE</span></b>";
 			elseif($status==2) //new device

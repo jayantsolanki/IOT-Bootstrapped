@@ -146,34 +146,41 @@ function normalize($startm,$duration)
  */
 function display()
 {
-	$dbname='IOT'; //this bottleneck is gving me pain...
-	mysql_select_db($dbname) or die(mysql_error());
-	$query="SELECT * FROM tasks"; //displaying scheduled tasks
-	$results=mysql_query($query);
-	if (mysql_num_rows($results) > 0) 
-	{	$i=1;
-		echo "</br></br><h2>Scheduled Tasks</h2>";		
-		while($row=mysql_fetch_assoc($results)) 
-		{	$id=$row['id'];
-			$start=$row['start'];
-			$stop=$row['stop']; //online offline or new, 1, 0, 2
-			$item=$row['item'];
-			if($start>=2100 or $start<=300)
-				$status="<span style='color:#FF0000;font-weight:bold;'>Shouldn't water plants during night</span>";
-			else
-				$status='';
-			
-			
-			echo "<span style='color:#3B5998;font-weight:normal;'><b>Task ".$i."</b>&nbsp; &nbsp;<b>Item:</b> $item&nbsp; &nbsp; Start time : $start &nbsp; &nbsp; Stop time : $stop </span>&nbsp;<a href='javascript:del($id)'><b>DELETE</b></a> &nbsp; $status<hr>";
-			$i++;
-		
-		
-		}
-	}
-	else
-	{
-		echo "</br><div class='notice'><b>No Tasks scheduled yet.</b></div>";
-	}
+    $dbname='IOT';
+    mysql_select_db($dbname) or die(mysql_error());
+    $query="SELECT * FROM tasks"; //displaying scheduled tasks
+    $results=mysql_query($query);
+    if (mysql_num_rows($results) > 0) 
+    {   $i=1;
+        echo "</br></br><h2>Scheduled Tasks</h2>";
+        echo "<table class='table table-striped'><tbody>";      
+        while($row=mysql_fetch_assoc($results)) 
+        {   $id=$row['id'];
+            $start=$row['start'];
+            $stop=$row['stop']; //online offline or new, 1, 0, 2
+            $item=$row['item'];
+            if($start>=2100 or $start<=300)
+                $status="<span class='label label-warning'>Shouldn't water plants during night</span>";
+            else
+                $status='';
+            echo "<tr>
+            <td><b>Task ".$i."</b></td>
+            <td><b>Item:</b> $item</td>
+            <td> Start time : $start</td>
+            <td> Stop time : $stop</td>
+            <td><a class='label label-danger' href='javascript:del($id)'><b>DELETE</b></a> </td>
+            <td> $status</td>
+            </tr>";
+            $i++;
+        
+        
+        }
+        echo "</tbody></table>";
+    }
+    else
+    {
+        echo "</br><div class='alert alert-danger'><b>No Tasks scheduled yet.</b></div>";
+    }
 
 }
 ?>

@@ -18,6 +18,24 @@
   if(mysql_num_rows($results)>0)
     $task=mysql_num_rows($results);
 
+    $query="SELECT * FROM tasks where type=0";    
+      $results=mysql_query($query);
+      $mantask=0;//manually started
+      if(mysql_num_rows($results)>0)
+        $mantask=mysql_num_rows($results);
+
+     $query="SELECT * FROM devices where status=1";    
+      $results=mysql_query($query);
+      $online=0;//manually started
+      if(mysql_num_rows($results)>0)
+        $online=mysql_num_rows($results);
+    $query="SELECT * FROM devices where status=0";    
+      $results=mysql_query($query);
+      $offline=0;//manually started
+      if(mysql_num_rows($results)>0)
+        $offline=mysql_num_rows($results);
+
+
     ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -88,7 +106,7 @@
                                 </div>
                             </div>
                         </div>
-                        <a href="#">
+                        <a href="deviceStatus.php">
                             <div class="panel-footer">
                                 <span class="pull-left">View Details</span>
                                 <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -110,7 +128,7 @@
                                 </div>
                             </div>
                         </div>
-                        <a href="#">
+                        <a href="schedule.php">
                             <div class="panel-footer">
                                 <span class="pull-left">View Details</span>
                                 <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -161,14 +179,19 @@
                         <!-- /.panel-heading -->
                         <div class="panel-body">
                             <div class="list-group">
-                                <a href="#" class="list-group-item">
-                                    <i class="fa fa-envelope fa-fw"></i> Message Sent
-                                    <span class="pull-right text-muted small"><em>27 minutes ago</em>
+                                <a href="deviceStatus.php" class="list-group-item">
+                                    <i class="fa fa-envelope fa-fw"></i> <?php echo $online;?> <span class="text text-success"> Online</span> Devices
+                                    <span class="pull-right text-muted small"><em></em>
                                     </span>
                                 </a>
-                                <a href="#" class="list-group-item">
-                                    <i class="fa fa-tasks fa-fw"></i> New Task
-                                    <span class="pull-right text-muted small"><em>43 minutes ago</em>
+                                <a href="deviceStatus.php" class="list-group-item">
+                                    <i class="fa fa-envelope fa-fw"></i> <?php echo $offline;?><span class="text text-danger"> Offline</span> Devices
+                                    <span class="pull-right text-muted small"><em></em>
+                                    </span>
+                                </a>
+                                <a href="schedule.php" class="list-group-item">
+                                    <i class="fa fa-envelope fa-fw"></i> <?php echo $mantask;?> manually started tasks
+                                    <span class="pull-right text-muted small"><em></em>
                                     </span>
                                 </a>
                                 <a href="#" class="list-group-item">
