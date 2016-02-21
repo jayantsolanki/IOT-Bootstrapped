@@ -6,6 +6,7 @@
 *It is called in JAX mode by devdis.php for displaying devices information
 */
 include 'settings/iotdb.php';
+include 'settings/mqttsetting.php';
 require(__DIR__ . '/spMQTT.class.php');
 spMQTTDebug::Enable();
 $grp=$_GET["grp"]; //grp is the group id received
@@ -58,11 +59,12 @@ if($bat!=NULL)
 function command($macid,$action) //for sending mqtt commands
 	{
 		//$mqtt->setAuth('sskaje', '123123');
-		$mqtt = new spMQTT('tcp://10.129.28.118:1883/');
+		include 'settings/mqttsetting.php';
+		$mqtt = new spMQTT($mqttaddress);
 		$connected = $mqtt->connect();
 		if (!$connected) 
 			{
-			    die(" <span class='error'>Mosca MQTT Server is Offline\n</span>");
+			    die(" <span class='text text-danger'>Mosca MQTT Server is Offline\n</span>");
 			}
 
 		$mqtt->ping();

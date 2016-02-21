@@ -206,6 +206,9 @@
                         <li>
                             <a href='devManagement.php'><i class='fa fa-wrench fa-fw'></i> Device Management</a>
                         </li>
+                        <li>
+                            <a href='config.php'><i class='fa fa-wrench fa-fw'></i> Configuration</a>
+                        </li>
                     </ul>
                 </div>
                 <!-- /.sidebar-collapse -->

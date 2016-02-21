@@ -1,12 +1,10 @@
 <?php
 /*
-*Project: eYSIP_2015_IoT-Connected-valves-for-irrigation-of-greenhouse
-*Team members: Jayant Solanki, Kevin D'Souza
-*File name: com.php
+*Project: IoT-Connected-valves-for-irrigation-of-greenhouse
 *Author: Jayant Solanki
 *sends manual on/off command to esp devices, and also sets timeout for them
 */
-include 'settings/iotdb.php';
+require 'settings/iotdb.php';
 require(__DIR__ . '/spMQTT.class.php');
 date_default_timezone_set('Asia/Kolkata');//setting IST
 spMQTTDebug::Enable();
@@ -126,10 +124,11 @@ $results=mysql_query($query);
 function command($macid,$action) //for sending mqtt commands
 {
 
-$mqtt = new spMQTT('tcp://10.129.28.118:1883/');
+include 'settings/mqttsetting.php';
+$mqtt = new spMQTT($mqttaddress);
 $connected = $mqtt->connect();
 if (!$connected) {
-    die("<span class='error'> Mosca MQTT Server is Offline\n</span>");
+    die("<span class='text text-danger'> Mosca MQTT Server is Offline\n</span>");
 }
 
 $mqtt->ping();
