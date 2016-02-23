@@ -67,35 +67,35 @@ error_reporting(-1); //for suppressing errors and notices
                   <div class="panel panel-info">
                     <div class="panel panel-heading">
                           <h4 class='text text-center'>Registered Devices</h4>
-                        </div>
+                    </div>
                         <div class="panel panel-body">
 
-                    <b>Select group</b> <select name='groups' class='mobileSelect'>
-                    <option selected="true" disabled='disabled'>Choose</option>
-                    <?php 
-                    mysql_select_db($dbname) or die(mysql_error());
-                    $query="SELECT * FROM groups"; //displaying groups
-                    $results=mysql_query($query);
-                    if (mysql_num_rows($results) > 0) 
-                        {       
-                            while($row=mysql_fetch_assoc($results)) 
-                            {   //$id=$row['id'];
-                                $group=$row['name'];
-                                $id=$row['id'];
-                                if($id==1)
-                                echo " <option selected='selected' value='$id'>$group</option>";
-                                else
-                                echo " <option value='$id'>$group</option>";
-                            }
-                        }
-                    ?>
-                    </select>&nbsp; &nbsp;</br></br>
-                    <div id='dev'>
+                          <b>Select group</b> <select name='groups' class='mobileSelect'>
+                          <option selected="true" disabled='disabled'>Choose</option>
+                          <?php 
+                          mysql_select_db($dbname) or die(mysql_error());
+                          $query="SELECT * FROM groups"; //displaying groups
+                          $results=mysql_query($query);
+                          if (mysql_num_rows($results) > 0) 
+                              {       
+                                  while($row=mysql_fetch_assoc($results)) 
+                                  {   //$id=$row['id'];
+                                      $group=$row['name'];
+                                      $id=$row['id'];
+                                      if($id==1)
+                                      echo " <option selected='selected' value='$id'>$group</option>";
+                                      else
+                                      echo " <option value='$id'>$group</option>";
+                                  }
+                              }
+                          ?>
+                          </select>&nbsp; &nbsp;</br></br>
+                          <div id='dev'>
 
-                    </div>
-                      </div><!-- end of content div -->
-                    </div>
-                    </div>
+                          </div>
+                        </div><!-- ending panel body -->
+                      </div><!-- ending panel -->
+                      
                 </div>
                 <!-- /.row -->
             </div>
@@ -188,47 +188,7 @@ error_reporting(-1); //for suppressing errors and notices
         xmlhttp.send();
         }
         </script>
-        <script type='text/javascript'>
-        /*
-         *
-         * Function Name: checkbat(bat)
-         * Input: bat, stores group id
-         * Output: checks for battery status of sensors under group id
-         * Logic: It is a AJAX call
-         * Example Call: checkbat(34)
-         *
-         */
-        function checkbat(bat)
-        {
-        if (bat=='')
-          {
-          document.getElementById('dev').innerHTML='';
-          return;
-          } 
-        if (window.XMLHttpRequest)
-          {
-          xmlhttp=new XMLHttpRequest();
-          }
-        else
-          {
-          xmlhttp=new ActiveXObject('Microsoft.XMLHTTP');
-          }
-        xmlhttp.onreadystatechange=function()
-          {
-            if (xmlhttp.readyState==3 && xmlhttp.status==200)
-              {
-              document.getElementById('dev').innerHTML="<span class='push-5'><img src='images/ajax.gif'/></span>";
-              }
-          if (xmlhttp.readyState==4 && xmlhttp.status==200)
-            {
-            document.getElementById('dev').innerHTML=xmlhttp.responseText;
-            }
-          }
-        xmlhttp.open('GET','dd.php?bat='+bat,true);
-        //alert(grp);
-        xmlhttp.send();
-        }
-    </script>
+       
 </body>
 
 </html>

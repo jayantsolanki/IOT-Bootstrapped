@@ -15,7 +15,7 @@ if($grp!=NULL)
 {
 	display($grp);
 }
-if($bat!=NULL)
+/*if($bat!=NULL)
 {
 	//
 	mysql_select_db($dbname) or die(mysql_error());
@@ -45,7 +45,7 @@ if($bat!=NULL)
 	
 
 	display($bat);
-}
+}*/
  /*
  *
  * Function Name: command($macid,$action)
@@ -56,7 +56,7 @@ if($bat!=NULL)
  * 
  *
  */
-function command($macid,$action) //for sending mqtt commands
+/*function command($macid,$action) //for sending mqtt commands
 	{
 		//$mqtt->setAuth('sskaje', '123123');
 		include 'settings/mqttsetting.php';
@@ -74,7 +74,7 @@ function command($macid,$action) //for sending mqtt commands
 		//echo "</br>esp/valve/".$macid;
 		$mqtt->publish('esp/'.$macid, $msg, 0, 1, 0, 1);
 		//echo "</br>Success";
-	}
+	}*/
  /*
  *
  * Function Name: display()
@@ -96,6 +96,7 @@ function display($grp)
 		
 		while($row=mysql_fetch_assoc($results)) 
 		{	
+
 			$macid=$row['macid'];
 			$action=$row['action'];
 			$battery=$row['battery'];
@@ -104,6 +105,11 @@ function display($grp)
 			$grp=$row['group'];//group in which it belongs
 			$dname=$row['name'];
 			$sense=$row['type'];
+			$batquery="SELECT battery_value, created_at FROM feeds WHERE feeds.device_id='$macid' order by feeds.id desc limit 1";
+			$batresult=mysql_query($batquery);
+			$batfetch=mysql_fetch_assoc($batresult);
+			$batvalue=$batfetch['battery_value'];
+			$battime=$batfetch['created_at'];
 			$query="SELECT name FROM groups WHERE id='$grp'";
 			$grps=mysql_query($query);
 			$rows=mysql_fetch_assoc($grps);
@@ -112,7 +118,7 @@ function display($grp)
 			$grps=mysql_query($query);
 			$rows=mysql_fetch_assoc($grps);
 			$sensor=$rows['name'];
-			if($battery==1) //changing into user readable form
+			/*if($battery==1) //changing into user readable form
 				$batterymsg="<span class='label label-success' ><b>Healthy</b></span>";
 			elseif($battery==2)
 				$batterymsg="<span class='label label-danger'><b>Status unavailable</b></span>";
@@ -120,7 +126,7 @@ function display($grp)
 				$batterymsg="<span class='label label-warning''><b>Checking status...</b></span>";
 			elseif ($battery==0)
 				$batterymsg="<span class='label label-danger''><b>Replace battery</b></span>";
-			
+			*/
 			/*if($action==1) //changing into user readable form
 				$action="<b><span style='color: #FFAA00;'>Device is ON</b></span>";
 			elseif($action==0)
@@ -139,9 +145,17 @@ function display($grp)
 				$status="<b><span class='label label-success'>ONLINE</span></b>";
 			elseif($status==2) //new device
 				$status="<span class='label label-info'><b>New Device Found</b></span>";
-
-			echo "<h4 style='color:#3B5998;font-weight:normal;'><b>".$i.". Name:</b>$dname :".$status."</h4><b style='color:#3B5998;font-weight:normal;'>Group: $name</b></br><b style='color:#3B5998;font-weight:normal;'>Type: $sensor</b></br><b style='color:#3B5998;font-weight:normal;'>Device ID</b> :<span style='color:#3B5998;font-weight:normal;'> ".$macid. "</span></br> <b style='color:#3B5998;font-weight:normal;'>Battery status : </b> ".$batterymsg." </br><b style='color:#3B5998;font-weight:normal;'>Last updated : </b>$seen <hr></span>";
+			echo "<div class='row list-group'>";	
+			echo "
+			<div class='list-group-item col-md-5'>
+			<h4 style='color:#3B5998;font-weight:normal;'><b>".$i.". Name:</b>$dname :".$status."</h4><b style='color:#3B5998;font-weight:normal;'>Group: $name</b></br><b style='color:#3B5998;font-weight:normal;'>Type: $sensor</b></br><b style='color:#3B5998;font-weight:normal;'>Device ID</b> :<span style='color:#3B5998;font-weight:normal;'> ".$macid. "</span></br> <b style='color:#3B5998;font-weight:normal;'>Battery status : </b> ".$batvalue." mV <strong class='text text-info'>Updated</strong> on $battime</br><b style='color:#3B5998;font-weight:normal;'>Last updated : </b>$seen</span>
+			</div>";
 			$i++;
+			echo "
+			<div class='col-md-3'>
+			</div>
+			</div>
+			";
 		
 		
 		}
