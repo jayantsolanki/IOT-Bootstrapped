@@ -28,6 +28,7 @@ if(isset($_GET['q']))
 		
 		//check if there is any data returned by the SQL Query
 		//echo mysql_num_rows($feeds);
+		$i=0;
 		if (mysql_num_rows($feeds) > 0) {
 		  //Converting the results into an associative array
 		  while($row=mysql_fetch_assoc($feeds)) {
@@ -37,8 +38,11 @@ if(isset($_GET['q']))
 		    $jsonArrayItem['label'] = $row['created_at'];
 		    
 		    $jsonArrayItem['value'] = $row['temp_value'];
+		    if($i==mysql_num_rows($feeds)-1)
+		    	$jsonArrayItem['bulletClass'] = 'lastBullet';
 		    //append the above created object into the main array.
 		    array_push($jsonArray, $jsonArrayItem);
+			$i++;
 		  }
 		}
 		
@@ -52,6 +56,7 @@ if(isset($_GET['q']))
 		
 		//check if there is any data returned by the SQL Query
 		//echo mysql_num_rows($feeds);
+		$i=0;
 		if (mysql_num_rows($feeds) > 0) {
 		  //Converting the results into an associative array
 		  while($row=mysql_fetch_assoc($feeds)) {
@@ -62,7 +67,10 @@ if(isset($_GET['q']))
 		    
 		    $jsonArrayItem['value'] = $row['humidity_value'];
 		    //append the above created object into the main array.
+		    if($i==mysql_num_rows($feeds)-1)
+		    	$jsonArrayItem['bulletClass'] = 'lastBullet';
 		    array_push($jsonArray, $jsonArrayItem);
+		    $i++;
 		  }
 		}
 	}
@@ -75,6 +83,7 @@ if(isset($_GET['q']))
 		
 		//check if there is any data returned by the SQL Query
 		//echo mysql_num_rows($feeds);
+		$i=0;
 		if (mysql_num_rows($feeds) > 0) {
 		  //Converting the results into an associative array
 		  while($row=mysql_fetch_assoc($feeds)) {
@@ -85,7 +94,10 @@ if(isset($_GET['q']))
 		    
 		    $jsonArrayItem['value'] = $row['moist_value'];
 		    //append the above created object into the main array.
+		    if($i==mysql_num_rows($feeds)-1)
+		    	$jsonArrayItem['bulletClass'] = 'lastBullet';
 		    array_push($jsonArray, $jsonArrayItem);
+		    $i++;
 		  }
 		}
 	}
@@ -98,6 +110,7 @@ if(isset($_GET['q']))
 		
 		//check if there is any data returned by the SQL Query
 		//echo mysql_num_rows($feeds);
+		$i=0;
 		if (mysql_num_rows($feeds) > 0) {
 		  //Converting the results into an associative array
 		  while($row=mysql_fetch_assoc($feeds)) {
@@ -108,7 +121,10 @@ if(isset($_GET['q']))
 		    
 		    $jsonArrayItem['value'] = $row['battery_value'];
 		    //append the above created object into the main array.
+		    if($i==mysql_num_rows($feeds)-1)
+		    	$jsonArrayItem['bulletClass'] = 'lastBullet';
 		    array_push($jsonArray, $jsonArrayItem);
+		    $i++;
 		  }
 		}
 	}

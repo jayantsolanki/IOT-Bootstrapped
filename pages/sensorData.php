@@ -34,6 +34,51 @@ include_once 'settings/iotdb.php';
     <!-- Custom Fonts -->
     <link href="../bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" type="text/css" href="../dist/css/bootstrap-fullscreen-select.css" />
+    <style>
+    /* .modal-fullscreen */
+
+    .modal-fullscreen {
+      background: transparent;
+    }
+    .modal-fullscreen .modal-content {
+      background: transparent;
+      border: 0;
+      -webkit-box-shadow: none;
+      box-shadow: none;
+    }
+    .modal-backdrop.modal-backdrop-fullscreen {
+      background: #000000;
+    }
+    .modal-backdrop.modal-backdrop-fullscreen.in {
+      opacity: .80;
+      filter: alpha(opacity=80);
+    }
+
+    /* .modal-fullscreen size: we use Bootstrap media query breakpoints */
+
+    .modal-fullscreen .modal-dialog {
+      margin: 0;
+      margin-right: auto;
+      margin-left: auto;
+      width: 100%;
+    }
+    @media (min-width: 768px) {
+      .modal-fullscreen .modal-dialog {
+        width: 750px;
+      }
+    }
+    @media (min-width: 992px) {
+      .modal-fullscreen .modal-dialog {
+        width: 970px;
+      }
+    }
+    @media (min-width: 1200px) {
+      .modal-fullscreen .modal-dialog {
+         width: 1170px;
+      }
+    }
+
+    </style>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -89,24 +134,35 @@ include_once 'settings/iotdb.php';
                                     <cite>Select group and the device for the Chart</cite>
                           </div>
 
-                         <div class="panel panel-info col-md-8">
-                            <div class="panel-heading">
-                                For Device <span id="devId"><?php if($_SESSION["devId"]!=null) echo $_SESSION["devId"];?></span>
-                            </div>
-                            <div class="panel-body">
-                                <ul class="nav nav-tabs" role="tablist">
-                                    <li name='battery' role="presentation">
-                                    <a id="batval" href="javascript:showgraphBattery('<?php echo $_SESSION['devId'];?>')">Battery</a></li>
-                                    <li name="temperature" role="presentation">
-                                    <a href="javascript:showgraphTemp('temperature')">Temperature</a></li>
-                                    <li name='humidity' role="presentation">
-                                    <a href="javascript:showgraphHumid('humidity')">Humidity</a></li>
-                                    <li  name='moisture' role="presentation">
-                                    <a href="javascript:showgraphMoist('moisture')">Moisture</a></li>
-                                </ul>
-                            </div>
-                            <div id='dumps' style="height: 400px;  background-color: #222222;">
-                                <cite>Select group and the device for the Chart</cite>
+                            <!-- Modal fullscreen -->
+                            <div class="modal modal-fullscreen fade" id="modal-fullscreen" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                              
+                                  <div class="modal-dialog">
+                                    <div class="modal-content">
+                                      <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                        <h4 class="modal-title text text-danger text-center" id="myModalLabel">For Device <span id="devId"><?php if($_SESSION["devId"]!=null) echo $_SESSION["devId"];?></span></h4>
+                                      </div>
+                                      <ul class="nav nav-tabs" role="tablist">
+                                        <li name='battery' role="presentation">
+                                        <a class="text text-danger" id="batval" href="javascript:showgraphBattery('<?php echo $_SESSION['devId'];?>')">Battery</a></li>
+                                        <li name="temperature" role="presentation">
+                                        <a class="text text-danger" href="javascript:showgraphTemp('temperature')">Temperature</a></li>
+                                        <li name='humidity' role="presentation">
+                                        <a  class="text text-danger"href="javascript:showgraphHumid('humidity')">Humidity</a></li>
+                                        <li  name='moisture' role="presentation">
+                                        <a  class="text text-danger"href="javascript:showgraphMoist('moisture')">Moisture</a></li>
+                                    </ul>
+                                      <div class="modal-body" id="dumps" style="height: 500px;  background-color: #222222;">
+                                       
+                                        ...
+                                      </div>
+                                      <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                
                             </div>
                             
                         </div>
@@ -145,6 +201,18 @@ include_once 'settings/iotdb.php';
      
     <!-- Custom Theme JavaScript -->
     <script src="../dist/js/sb-admin-2.js"></script>
+    <script>
+          $(".modal-fullscreen").on('show.bs.modal', function () {
+
+        setTimeout( function() {
+          $(".modal-backdrop").addClass("modal-backdrop-fullscreen");
+        }, 0);
+      });
+      $(".modal-fullscreen").on('hidden.bs.modal', function () {
+        $(".modal-backdrop").addClass("modal-backdrop-fullscreen");
+      });
+
+    </script>
     <script>
         $('.mobileSelect').mobileSelect({
         title: 'Select a Group',
@@ -188,6 +256,8 @@ include_once 'settings/iotdb.php';
           var chart = AmCharts.makeChart("dumps",
         {
           "type": "serial",
+          "addClassNames": true,
+          //"classNamePrefix": "amcharts", // Default value
           "theme": "dark",
           "marginRight": 40,
           "marginLeft": 86,
@@ -207,27 +277,31 @@ include_once 'settings/iotdb.php';
               "shadowAlpha": 0
           },
           "graphs": [{
-              "id": custom.title,
+              "id": "g2",
               "title": custom.title,
               "type": "smoothedLine",
+              "classNameField": "bulletClass",
               "balloon":{
                 "drop":true,
                 "adjustBorderColor":false,
                 "color":"#ffffff"
               },
               "bullet": "round",
+              "bulletBorderColor": "#786c56",
               "bulletBorderAlpha": 1,
-              "bulletColor": "#FFFFFF",
-              "bulletSize": 5,
-              "hideBulletsCount": 50,
+              "bulletBorderThickness": 2,
+              "bulletColor": "#ffffff",
+              "showBalloon": true,
+              "animationPlayed": true,
               "lineThickness": 2,
               "title": "red line",
               "useLineColorForBulletBorder": true,
               "valueField": "value",
+              "valueAxis": "v1",
               "balloonText": "<span style='font-size:18px;'>[[value]]"+custom.unit+"</span>"
           }],
           "chartScrollbar": {
-              "graph": "g1",
+              "graph": "g2",
               "oppositeAxis":false,
               "offset":30,
               "scrollbarHeight": 80,
@@ -278,6 +352,34 @@ include_once 'settings/iotdb.php';
       }
     }
     </script>
+    <style type="text/css">
+       
+
+      .lastBullet{
+        -webkit-animation: am-pulsating 1s ease-out infinite;
+        animation: am-pulsating 1s ease-out infinite;
+      }
+      @-webkit-keyframes am-pulsating {
+        0% {
+          stroke-opacity: 1;
+          stroke-width: 0px;
+        }
+        100% {
+          stroke-opacity: 0;
+          stroke-width: 50px;
+        }
+      }
+      @keyframes am-pulsating {
+        0% {
+          stroke-opacity: 1;
+          stroke-width: 0px;
+        }
+        100% {
+          stroke-opacity: 0;
+          stroke-width: 50px;
+        }
+      }
+    </style>
     <script type='text/javascript'>
         /*
          *
@@ -388,10 +490,11 @@ include_once 'settings/iotdb.php';
                     "yAxisName": "Battery in mV ",
                     "unit":" mV"
                   };
-                renderChartBattery(xmlhttp.responseText, custom);
-
+                  renderChartBattery(xmlhttp.responseText, custom);
+                  jQuery("#modal-fullscreen").modal('show');
+                
                 //alert(xmlhttp.responseText);
-                document.getElementById("dump").innerHTML=xmlhttp.responseText;
+                //document.getElementById("dump").innerHTML=xmlhttp.responseText;
 
             
             }
@@ -442,7 +545,8 @@ include_once 'settings/iotdb.php';
                   };   
              
             renderChartBattery(xmlhttp.responseText,custom);
-            document.getElementById("dump").innerHTML=xmlhttp.responseText;
+            jQuery("#modal-fullscreen").modal('show');
+            //document.getElementById("dump").innerHTML=xmlhttp.responseText;
             }
           }
             xmlhttp.open('GET','displaygraph.php?type='+str+'&q='+devid,true);
@@ -491,7 +595,8 @@ include_once 'settings/iotdb.php';
                     "unit":" %"
                   };
                 renderChartBattery(xmlhttp.responseText,custom);
-                document.getElementById("dump").innerHTML=xmlhttp.responseText;
+                jQuery("#modal-fullscreen").modal('show');
+                //document.getElementById("dump").innerHTML=xmlhttp.responseText;
             }
           }
             xmlhttp.open('GET','displaygraph.php?type='+str+'&q='+devid,true);
@@ -541,7 +646,8 @@ include_once 'settings/iotdb.php';
                   };   
                  
                 renderChartBattery(xmlhttp.responseText, custom);
-                document.getElementById("dump").innerHTML=xmlhttp.responseText;
+                jQuery("#modal-fullscreen").modal('show');
+                //document.getElementById("dump").innerHTML=xmlhttp.responseText;
             }
           }
             xmlhttp.open('GET','displaygraph.php?type='+str+'&q='+devid,true);
