@@ -251,7 +251,14 @@ include_once 'settings/iotdb.php';
         function renderChartBattery(data, custom)
         {         
          //alert(data);
-         
+         AmCharts.addInitHandler( function( chart ) {
+           
+             var dataPoint = chart.dataProvider[ chart.dataProvider.length - 1 ];
+             var graph = chart.graphs[0];
+              graph.bulletField = "bullet";
+              dataPoint.bullet = "round";
+
+         },[ "serial" ]);
          var chartData = JSON.parse(data); //return json object, converts json string into json objects
           var chart = AmCharts.makeChart("dumps",
         {
@@ -286,11 +293,11 @@ include_once 'settings/iotdb.php';
                 "adjustBorderColor":false,
                 "color":"#ffffff"
               },
-              "bullet": "round",
+              //"bullet": "round",
               "bulletBorderColor": "#786c56",
               "bulletBorderAlpha": 1,
               "bulletBorderThickness": 2,
-              "bulletColor": "#ffffff",
+              "bulletColor": "#ff0000",
               "showBalloon": true,
               "animationPlayed": true,
               "lineThickness": 2,
