@@ -206,7 +206,7 @@ include_once 'settings/iotdb.php';
               "shadowAlpha": 0
           },
           "graphs": [{
-              "id": "g1",
+              "id": custom.title,
               "title": custom.title,
               "type": "smoothedLine",
               "balloon":{
@@ -258,7 +258,9 @@ include_once 'settings/iotdb.php';
           "categoryAxis": {
               "title":custom.id,
               "parseDates": true,
-              "minPeriod":"hh",
+              "equalSpacing" : true,
+              "minPeriod":"dd",
+              "groupToPeriods" : ["DD", "WW"],
               "dashLength": 1,
               "minorGridEnabled": true
           },

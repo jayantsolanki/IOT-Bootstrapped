@@ -21,7 +21,7 @@ if(isset($_GET['q']))
 	if($type=='temperature'){//temperature
 
 		mysql_select_db($dbname) or die(mysql_error());
-		$query="(SELECT created_at , temp_value FROM feeds WHERE feeds.device_id= '$macid')"; //device id similar to macid
+		$query="(SELECT DATE_FORMAT(created_at, '%Y-%m-%d-%H-%i') as created_at , temp_value FROM feeds WHERE feeds.device_id= '$macid' )"; //device id similar to macid
 		$feeds=mysql_query($query);
 		//echo mysql_num_rows($feeds);
 		//initialize the array to store the processed data
@@ -46,7 +46,7 @@ if(isset($_GET['q']))
 	else if($type=='humidity'){
 
 		mysql_select_db($dbname) or die(mysql_error());
-		$query="(SELECT feeds.created_at ,humidity_value FROM feeds WHERE feeds.device_id= '$macid')"; //device id similar to macid
+		$query="(SELECT DATE_FORMAT(created_at, '%Y-%m-%d-%H-%i') as created_at ,humidity_value FROM feeds WHERE feeds.device_id= '$macid' )"; //device id similar to macid
 		$feeds=mysql_query($query);
 		//initialize the array to store the processed data
 		
@@ -69,7 +69,7 @@ if(isset($_GET['q']))
 	else if($type=='moisture'){
 		
 		mysql_select_db($dbname) or die(mysql_error());
-		$query="(SELECT feeds.created_at ,moist_value FROM feeds WHERE feeds.device_id= '$macid' )"; //device id similar to macid
+		$query="(SELECT DATE_FORMAT(created_at, '%Y-%m-%d-%H-%i') as created_at ,moist_value FROM feeds WHERE feeds.device_id= '$macid' )"; //device id similar to macid
 		$feeds=mysql_query($query);
 		//initialize the array to store the processed data
 		
@@ -92,7 +92,7 @@ if(isset($_GET['q']))
 	else{//battery
 
 		mysql_select_db($dbname) or die(mysql_error());
-		$query="(SELECT feeds.created_at ,battery_value FROM feeds WHERE feeds.device_id= '$macid' )"; //device id similar to macid
+		$query="(SELECT DATE_FORMAT(created_at, '%Y-%m-%d-%H-%i') as created_at ,battery_value FROM feeds WHERE feeds.device_id= '$macid' )"; //device id similar to macid
 		$feeds=mysql_query($query);
 		//initialize the array to store the processed data
 		
