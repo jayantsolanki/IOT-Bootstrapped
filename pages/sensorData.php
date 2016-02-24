@@ -141,7 +141,7 @@ include_once 'settings/iotdb.php';
      <script type="text/javascript" src="../dist/js/bootstrap-fullscreen-select.js"></script>
      <script src="../bower_components/amcharts3/amcharts/amcharts.js"></script>
      <script src="../bower_components/amcharts3/amcharts/serial.js"></script>
-     <script src="../bower_components/amcharts3/amcharts/themes/black.js"></script>
+     <script src="../bower_components/amcharts3/amcharts/themes/dark.js"></script>
      
     <!-- Custom Theme JavaScript -->
     <script src="../dist/js/sb-admin-2.js"></script>
@@ -182,60 +182,89 @@ include_once 'settings/iotdb.php';
          */
         function renderChartBattery(data, custom)
         {         
-         // alert(data);
+         //alert(data);
+         
          var chartData = JSON.parse(data); //return json object, converts json string into json objects
-          AmCharts.makeChart("dumps",
+          var chart = AmCharts.makeChart("dumps",
         {
           "type": "serial",
-          "categoryField": "label",
-          "startDuration": 1,
-          "color": "#ffff00",
-          "fontFamily": "Sans-Serif",
-          "fontSize": 9,
-          "handDrawScatter": 2,
-          "processCount": 997,
-          "theme": "black",
-          "categoryAxis": {
-            "gridPosition": "start"
+          "theme": "dark",
+          "marginRight": 40,
+          "marginLeft": 50,
+          "autoMarginOffset": 20,
+          "dataDateFormat": "YYYY-MM-DD-JJ-NN",
+          "precision":0,
+          "valueAxes": [{
+              "title":custom.yAxisName,
+              "id": "v1",
+              "axisAlpha": 0,
+              "position": "left",
+              "ignoreAxisWidth":true
+          }],
+          "balloon": {
+              "borderThickness": 1,
+              "shadowAlpha": 0
           },
-          "trendLines": [],
-          "graphs": [
-            {
-              "balloonText": "[[title]] of [[category]]:[[value]]",
-              "bullet": "round",
-              "cornerRadiusTop": 0,
-              "id": "Jayant",
+          "graphs": [{
+              "id": "g1",
               "title": custom.title,
               "type": "smoothedLine",
-              "valueAxis": custom.yAxisName,
+              "balloon":{
+                "drop":true,
+                "adjustBorderColor":false,
+                "balloonDateFormat":"DD,MMM JJ:NN",
+                "color":"#ffffff"
+              },
+              "bullet": "round",
+              "bulletBorderAlpha": 1,
+              "bulletColor": "#FFFFFF",
+              "bulletSize": 5,
+              "hideBulletsCount": 50,
+              "lineThickness": 2,
+              "title": "red line",
+              "useLineColorForBulletBorder": true,
               "valueField": "value",
-              "yAxis": "value"
-            }
-          ],
-          "guides": [],
-          "valueAxes": [
-            {
-              "id": "value",
-              "title": custom.yAxisName
-            }
-          ],
-          "allLabels": [],
-          "balloon": {
-            "offsetX": 13
+              "balloonText": "<span style='font-size:18px;'>[[value]]</span>"
+          }],
+          "chartScrollbar": {
+              "graph": "g1",
+              "oppositeAxis":false,
+              "offset":30,
+              "scrollbarHeight": 80,
+              "backgroundAlpha": 0,
+              "selectedBackgroundAlpha": 0.1,
+              "selectedBackgroundColor": "#888888",
+              "graphFillAlpha": 0,
+              "graphLineAlpha": 0.5,
+              "selectedGraphFillAlpha": 0,
+              "selectedGraphLineAlpha": 1,
+              "autoGridCount":true,
+              "color":"#AAAAAA"
           },
-          "legend": {
-            "enabled": true,
-            "useGraphSettings": true
+          "chartCursor": {
+              "pan": true,
+              "valueLineEnabled": true,
+              "valueLineBalloonEnabled": true,
+              "cursorAlpha":1,
+              "cursorColor":"#258cbb",
+              "limitToGraph":"g1",
+              "valueLineAlpha":0.2
           },
-          "titles": [
-            {
-              "alpha": 0,
-              "color": "#FF0000",
-              "id": custom.id,
-              "size": 15,
-              "text": "Chart Title"
-            }
-          ],
+          "valueScrollbar":{
+            "oppositeAxis":true,
+            "scrollbarHeight":10
+          },
+          "categoryField": "label",
+          "categoryAxis": {
+              "title":custom.id,
+              "parseDates": true,
+              "minPeriod":"hh",
+              "dashLength": 1,
+              "minorGridEnabled": true
+          },
+          "export": {
+              "enabled": true
+          },
           "dataProvider": chartData
         }
       );
