@@ -21,7 +21,7 @@ if(isset($_GET['q']))
 	if($type=='temperature'){//temperature
 
 		mysql_select_db($dbname) or die(mysql_error());
-		$query="(SELECT feeds.created_at ,avg(temp_value) as avg_value FROM feeds WHERE feeds.device_id= '$macid' GROUP BY DATE_FORMAT(created_at, '%y%m%d%H') order by created_at desc limit 24) order by created_at asc"; //device id similar to macid
+		$query="(SELECT date_format(feeds.created_at, '%a %d %H:00') as created_at ,avg(temp_value) as avg_value FROM feeds WHERE feeds.device_id= '$macid' GROUP BY DATE_FORMAT(created_at, '%y%m%d%H') order by created_at desc limit 24) order by created_at asc"; //device id similar to macid
 		$feeds=mysql_query($query);
 		//echo mysql_num_rows($feeds);
 		//initialize the array to store the processed data
@@ -46,7 +46,7 @@ if(isset($_GET['q']))
 	else if($type=='humidity'){
 
 		mysql_select_db($dbname) or die(mysql_error());
-		$query="(SELECT feeds.created_at ,avg(humidity_value) as avg_value FROM feeds WHERE feeds.device_id= '$macid' GROUP BY DATE_FORMAT(created_at, '%y%m%d%H') order by created_at desc limit 24) order by created_at asc"; //device id similar to macid
+		$query="(SELECT date_format(feeds.created_at, '%a %d %H:00') as created_at ,avg(humidity_value) as avg_value FROM feeds WHERE feeds.device_id= '$macid' GROUP BY DATE_FORMAT(created_at, '%y%m%d%H') order by created_at desc limit 24) order by created_at asc"; //device id similar to macid
 		$feeds=mysql_query($query);
 		//initialize the array to store the processed data
 		
@@ -69,7 +69,7 @@ if(isset($_GET['q']))
 	else if($type=='moisture'){
 		
 		mysql_select_db($dbname) or die(mysql_error());
-		$query="(SELECT feeds.created_at ,avg(moist_value) as avg_value FROM feeds WHERE feeds.device_id= '$macid' GROUP BY DATE_FORMAT(created_at, '%y%m%d%H') order by created_at desc limit 24) order by created_at asc"; //device id similar to macid
+		$query="(SELECT date_format(feeds.created_at, '%a %d %H:00') as created_at ,avg(moist_value) as avg_value FROM feeds WHERE feeds.device_id= '$macid' GROUP BY DATE_FORMAT(created_at, '%y%m%d%H') order by created_at desc limit 24) order by created_at asc"; //device id similar to macid
 		$feeds=mysql_query($query);
 		//initialize the array to store the processed data
 		
@@ -92,7 +92,7 @@ if(isset($_GET['q']))
 	else{//battery
 
 		mysql_select_db($dbname) or die(mysql_error());
-		$query="(SELECT feeds.created_at ,avg(battery_value) as avg_value FROM feeds WHERE feeds.device_id= '$macid' GROUP BY DATE_FORMAT(created_at, '%y%m%d%H') order by created_at desc limit 24) order by created_at asc"; //device id similar to macid
+		$query="(SELECT date_format(feeds.created_at, '%a %d %H:00') as created_at ,avg(battery_value) as avg_value FROM feeds WHERE feeds.device_id= '$macid' GROUP BY DATE_FORMAT(created_at, '%y%m%d%H') order by created_at desc limit 24) order by created_at asc"; //device id similar to macid
 		$feeds=mysql_query($query);
 		//initialize the array to store the processed data
 		

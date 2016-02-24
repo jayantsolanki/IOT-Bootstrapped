@@ -63,9 +63,10 @@ class spMQTT extends spMQTTBase{
     public function __construct($address, $clientid=null) {
         $this->address = $address;
         # check client id
-        spMQTTUtil::CheckClientID($clientid);
+        //spMQTTUtil::CheckClientID($clientid);
 
-        $this->clientid = $clientid;
+        //$this->clientid = $clientid;
+        $this->clientid = 'PHP-MQTT'; //added personal client id
     }
 
     /**

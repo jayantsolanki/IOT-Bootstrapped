@@ -17,7 +17,7 @@ if(isset($_GET['q']))
 	if ($feeds=mysql_query($sql)) {
 	    //echo "Record updated successfully";
 	} else {
-	    echo "<span class='text txt-danger'>Error updating record: " . $feeds."</span>";
+	    echo "<span class='text text-danger'>Error updating record: " . $feeds."</span>";
 	}
 	echo $val;
 }

@@ -105,14 +105,14 @@ include_once 'settings/iotdb.php';
                                     <a href="javascript:showgraphMoist('moisture')">Moisture</a></li>
                                 </ul>
                             </div>
-                            <div id='chart-container'>
+                            <div id='dumps' style="height: 400px;  background-color: #222222;">
                                 <cite>Select group and the device for the Chart</cite>
                             </div>
                             
                         </div>
 
                          </div>
-                         <div id='dumps'>
+                         <div id='ss' style="height: 400px;">
                                 <cite>Select group and the device for the Chart</cite>
                             </div>
                       </div><!-- end of content div -->
@@ -139,9 +139,10 @@ include_once 'settings/iotdb.php';
     <!-- Metis Menu Plugin JavaScript -->
     <script src="../bower_components/metisMenu/dist/metisMenu.min.js"></script>
      <script type="text/javascript" src="../dist/js/bootstrap-fullscreen-select.js"></script>
-      <script type="text/javascript" src="../dist/js/fusioncharts.charts.js"></script>
-       <script type="text/javascript" src="../dist/js/fusioncharts.js"></script>
-       <script src="../dist/js/fusioncharts.theme.zune.js"></script>
+     <script src="../bower_components/amcharts3/amcharts/amcharts.js"></script>
+     <script src="../bower_components/amcharts3/amcharts/serial.js"></script>
+     <script src="../bower_components/amcharts3/amcharts/themes/black.js"></script>
+     
     <!-- Custom Theme JavaScript -->
     <script src="../dist/js/sb-admin-2.js"></script>
     <script>
@@ -179,50 +180,65 @@ include_once 'settings/iotdb.php';
          * Example Call: showgrp(34)
          *
          */
-        function renderChartBattery(data, chartProperties)
+        function renderChartBattery(data, custom)
         {         
+         // alert(data);
          var chartData = JSON.parse(data); //return json object, converts json string into json objects
-        // alert(chartData[0].value);
-          var apiChart = new FusionCharts({
-                type: 'line',
-                renderAt: 'chart-container',
-                width: '700',
-                height: '400',
-                dataFormat: 'json',
-                dataSource: {
-                  "chart": chartProperties,
-                  "data": chartData
-                }
-              });
-              apiChart.render();
-               // alert(1);
-        $(function(){
-          $("#background-btn").click(function(){
-            modifyBackground();
-          });
-         
-          $("#canvas-btn").click(function(){
-            modifyCanvas();
-          });
-         
-          $("#dataplot-btn").click(function(){
-            modifyDataplot();
-          });
-         //alert(12);
-         // apiChart.render();
-        });
-         
-        function modifyBackground(){
-          //to be implemented
+          AmCharts.makeChart("dumps",
+        {
+          "type": "serial",
+          "categoryField": "label",
+          "startDuration": 1,
+          "color": "#ffff00",
+          "fontFamily": "Sans-Serif",
+          "fontSize": 9,
+          "handDrawScatter": 2,
+          "processCount": 997,
+          "theme": "black",
+          "categoryAxis": {
+            "gridPosition": "start"
+          },
+          "trendLines": [],
+          "graphs": [
+            {
+              "balloonText": "[[title]] of [[category]]:[[value]]",
+              "bullet": "round",
+              "cornerRadiusTop": 0,
+              "id": "Jayant",
+              "title": custom.title,
+              "type": "smoothedLine",
+              "valueAxis": custom.yAxisName,
+              "valueField": "value",
+              "yAxis": "value"
+            }
+          ],
+          "guides": [],
+          "valueAxes": [
+            {
+              "id": "value",
+              "title": custom.yAxisName
+            }
+          ],
+          "allLabels": [],
+          "balloon": {
+            "offsetX": 13
+          },
+          "legend": {
+            "enabled": true,
+            "useGraphSettings": true
+          },
+          "titles": [
+            {
+              "alpha": 0,
+              "color": "#FF0000",
+              "id": custom.id,
+              "size": 15,
+              "text": "Chart Title"
+            }
+          ],
+          "dataProvider": chartData
         }
-         
-        function modifyCanvas(){
-          //to be implemented
-        }
-         
-        function modifyDataplot(){
-          //to be implemented
-        }
+      );
     }
     </script>
     <script type='text/javascript'>
@@ -327,21 +343,17 @@ include_once 'settings/iotdb.php';
             {
                 $('ul.nav-tabs li.active').removeClass('active');
                 document.getElementsByName("battery")[0].setAttribute("class","active");
-                var chartProperties = {
-                    "caption": "Battery Value",
-                    "xAxisName": "Time",
-                    "yAxisName": "Battery Value in mV",
-                    "rotatevalues": "1",
-                    "theme": "zune",
-                    "setAdaptiveYMin": "1",
-                    "showValues": "1",
-                    "drawAnchors": "1"
-                  };   
-             document.getElementById('devId').innerHTML=str;
-             document.getElementById("batval").setAttribute("href","javascript:showgraphBattery('"+str+"')");
-            renderChartBattery(xmlhttp.responseText,chartProperties);
-            //alert(xmlhttp.responseText);
-           document.getElementById("dump").innerHTML=xmlhttp.responseText;
+                document.getElementById('devId').innerHTML=str;
+                document.getElementById("batval").setAttribute("href","javascript:showgraphBattery('"+str+"')");
+                var custom = {
+                    "title": "Battery Values in last 24 hours",
+                    "id": "Battery Chart",
+                    "yAxisName": "Battery in mV "
+                  };
+                renderChartBattery(xmlhttp.responseText, custom);
+
+                //alert(xmlhttp.responseText);
+                document.getElementById("dump").innerHTML=xmlhttp.responseText;
 
             
             }
@@ -384,18 +396,13 @@ include_once 'settings/iotdb.php';
             {
                 $('ul.nav-tabs li.active').removeClass('active');
             document.getElementsByName("temperature")[0].setAttribute("class","active");
-            var chartProperties = {
-                    "caption": "Temperature Value",
-                    "xAxisName": "Time",
-                    "yAxisName": "Temperature in °C ",
-                    "rotatevalues": "1",
-                    "theme": "zune",
-                    "setAdaptiveYMin": "1",
-                    "showValues": "1",
-                    "drawAnchors": "1"
+            var custom = {
+                    "title": "Temperature Value",
+                    "id": "Temperature Chart",
+                    "yAxisName": "Temperature in °C "
                   };   
              
-            renderChartBattery(xmlhttp.responseText,chartProperties);
+            renderChartBattery(xmlhttp.responseText,custom);
             document.getElementById("dump").innerHTML=xmlhttp.responseText;
             }
           }
@@ -438,18 +445,12 @@ include_once 'settings/iotdb.php';
             {
                 $('ul.nav-tabs li.active').removeClass('active');
                 document.getElementsByName("humidity")[0].setAttribute("class","active");
-                var chartProperties = {
-                        "caption": "Humidity Value",
-                        "xAxisName": "Time",
-                        "yAxisName": "Humidity Value in mV",
-                        "rotatevalues": "1",
-                        "theme": "zune",
-                        "setAdaptiveYMin": "1",
-                        "showValues": "1",
-                        "drawAnchors": "1"
-                      };   
-                 
-                renderChartBattery(xmlhttp.responseText,chartProperties);
+                var custom = {
+                    "title": "Humidity Values in last 24 hours",
+                    "id": "Humidity Chart",
+                    "yAxisName": "Humidity in % "
+                  };
+                renderChartBattery(xmlhttp.responseText,custom);
                 document.getElementById("dump").innerHTML=xmlhttp.responseText;
             }
           }
@@ -492,18 +493,13 @@ include_once 'settings/iotdb.php';
             {
                 $('ul.nav-tabs li.active').removeClass('active');
                 document.getElementsByName("moisture")[0].setAttribute("class","active");
-                var chartProperties = {
-                        "caption": "Moisture Value",
-                        "xAxisName": "Time",
-                        "yAxisName": "Moisture Value in #",
-                        "rotatevalues": "1",
-                        "theme": "zune",
-                        "setAdaptiveYMin": "1",
-                        "showValues": "1",
-                        "drawAnchors": "1"
-                      };   
+                var custom = {
+                    "title": "Moisture Values in last 24 hours",
+                    "id": "Moisture Chart",
+                    "yAxisName": "Moisture in %"
+                  };   
                  
-                renderChartBattery(xmlhttp.responseText,chartProperties);
+                renderChartBattery(xmlhttp.responseText, custom);
                 document.getElementById("dump").innerHTML=xmlhttp.responseText;
             }
           }
