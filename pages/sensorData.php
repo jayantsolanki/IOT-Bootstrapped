@@ -190,12 +190,13 @@ include_once 'settings/iotdb.php';
           "type": "serial",
           "theme": "dark",
           "marginRight": 40,
-          "marginLeft": 50,
+          "marginLeft": 86,
           "autoMarginOffset": 20,
           "dataDateFormat": "YYYY-MM-DD-JJ-NN",
           "precision":0,
           "valueAxes": [{
               "title":custom.yAxisName,
+              "unit": custom.unit,
               "id": "v1",
               "axisAlpha": 0,
               "position": "left",
@@ -212,7 +213,6 @@ include_once 'settings/iotdb.php';
               "balloon":{
                 "drop":true,
                 "adjustBorderColor":false,
-                "balloonDateFormat":"DD,MMM JJ:NN",
                 "color":"#ffffff"
               },
               "bullet": "round",
@@ -224,7 +224,7 @@ include_once 'settings/iotdb.php';
               "title": "red line",
               "useLineColorForBulletBorder": true,
               "valueField": "value",
-              "balloonText": "<span style='font-size:18px;'>[[value]]</span>"
+              "balloonText": "<span style='font-size:18px;'>[[value]]"+custom.unit+"</span>"
           }],
           "chartScrollbar": {
               "graph": "g1",
@@ -247,6 +247,7 @@ include_once 'settings/iotdb.php';
               "valueLineBalloonEnabled": true,
               "cursorAlpha":1,
               "cursorColor":"#258cbb",
+              "categoryBalloonDateFormat":"JJ:NN, DD MMM",
               "limitToGraph":"g1",
               "valueLineAlpha":0.2
           },
@@ -259,8 +260,8 @@ include_once 'settings/iotdb.php';
               "title":custom.id,
               "parseDates": true,
               "equalSpacing" : true,
-              "minPeriod":"dd",
-              "groupToPeriods" : ["DD", "WW"],
+              "minPeriod":"mm",
+              "periodValue": "Average",
               "dashLength": 1,
               "minorGridEnabled": true
           },
@@ -270,6 +271,11 @@ include_once 'settings/iotdb.php';
           "dataProvider": chartData
         }
       );
+      chart.addListener("rendered", zoomChart);
+      zoomChart();
+      function zoomChart() {
+          chart.zoomToIndexes(chart.dataProvider.length - 40, chart.dataProvider.length - 1);
+      }
     }
     </script>
     <script type='text/javascript'>
@@ -379,7 +385,8 @@ include_once 'settings/iotdb.php';
                 var custom = {
                     "title": "Battery Values in last 24 hours",
                     "id": "Battery Chart",
-                    "yAxisName": "Battery in mV "
+                    "yAxisName": "Battery in mV ",
+                    "unit":" mV"
                   };
                 renderChartBattery(xmlhttp.responseText, custom);
 
@@ -430,7 +437,8 @@ include_once 'settings/iotdb.php';
             var custom = {
                     "title": "Temperature Value",
                     "id": "Temperature Chart",
-                    "yAxisName": "Temperature in °C "
+                    "yAxisName": "Temperature in °C ",
+                    "unit":" °C"
                   };   
              
             renderChartBattery(xmlhttp.responseText,custom);
@@ -479,7 +487,8 @@ include_once 'settings/iotdb.php';
                 var custom = {
                     "title": "Humidity Values in last 24 hours",
                     "id": "Humidity Chart",
-                    "yAxisName": "Humidity in % "
+                    "yAxisName": "Humidity in % ",
+                    "unit":" %"
                   };
                 renderChartBattery(xmlhttp.responseText,custom);
                 document.getElementById("dump").innerHTML=xmlhttp.responseText;
@@ -527,7 +536,8 @@ include_once 'settings/iotdb.php';
                 var custom = {
                     "title": "Moisture Values in last 24 hours",
                     "id": "Moisture Chart",
-                    "yAxisName": "Moisture in %"
+                    "yAxisName": "Moisture in %",
+                    "unit":" %"
                   };   
                  
                 renderChartBattery(xmlhttp.responseText, custom);
