@@ -248,7 +248,7 @@ include_once 'settings/iotdb.php';
          * Example Call: showgrp(34)
          *
          */
-        function renderChartBattery(data, custom)
+        function renderChartBattery(data, custom, type, devId)
         {         
          //alert(data);
          AmCharts.addInitHandler( function( chart ) {
@@ -266,6 +266,7 @@ include_once 'settings/iotdb.php';
           "addClassNames": true,
           //"classNamePrefix": "amcharts", // Default value
           "theme": "dark",
+          "marginTop": 86,
           "marginRight": 40,
           "marginLeft": 86,
           "autoMarginOffset": 20,
@@ -357,6 +358,81 @@ include_once 'settings/iotdb.php';
       function zoomChart() {
           chart.zoomToIndexes(chart.dataProvider.length - 40, chart.dataProvider.length - 1);
       }
+
+      $(function() { //websocket
+
+          var ws = new WebSocket("ws://localhost:8181");
+
+
+
+          $('#AAPL span').toggleClass('label-success');
+          ws.onopen = function(e) {
+            console.log('Connection to server opened');
+          }
+              var valElem = $('#ss');
+                 
+          ws.onmessage = function(e) {
+           //alert(2);
+            var chartpoint = JSON.parse(e.data);
+            //alert(3);
+            valElem.html(e.data);
+            if(type=='battery')
+            {
+              if(devId==chartpoint['deviceId']){
+                  chart.dataProvider.push({
+                  label: chartpoint['date'],
+                  value: chartpoint['batValue']
+                  });
+                  chart.validateData();
+                  zoomChart();
+              }
+              //alert(chartpoint['batValue']);
+            }
+            else if(type=='temperature')
+            {
+              //alert(chartpoint['tempValue']);
+              if(devId==chartpoint['deviceId']){
+                  chart.dataProvider.push({
+                  label: chartpoint['date'],
+                  value: chartpoint['tempValue']
+                  });
+                  chart.validateData();
+                  zoomChart();
+              }
+              
+            }
+            else if(type=='humidity')
+            {
+              if(devId==chartpoint['deviceId']){
+                  chart.dataProvider.push({
+                  label: chartpoint['date'],
+                  value: chartpoint['humidityValue']
+                  });
+                  chart.validateData();
+                  zoomChart();
+              }
+            }
+            else if(type=='moisture')
+            {
+              if(devId==chartpoint['deviceId']){
+                  chart.dataProvider.push({
+                  label: chartpoint['date'],
+                  value: chartpoint['moistValue']
+                  });
+                  chart.validateData();
+                  zoomChart();
+              }
+            }
+            
+          }
+          ws.onclose = function(e) {
+            console.log("Connection closed");
+          }
+
+          function disconnect() {
+            ws.close();
+          }
+      });
     }
     </script>
     <style type="text/css">
@@ -497,7 +573,7 @@ include_once 'settings/iotdb.php';
                     "yAxisName": "Battery in mV ",
                     "unit":" mV"
                   };
-                  renderChartBattery(xmlhttp.responseText, custom);
+                  renderChartBattery(xmlhttp.responseText, custom, 'battery',str);
                   jQuery("#modal-fullscreen").modal('show');
                 
                 //alert(xmlhttp.responseText);
@@ -551,7 +627,7 @@ include_once 'settings/iotdb.php';
                     "unit":" °C"
                   };   
              
-            renderChartBattery(xmlhttp.responseText,custom);
+            renderChartBattery(xmlhttp.responseText,custom, 'temperature', devid);
             jQuery("#modal-fullscreen").modal('show');
             //document.getElementById("dump").innerHTML=xmlhttp.responseText;
             }
@@ -601,7 +677,7 @@ include_once 'settings/iotdb.php';
                     "yAxisName": "Humidity in % ",
                     "unit":" %"
                   };
-                renderChartBattery(xmlhttp.responseText,custom);
+                renderChartBattery(xmlhttp.responseText,custom, 'humidity',devid);
                 jQuery("#modal-fullscreen").modal('show');
                 //document.getElementById("dump").innerHTML=xmlhttp.responseText;
             }
@@ -652,7 +728,7 @@ include_once 'settings/iotdb.php';
                     "unit":" %"
                   };   
                  
-                renderChartBattery(xmlhttp.responseText, custom);
+                renderChartBattery(xmlhttp.responseText, custom, 'moisture',devid);
                 jQuery("#modal-fullscreen").modal('show');
                 //document.getElementById("dump").innerHTML=xmlhttp.responseText;
             }
