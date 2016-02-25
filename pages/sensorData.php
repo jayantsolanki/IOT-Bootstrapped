@@ -358,6 +358,17 @@ include_once 'settings/iotdb.php';
       function zoomChart() {
           chart.zoomToIndexes(chart.dataProvider.length - 40, chart.dataProvider.length - 1);
       }
+      function time_format(d) {
+          year=d.getFullYear();
+          month=format_two_digits(d.getMonth());
+          date=format_two_digits(d.getDate());
+          hours = format_two_digits(d.getHours());
+          minutes = format_two_digits(d.getMinutes());
+          return year+"-"+month+"-"+date+"-"+hours + "-" + minutes;
+      }
+      function format_two_digits(n) {
+           return n < 10 ? '0' + n : n;
+      }
 
       $(function() { //websocket
 
@@ -372,15 +383,18 @@ include_once 'settings/iotdb.php';
               var valElem = $('#ss');
                  
           ws.onmessage = function(e) {
+            var d = new Date();
+            var formatted_time = time_format(d);
+            $('#yourTimeField').text(formatted_time);
            //alert(2);
             var chartpoint = JSON.parse(e.data);
             //alert(3);
-            valElem.html(e.data);
+            //valElem.html(e.data);
             if(type=='battery')
             {
               if(devId==chartpoint['deviceId']){
                   chart.dataProvider.push({
-                  label: chartpoint['date'],
+                  label: formatted_time,
                   value: chartpoint['batValue']
                   });
                   chart.validateData();
@@ -393,7 +407,7 @@ include_once 'settings/iotdb.php';
               //alert(chartpoint['tempValue']);
               if(devId==chartpoint['deviceId']){
                   chart.dataProvider.push({
-                  label: chartpoint['date'],
+                  label: formatted_time,
                   value: chartpoint['tempValue']
                   });
                   chart.validateData();
@@ -405,7 +419,7 @@ include_once 'settings/iotdb.php';
             {
               if(devId==chartpoint['deviceId']){
                   chart.dataProvider.push({
-                  label: chartpoint['date'],
+                  label: formatted_time,
                   value: chartpoint['humidityValue']
                   });
                   chart.validateData();
@@ -416,7 +430,7 @@ include_once 'settings/iotdb.php';
             {
               if(devId==chartpoint['deviceId']){
                   chart.dataProvider.push({
-                  label: chartpoint['date'],
+                  label: formatted_time,
                   value: chartpoint['moistValue']
                   });
                   chart.validateData();
