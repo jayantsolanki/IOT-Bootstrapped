@@ -272,6 +272,7 @@ include_once 'settings/iotdb.php';
           "autoMarginOffset": 20,
           "dataDateFormat": "YYYY-MM-DD-JJ-NN",
           "precision":0,
+          "mouseWheelZoomEnabled": true,
           "valueAxes": [{
               "title":custom.yAxisName,
               "unit": custom.unit,
@@ -287,7 +288,7 @@ include_once 'settings/iotdb.php';
           "graphs": [{
               "id": "g2",
               "title": custom.title,
-              "type": "smoothedLine",
+              //"type": "smoothedLine",
               "classNameField": "bulletClass",
               "balloon":{
                 "drop":true,
@@ -335,7 +336,7 @@ include_once 'settings/iotdb.php';
           },
           "valueScrollbar":{
             "oppositeAxis":true,
-            "scrollbarHeight":10
+            "scrollbarHeight":40
           },
           "categoryField": "label",
           "categoryAxis": {
