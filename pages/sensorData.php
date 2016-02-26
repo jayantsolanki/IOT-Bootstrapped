@@ -341,7 +341,7 @@ include_once 'settings/iotdb.php';
           "categoryAxis": {
               "title":custom.id,
               "parseDates": true,
-              "equalSpacing" : true,
+              //"equalSpacing" : true,
               "minPeriod":"mm",
               "periodValue": "Average",
               "dashLength": 1,
@@ -374,9 +374,6 @@ include_once 'settings/iotdb.php';
 
           var ws = new WebSocket("ws://10.129.28.118:8181");
 
-
-
-          $('#AAPL span').toggleClass('label-success');
           ws.onopen = function(e) {
             console.log('Connection to server opened');
           }
@@ -398,6 +395,7 @@ include_once 'settings/iotdb.php';
                   value: chartpoint['batValue']
                   });
                   chart.validateData();
+                  chart.parseDates(true);
                   zoomChart();
               }
               //alert(chartpoint['batValue']);
@@ -411,6 +409,7 @@ include_once 'settings/iotdb.php';
                   value: chartpoint['tempValue']
                   });
                   chart.validateData();
+                  chart.parseDates(true);
                   zoomChart();
               }
               
