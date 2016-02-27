@@ -20,7 +20,7 @@ if($stop>=2400)
 if($q!=0 and $q!=1 )//individual on/off
 {
 //echo "Hello World".$q;
-mysql_select_db($dbname) or die(mysql_error());
+mysql_select_db($dbname) or die(mysql_error());//manual on/off
 $query="SELECT * FROM devices where"."(macid='$q')";
 $results=mysql_query($query);
 
@@ -35,8 +35,8 @@ $results=mysql_query($query);
 			//$status=$row['status'];
 			if($action==0)//checking valve is off or not
 			{
-				command($macid,1);	//switch ON			
-				echo "Switch OFF"; //update button status
+				//command($macid,1);	//switch ON			
+				//echo "Switch OFF"; //update button status
 				$query = "UPDATE devices SET action ='1' WHERE macid='$macid'"; //updating action status in device table and also chanign new device status
 				//echo "</br>".$query;
 				if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))
@@ -48,13 +48,13 @@ $results=mysql_query($query);
 			}
 			else
 			{
-				command($macid,0);	//Switch off
-				echo "Switch ON";
+				//command($macid,0);	//Switch off
+				//echo "Switch ON";
 				$query = "UPDATE devices SET action ='0' WHERE macid='$macid'"; //updating action status in device table 
 				//echo "</br>".$query;
 				if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))
 					echo "UPDATE failed: $query<br/>".mysql_error()."<br/><br/>";
-				$query= "DELETE FROM tasks where macid='$macid'";
+				$query= "DELETE FROM tasks where macid='$macid'";//possible collision with sql query running in mosca server
 				if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))
 					echo "UPDATE failed: $query<br/>".mysql_error()."<br/><br/>";
 				
@@ -82,12 +82,7 @@ $results=mysql_query($query);
 		{
 				$macid=$row['macid'];
 				command($macid,$q);	//switch 
-
-							
 				//echo "Switch OFF"; //update button status
-				
-			
-           	    	
 		}
 	
 	if($q==1)

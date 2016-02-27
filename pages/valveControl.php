@@ -97,6 +97,12 @@ include_once 'settings/iotdb.php';
                           <div class="" id='controls'>
 
                           </div>
+                          <div class="" id='ss'>
+
+                          </div>
+                          <div class="" id='sss'>
+
+                          </div>
                          </div>
 
                       </div><!-- end of content div -->
@@ -120,16 +126,53 @@ include_once 'settings/iotdb.php';
 
     <!-- jQuery -->
     <script src="../bower_components/jquery/dist/jquery.min.js"></script>
-     <script type="text/javascript" src="../dist/js/bootstrap-fullscreen-select.js"></script>
+    <script type="text/javascript" src="../dist/js/bootstrap-fullscreen-select.js"></script>
 
     <!-- Bootstrap Core JavaScript -->
     <script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 
     <!-- Metis Menu Plugin JavaScript -->
     <script src="../bower_components/metisMenu/dist/metisMenu.min.js"></script>
-
+    <!-- bootstrap switch -->
+    <script src="../dist/js/bootstrap-switch.min.js"></script>
     <!-- Custom Theme JavaScript -->
     <script src="../dist/js/sb-admin-2.js"></script>
+    <script>
+      var ws=null;
+      $(function() { //websocket
+          //var wscon=null;
+          ws = new WebSocket("ws://10.129.28.118:8180");
+
+
+
+          $('#AAPL span').toggleClass('label-success');
+          ws.onopen = function(e) {
+            console.log('Connection to server opened');
+          }
+              //var valElem = $('#sss');
+                 
+          ws.onmessage = function(e) {
+            var status = JSON.parse(e.data);
+
+            //alert(3);
+           // valElem.html(e.data);
+            //alert(status.deviceId+' '+status.status);
+            if(status.status==0)
+              document.getElementById(status.deviceId).innerHTML='Switch ON';
+            else if(status.status==1)
+              document.getElementById(status.deviceId).innerHTML='Switch OFF';
+            
+                   
+          }
+          ws.onclose = function(e) {
+            console.log("Connection closed");
+          }
+
+          function disconnect() {
+            ws.close();
+          }
+      });
+    </script
     <script src="../dist/js/bootstrap-switch.min.js"></script>
      <script>
         $('.mobileSelect').mobileSelect({
@@ -168,6 +211,7 @@ include_once 'settings/iotdb.php';
  */
 function showgrp(grp)
 {
+
     
 if (grp=='')
   {
@@ -191,11 +235,7 @@ xmlhttp.onreadystatechange=function()
   if (xmlhttp.readyState==4 && xmlhttp.status==200)
     {
     document.getElementById('controls').innerHTML=xmlhttp.responseText;
-        $('.BSswitch').bootstrapSwitch('state') //loading buttons
-          $('#TheCheckBox').on('switchChange.bootstrapSwitch', function () {
-            //var mac=$('#TheCheckBox').val();
-            update($('#TheCheckBox').val());
-        });
+        
     }
   }
 xmlhttp.open('GET','control.php?grp='+grp,true);
@@ -216,6 +256,28 @@ xmlhttp.send();
 function update(str)
 {
   //alert(str);
+  var action=document.getElementById(str).innerHTML;
+  var payload;
+  //alert(action);
+  //alert(action);
+  if(ws!=null){//sending data via websocket
+          //if(ws.readyState == 1) {
+              if(action=='Switch OFF'){
+                payload=0;                
+              }
+              if(action=='Switch ON'){
+                payload=1;
+              }
+              var jsonS={
+                  "deviceId":str,
+                   "payload":payload
+                   };
+                ws.send(JSON.stringify(jsonS));
+               // var valElem = $('#sss');
+                //valElem.html(JSON.stringify(jsonS));
+
+           // }
+        }
 var duration=document.getElementById('duration').value;
 //alert(duration);
 if (window.XMLHttpRequest)
@@ -234,7 +296,10 @@ xmlhttp.onreadystatechange=function()
       }
   if (xmlhttp.readyState==4 && xmlhttp.status==200)
     {
-    document.getElementById(str).innerHTML=xmlhttp.responseText;
+      if(payload==0)
+        document.getElementById(str).innerHTML='Switch ON';
+     else if(payload==1)
+        document.getElementById(str).innerHTML='Switch OFF';
     }
   }
 xmlhttp.open('GET','com.php?q='+str+'&duration='+duration,true);
@@ -292,12 +357,7 @@ xmlhttp.open('GET','com.php?q='+str+'&gid='+gid+'&duration='+duration,true);
 xmlhttp.send();
 }
 </script>
-<script type="text/javascript">
-$('.BSswitch').bootstrapSwitch('state')
-$('#TheCheckBox').on('switchChange.bootstrapSwitch', function () {
-  alert(2);
-  });
-</script>
+
 
 </body>
 
