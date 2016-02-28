@@ -126,7 +126,7 @@ error_reporting(-1); //for suppressing errors and notices
       var ws=null;
       $(function() { //websocket
           //var wscon=null;
-          ws = new WebSocket("ws://10.129.28.118:8180");
+          ws = new WebSocket("ws://10.129.28.181:8180");
           ws.onopen = function(e) {
             console.log('Connection to server opened');
           }
@@ -152,7 +152,7 @@ error_reporting(-1); //for suppressing errors and notices
             ws.close();
           }
       });
-    </script
+    </script>
     <script>
         $('.mobileSelect').mobileSelect({
         title: 'Select a Group',
