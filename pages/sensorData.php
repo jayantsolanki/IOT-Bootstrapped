@@ -168,9 +168,7 @@ include_once 'settings/iotdb.php';
                         </div>
 
                          </div>
-                         <div id='ss' style="height: 400px;">
-                                <cite>Select group and the device for the Chart</cite>
-                            </div>
+                         
                       </div><!-- end of content div -->
                 </div>
                 <!-- /.row -->
@@ -212,6 +210,25 @@ include_once 'settings/iotdb.php';
         $(".modal-backdrop").addClass("modal-backdrop-fullscreen");
       });
 
+    </script>
+    <script>
+      var ws=null;
+      $(function() { //websocket
+          //var wscon=null;
+          ws = new WebSocket("ws://10.129.28.118:8181");
+          ws.onopen = function(e) {
+            console.log('Connection to server opened');
+          }
+              //var valElem = $('#sss');
+                 
+          ws.onclose = function(e) {
+            console.log("Connection closed");
+          }
+
+          function disconnect() {
+            ws.close();
+          }
+      });
     </script>
     <script>
         $('.mobileSelect').mobileSelect({
@@ -372,76 +389,63 @@ include_once 'settings/iotdb.php';
       }
 
       $(function() { //websocket
-
-          var ws = new WebSocket("ws://10.129.28.118:8181");
-
-          ws.onopen = function(e) {
-            console.log('Connection to server opened');
-          }
-              var valElem = $('#ss');
-                 
-          ws.onmessage = function(e) {
-            var d = new Date();
-            var formatted_time = time_format(d);
-           //alert(2);
-            var chartpoint = JSON.parse(e.data);
-            //alert(3);
-            //valElem.html(e.data);
-            if(type=='battery')
-            {
-              if(devId==chartpoint['deviceId']){
-                  chart.dataProvider.push({
-                  label: formatted_time,
-                  value: chartpoint['batValue']
-                  });
-                  chart.validateData();
-                  zoomChart();
+        if(ws!=null){//sending data via websocket
+            ws.onmessage = function(e) {
+              var d = new Date();
+              var formatted_time = time_format(d);
+             //alert(2);
+              var chartpoint = JSON.parse(e.data);
+              //alert(3);
+              //valElem.html(e.data);
+              if(type=='battery')
+              {
+                if(devId==chartpoint['deviceId']){
+                    chart.dataProvider.push({
+                    label: formatted_time,
+                    value: chartpoint['batValue']
+                    });
+                    chart.validateData();
+                    zoomChart();
+                }
+                //alert(chartpoint['batValue']);
               }
-              //alert(chartpoint['batValue']);
-            }
-            else if(type=='temperature')
-            {
-              //alert(chartpoint['tempValue']);
-              if(devId==chartpoint['deviceId']){
-                  chart.dataProvider.push({
-                  label: formatted_time,
-                  value: chartpoint['tempValue']
-                  });
-                  chart.validateData();
-                  zoomChart();
+              else if(type=='temperature')
+              {
+                //alert(chartpoint['tempValue']);
+                if(devId==chartpoint['deviceId']){
+                    chart.dataProvider.push({
+                    label: formatted_time,
+                    value: chartpoint['tempValue']
+                    });
+                    chart.validateData();
+                    zoomChart();
+                }
+                
+              }
+              else if(type=='humidity')
+              {
+                if(devId==chartpoint['deviceId']){
+                    chart.dataProvider.push({
+                    label: formatted_time,
+                    value: chartpoint['humidityValue']
+                    });
+                    chart.validateData();
+                    zoomChart();
+                }
+              }
+              else if(type=='moisture')
+              {
+                if(devId==chartpoint['deviceId']){
+                    chart.dataProvider.push({
+                    label: formatted_time,
+                    value: chartpoint['moistValue']
+                    });
+                    chart.validateData();
+                    zoomChart();
+                }
               }
               
             }
-            else if(type=='humidity')
-            {
-              if(devId==chartpoint['deviceId']){
-                  chart.dataProvider.push({
-                  label: formatted_time,
-                  value: chartpoint['humidityValue']
-                  });
-                  chart.validateData();
-                  zoomChart();
-              }
-            }
-            else if(type=='moisture')
-            {
-              if(devId==chartpoint['deviceId']){
-                  chart.dataProvider.push({
-                  label: formatted_time,
-                  value: chartpoint['moistValue']
-                  });
-                  chart.validateData();
-                  zoomChart();
-              }
-            }
-            
-          }
-          ws.onclose = function(e) {
-            console.log("Connection closed");
-          }
-
-          function disconnect() {
-            ws.close();
           }
       });
     }
