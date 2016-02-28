@@ -73,7 +73,8 @@ if(isset($_GET['grp']))
 			<tr>
 			<td><strong class='text text-info'>".$i.". $sname sensor: $name </strong>&nbsp; &nbsp;<strong class='text text-info'>MacId:</b> $macid &nbsp;</td>";
 			
-			echo "<td><button class='item btn btn-primary' id='$macid' type='button'  onclick='update(this.value)' value='$macid'>Switch ".$action."</button></td><td>$status</td>
+			echo "<td><button class='item btn btn-primary' id='$macid' type='button'  onclick='update(this.value)' value='$macid'>Switch ".$action."</button></td>
+			<td class='$macid'>$status</td>
 				</tr>";
 			
 		

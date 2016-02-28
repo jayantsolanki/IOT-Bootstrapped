@@ -148,7 +148,7 @@ function display($grp)
 			echo "<div class='row list-group'>";	
 			echo "
 			<div class='list-group-item col-md-5'>
-			<h4 style='color:#3B5998;font-weight:normal;'><b>".$i.". Name:</b>$dname :".$status."</h4><b style='color:#3B5998;font-weight:normal;'>Group: $name</b></br><b style='color:#3B5998;font-weight:normal;'>Type: $sensor</b></br><b style='color:#3B5998;font-weight:normal;'>Device ID</b> :<span style='color:#3B5998;font-weight:normal;'> ".$macid. "</span></br> <b style='color:#3B5998;font-weight:normal;'>Battery status : </b> ".$batvalue." mV <strong class='text text-info'>Updated</strong> on $battime</br><b style='color:#3B5998;font-weight:normal;'>Last updated : </b>$seen</span>
+			<h4 style='color:#3B5998;font-weight:normal;'><b>".$i.". Name:</b>$dname :<span id='$macid'>".$status."</span></h4><b style='color:#3B5998;font-weight:normal;'>Group: $name</b></br><b style='color:#3B5998;font-weight:normal;'>Type: $sensor</b></br><b style='color:#3B5998;font-weight:normal;'>Device ID</b> :<span style='color:#3B5998;font-weight:normal;'> ".$macid. "</span></br> <b style='color:#3B5998;font-weight:normal;'>Battery status : </b> ".$batvalue." mV <strong class='text text-info'>Updated</strong> on $battime</br><b style='color:#3B5998;font-weight:normal;'>Last updated : </b>$seen</span>
 			</div>";
 			$i++;
 			echo "

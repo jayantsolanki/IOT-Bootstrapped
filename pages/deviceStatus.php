@@ -122,6 +122,37 @@ error_reporting(-1); //for suppressing errors and notices
     <!-- Custom Theme JavaScript -->
     <script src="../dist/js/sb-admin-2.js"></script>
      <script type="text/javascript" src="../dist/js/bootstrap-fullscreen-select.js"></script>
+     <script>
+      var ws=null;
+      $(function() { //websocket
+          //var wscon=null;
+          ws = new WebSocket("ws://10.129.28.118:8180");
+          ws.onopen = function(e) {
+            console.log('Connection to server opened');
+          }
+              //var valElem = $('#sss');
+                 
+          ws.onmessage = function(e) {
+            var response = JSON.parse(e.data);
+            //alert(3);
+           // valElem.html(e.data);
+            //alert(status.deviceId+' '+status.status);
+            if(response.status==0)
+               document.getElementById(response.deviceId).innerHTML="<span class='label label-danger'>OFFLINE</span>";
+            else if(response.status==1)
+               document.getElementById(response.deviceId).innerHTML="<span class='label label-success'>ONLINE</span>";
+            
+                   
+          }
+          ws.onclose = function(e) {
+            console.log("Connection closed");
+          }
+
+          function disconnect() {
+            ws.close();
+          }
+      });
+    </script
     <script>
         $('.mobileSelect').mobileSelect({
         title: 'Select a Group',

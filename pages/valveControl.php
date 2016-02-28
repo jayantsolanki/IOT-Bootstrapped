@@ -142,25 +142,24 @@ include_once 'settings/iotdb.php';
       $(function() { //websocket
           //var wscon=null;
           ws = new WebSocket("ws://10.129.28.118:8180");
-
-
-
-          $('#AAPL span').toggleClass('label-success');
           ws.onopen = function(e) {
             console.log('Connection to server opened');
           }
               //var valElem = $('#sss');
                  
           ws.onmessage = function(e) {
-            var status = JSON.parse(e.data);
-
+            var response = JSON.parse(e.data);
             //alert(3);
            // valElem.html(e.data);
             //alert(status.deviceId+' '+status.status);
-            if(status.status==0)
-              document.getElementById(status.deviceId).innerHTML='Switch ON';
-            else if(status.status==1)
-              document.getElementById(status.deviceId).innerHTML='Switch OFF';
+            if(response.action==1)
+              document.getElementById(response.deviceId).innerHTML='Switch OFF';
+            else if(response.action==0)
+              document.getElementById(response.deviceId).innerHTML='Switch ON';
+            if(response.status==0)
+              document.getElementsByClassName(response.deviceId)[0].innerHTML="<span class='label label-danger'>OFFLINE</span>";
+            else if(response.status==1)
+              document.getElementsByClassName(response.deviceId)[0].innerHTML="<span class='label label-success'>ONLINE</span>";
             
                    
           }

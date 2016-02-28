@@ -373,7 +373,7 @@ include_once 'settings/iotdb.php';
 
       $(function() { //websocket
 
-          var ws = new WebSocket("ws://10.129.28.118:8181");
+          var ws = new WebSocket("ws://10.129.28.181:8181");
 
 
 
@@ -386,7 +386,6 @@ include_once 'settings/iotdb.php';
           ws.onmessage = function(e) {
             var d = new Date();
             var formatted_time = time_format(d);
-            $('#yourTimeField').text(formatted_time);
            //alert(2);
             var chartpoint = JSON.parse(e.data);
             //alert(3);
