@@ -373,7 +373,7 @@ include_once 'settings/iotdb.php';
 
       $(function() { //websocket
 
-          var ws = new WebSocket("ws://10.129.28.181:8181");
+          var ws = new WebSocket("ws://10.129.28.118:8181");
 
           ws.onopen = function(e) {
             console.log('Connection to server opened');
