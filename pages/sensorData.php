@@ -375,9 +375,6 @@ include_once 'settings/iotdb.php';
 
           var ws = new WebSocket("ws://10.129.28.181:8181");
 
-
-
-          $('#AAPL span').toggleClass('label-success');
           ws.onopen = function(e) {
             console.log('Connection to server opened');
           }
@@ -573,7 +570,7 @@ include_once 'settings/iotdb.php';
           {
             if (xmlhttp.readyState==3 && xmlhttp.status==200)
               {
-              document.getElementById('charts').innerHTML="<span><img src='images/ajax.gif'/></span>";
+              document.getElementById('dumps').innerHTML="<span><img src='images/ajax.gif'/></span>";
               }
           if (xmlhttp.readyState==4 && xmlhttp.status==200)
             {
@@ -628,7 +625,7 @@ include_once 'settings/iotdb.php';
           {
             if (xmlhttp.readyState==3 && xmlhttp.status==200)
               {
-              document.getElementById('charts').innerHTML="<span><img src='images/ajax.gif'/></span>";
+              document.getElementById('dumps').innerHTML="<span><img src='images/ajax.gif'/></span>";
               }
           if (xmlhttp.readyState==4 && xmlhttp.status==200)
             {
@@ -679,7 +676,7 @@ include_once 'settings/iotdb.php';
           {
             if (xmlhttp.readyState==3 && xmlhttp.status==200)
               {
-              document.getElementById('charts').innerHTML="<span><img src='images/ajax.gif'/></span>";
+              document.getElementById('dumps').innerHTML="<span><img src='images/ajax.gif'/></span>";
               }
           if (xmlhttp.readyState==4 && xmlhttp.status==200)
             {
@@ -729,7 +726,7 @@ include_once 'settings/iotdb.php';
           {
             if (xmlhttp.readyState==3 && xmlhttp.status==200)
               {
-              document.getElementById('charts').innerHTML="<span><img src='images/ajax.gif'/></span>";
+              document.getElementById('dumps').innerHTML="<span><img src='images/ajax.gif'/></span>";
               }
           if (xmlhttp.readyState==4 && xmlhttp.status==200)
             {
