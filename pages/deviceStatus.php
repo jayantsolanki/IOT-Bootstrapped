@@ -11,7 +11,7 @@ ini_set('display_startup_errors',1);
 error_reporting(-1); //for suppressing errors and notices
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="IOT-App">
 
 <head>
 
@@ -47,7 +47,7 @@ error_reporting(-1); //for suppressing errors and notices
     </noscript>
 </head>
 
-<body onload='showgrp(1)'>
+<body>
 
     <div id="wrapper">
 
@@ -56,7 +56,7 @@ error_reporting(-1); //for suppressing errors and notices
 
         <!-- Page Content -->
         <div id="page-wrapper">
-            <div class="container-fluid">
+            <div id="devIds" class="container-fluid" ng-controller="devicesStatus">
                 <div class="row">
                     <div class="col-lg-12">
                         <h1 class="page-header">Devices Status</h1>
@@ -71,7 +71,7 @@ error_reporting(-1); //for suppressing errors and notices
                         <div class="panel panel-body">
 
                           <b>Select group</b> <select name='groups' class='mobileSelect'>
-                          <option selected="true" disabled='disabled'>Choose</option>
+                          <!-- <option selected="true" disabled='disabled'>Choose</option> -->
                           <?php 
                           mysql_select_db($dbname) or die(mysql_error());
                           $query="SELECT * FROM groups"; //displaying groups
@@ -83,16 +83,39 @@ error_reporting(-1); //for suppressing errors and notices
                                       $group=$row['name'];
                                       $id=$row['id'];
                                       if($id==1)
-                                      echo " <option selected='selected' value='$id'>$group</option>";
+                                        echo " <option selected='selected' value=$id>$group</option>";
                                       else
-                                      echo " <option value='$id'>$group</option>";
+                                        echo " <option value='$id'>$group</option>";
                                   }
                               }
                           ?>
                           </select>&nbsp; &nbsp;</br></br>
+                          <strong>Group Selected <label class ="badge">{{devices[0].groupName}}</label></strong><hr/>
                           <div id='dev'>
-
-                          </div>
+                              <div class="row" ng-repeat="device in devices">
+                                  <div class="col-md-2">
+                                       <h2 class="text-danger" >{{device.deviceName}}</h2>
+                                  </div>
+                                  <div class="col-md-7">
+                                     <blockquote>
+                                         <p>
+                                            <span ng-if="device.status" class="label label-success">Online</span>
+                                            <span ng-if="!device.status" class="label label-danger">Offline</span>
+                                            <cite class="text-info">since {{device.seen}}</cite>
+                                        </p>
+                                        <p><strong class="text text-info">Device Id:</strong> {{device.deviceId}}</p>
+                                        <p><strong class="text text-info">Status:</strong> {{device.action}}</p>
+                                        <p><strong class="text text-danger">Type:</strong> {{device.type}}</p>
+                                        <p><strong class="text text-info">Group:</strong> {{device.groupName}}</p>
+                                        <p>
+                                          <strong class="text text-success">Battery Level:</strong> {{device.batValue}} mV
+                                          <cite class="text-info">last update on {{device.batTime}}</cite>
+                                        </p>
+                                    </blockquote>
+                                  </div><!-- end media div -->
+                              </div>
+                            </div>
+                          </div><!-- ending dev div -->
                         </div><!-- ending panel body -->
                       </div><!-- ending panel -->
                       
@@ -110,6 +133,8 @@ error_reporting(-1); //for suppressing errors and notices
         include_once "app.php";
         ?>
     </footer>
+    <!-- AngularJs -->
+    <script src="../bower_components/angular/angular.min.js"></script>
     <!-- jQuery -->
     <script src="../bower_components/jquery/dist/jquery.min.js"></script>
 
@@ -122,6 +147,30 @@ error_reporting(-1); //for suppressing errors and notices
     <!-- Custom Theme JavaScript -->
     <script src="../dist/js/sb-admin-2.js"></script>
      <script type="text/javascript" src="../dist/js/bootstrap-fullscreen-select.js"></script>
+     <script>
+        var app = angular.module('IOT-App',[]);
+      
+       app.controller('devicesStatus', function($scope, $http) {
+            var devices=null;
+            var groupId=null;
+           /* $http.get("dd.php")
+            .then(function(response) {
+                $scope.devices = response.data;                
+            });*/
+            $scope.devices = devices;
+            $scope.groupId = groupId;
+            $scope.groupId = 1;//default
+
+            $scope.selectGroup = function() {
+                $http.get("dd.php?grp="+$scope.groupId)
+                .then(function(response) {
+                    $scope.devices = response.data;                
+                });
+                
+            }
+            $scope.selectGroup();//calling first group initially
+        });
+    </script>
      <script>
       var ws=null;
       $(function() { //websocket
@@ -172,53 +221,14 @@ error_reporting(-1); //for suppressing errors and notices
             },
             onClose: function () {
                 if($('.mobileSelect').val()!=null)
-                     showgrp($('.mobileSelect').val());
+                   angular.element(document.getElementById('devIds')).scope().groupId=$('.mobileSelect').val();
+                  angular.element(document.getElementById('devIds')).scope().selectGroup();
             },
             style: 'btn-info'
         });
         $('.mobileSelect').mobileSelect();
     </script>
-    <script type='text/javascript'>
-        /*
-         *
-         * Function Name: showgrp(grp)
-         * Input: grp, stores group id
-         * Output: returns the sensors under the group id
-         * Logic: It is a AJAX call
-         * Example Call: showgrp(34)
-         *
-         */
-        function showgrp(grp)
-        {
-        if (grp=='')
-          {
-          document.getElementById('dev').innerHTML='';
-          return;
-          } 
-        if (window.XMLHttpRequest)
-          {
-          xmlhttp=new XMLHttpRequest();
-          }
-        else
-          {
-          xmlhttp=new ActiveXObject('Microsoft.XMLHTTP');
-          }
-        xmlhttp.onreadystatechange=function()
-          {
-            if (xmlhttp.readyState==3 && xmlhttp.status==200)
-              {
-              document.getElementById('dev').innerHTML="<span class='push-5'><img src='images/ajax.gif'/></span>";
-              }
-          if (xmlhttp.readyState==4 && xmlhttp.status==200)
-            {
-            document.getElementById('dev').innerHTML=xmlhttp.responseText;
-            }
-          }
-        xmlhttp.open('GET','dd.php?grp='+grp,true);
-        //alert(grp);
-        xmlhttp.send();
-        }
-        </script>
+
        
 </body>
 

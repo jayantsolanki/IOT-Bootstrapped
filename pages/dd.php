@@ -7,14 +7,10 @@
 */
 include 'settings/iotdb.php';
 include 'settings/mqttsetting.php';
-require(__DIR__ . '/spMQTT.class.php');
-spMQTTDebug::Enable();
 $grp=$_GET["grp"]; //grp is the group id received
 $bat=$_GET["bat"]; //bat  is group id received fro battery status
-if($grp!=NULL)
-{
-	display($grp);
-}
+
+display($grp);
 /*if($bat!=NULL)
 {
 	//
@@ -86,17 +82,16 @@ if($grp!=NULL)
  */
 function display($grp)
 {
-	$dbname='IOT';
-	mysql_select_db($dbname) or die(mysql_error());
+	$jsonArray = array();//creating a json response
 	//echo "<button id='bat' type='button' onclick='checkbat(this.value)' value='$grp'>Check Battery status</button></br></br>";
+	//$query="SELECT * FROM devices";
 	$query="SELECT * FROM devices WHERE devices.group=$grp";
 	$results=mysql_query($query);
 	if (mysql_num_rows($results) > 0) 
-	{	$i=1;
-		
+	{	
 		while($row=mysql_fetch_assoc($results)) 
 		{	
-
+			$jsonArrayItem = array();
 			$macid=$row['macid'];
 			$action=$row['action'];
 			$battery=$row['battery'];
@@ -104,12 +99,12 @@ function display($grp)
 			$seen=$row['seen'];
 			$grp=$row['group'];//group in which it belongs
 			$dname=$row['name'];
-			$sense=$row['type'];
+			$sense=$row['type'];//sensor type id
 			$batquery="SELECT battery_value, created_at FROM feeds WHERE feeds.device_id='$macid' order by feeds.id desc limit 1";
 			$batresult=mysql_query($batquery);
 			$batfetch=mysql_fetch_assoc($batresult);
 			$batvalue=$batfetch['battery_value'];
-			$battime=$batfetch['created_at'];
+			$batTime=$batfetch['created_at'];
 			$query="SELECT name FROM groups WHERE id='$grp'";
 			$grps=mysql_query($query);
 			$rows=mysql_fetch_assoc($grps);
@@ -118,6 +113,23 @@ function display($grp)
 			$grps=mysql_query($query);
 			$rows=mysql_fetch_assoc($grps);
 			$sensor=$rows['name'];
+
+			$jsonArrayItem['deviceName'] = $dname;
+			$jsonArrayItem['deviceId'] = $macid;
+			if($action==1)
+			$jsonArrayItem['action'] = 'Running';
+			if($action==0)
+			$jsonArrayItem['action'] = 'Idle';	
+			if($status==1)
+				$jsonArrayItem['status'] = true;
+			if($status==0)
+				$jsonArrayItem['status'] = false;
+			$jsonArrayItem['seen'] = $seen;
+			$jsonArrayItem['groupName'] = $name;
+			$jsonArrayItem['type'] = $sensor;
+			$jsonArrayItem['batValue'] = $batvalue;
+			$jsonArrayItem['batTime'] = $batTime;
+			array_push($jsonArray, $jsonArrayItem);
 			/*if($battery==1) //changing into user readable form
 				$batterymsg="<span class='label label-success' ><b>Healthy</b></span>";
 			elseif($battery==2)
@@ -139,26 +151,14 @@ function display($grp)
 				    $action="<b><span style='color: #AA6600;'>Soil is dry</span></b>";
 				
 			}*/
-			if($status==0) //offline
-				$status="<b><span class='label label-danger''>OFFLINE</span></b>";
-			elseif($status==1) //online
-				$status="<b><span class='label label-success'>ONLINE</span></b>";
-			elseif($status==2) //new device
-				$status="<span class='label label-info'><b>New Device Found</b></span>";
-			echo "<div class='row list-group'>";	
-			echo "
-			<div class='list-group-item col-md-5'>
-			<h4 style='color:#3B5998;font-weight:normal;'><b>".$i.". Name:</b>$dname :<span id='$macid'>".$status."</span></h4><b style='color:#3B5998;font-weight:normal;'>Group: $name</b></br><b style='color:#3B5998;font-weight:normal;'>Type: $sensor</b></br><b style='color:#3B5998;font-weight:normal;'>Device ID</b> :<span style='color:#3B5998;font-weight:normal;'> ".$macid. "</span></br> <b style='color:#3B5998;font-weight:normal;'>Battery status : </b> ".$batvalue." mV <strong class='text text-info'>Updated</strong> on $battime</br><b style='color:#3B5998;font-weight:normal;'>Last updated : </b>$seen</span>
-			</div>";
-			$i++;
-			echo "
-			<div class='col-md-3'>
-			</div>
-			</div>
-			";
+			
 		
 		
 		}
+		header('Content-type: application/json');
+		//output the return value of json encode using the echo function. 
+		echo json_encode($jsonArray);
+		
 	}
 	else
 		{
