@@ -109,7 +109,7 @@ error_reporting(-1); //for suppressing errors and notices
                                         <p><strong class="text text-info">Group:</strong> {{device.groupName}}</p>
                                         <p>
                                           <strong class="text text-success">Primary Battery Level:</strong> {{device.PbatValue}} mV <br>
-                                          <span ng-if="device.devType"><strong class="text text-success">Seondary Battery Level:</strong> {{device.SbatValue}} mV <br></span>
+                                          <span ng-if="device.devType"><strong class="text text-success">Secondary Battery Level:</strong> {{device.SbatValue}} mV <br></span>
                                           <cite class="text-warning">Battery level update {{device.batTime}}</cite>
                                         </p>
                                     </blockquote>
