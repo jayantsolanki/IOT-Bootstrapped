@@ -50,7 +50,6 @@ if(isset($_GET['grp']))
 			$i++;
 			$macid=$row['macid'];
 			$action=$row['action'];
-			$status=$row['status']; //online offline or new, 1, 0, 2
 			$name=$row['name'];
 			$type=$row['type'];
 			$query="SELECT name FROM sensors WHERE id='$type'";
@@ -62,7 +61,10 @@ if(isset($_GET['grp']))
 			else
 				$action='ON';
 			
-		
+			$seenquery="Select status from deviceStatus where deviceStatus.deviceId='$macid' order by deviceStatus.id desc limit 1";//getting last seen status
+			$seenresult=mysql_query($seenquery);
+			$seenfetch=mysql_fetch_assoc($seenresult);
+			$status=$seenfetch['status']; //online offline or new, 1, 0, 2
 			if($status==0) //offline
 				$status="<span class='label label-danger'>OFFLINE</span>";
 			elseif($status==1) //online

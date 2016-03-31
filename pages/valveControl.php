@@ -67,7 +67,7 @@ include_once 'settings/iotdb.php';
                     <div class="header" >
                       <h2 class="text-center">Valve Controls</h2>
                     </div>
-                      <div class=" col-md-6 content">
+                      <div class=" col-md-9 content">
                         <label class="text text-info">Select group</label>
                         <div class="row">
                             <select class='mobileSelect form-control' id='chartselect' name='chartselect' >
@@ -141,7 +141,7 @@ include_once 'settings/iotdb.php';
       var ws=null;
       $(function() { //websocket
           //var wscon=null;
-          ws = new WebSocket("ws://10.129.28.118:8180");
+          ws = new WebSocket("ws://10.129.28.181:8180");
           ws.onopen = function(e) {
             console.log('Connection to server opened');
           }
