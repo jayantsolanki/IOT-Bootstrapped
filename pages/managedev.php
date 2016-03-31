@@ -27,7 +27,7 @@ if($q!=null)
 	$results=mysql_query($query);
 	if (mysql_num_rows($results) > 0) 
 	{
-	echo "<span class='error'>Enter Unique group name</span>";
+	echo "<div class='alert alert-danger'>Enter Unique group name</div>";
 	}
 	else
 	{
@@ -36,7 +36,7 @@ if($q!=null)
 		if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))
 			echo "INSERT failed: $query".mysql_error()."<br/>";
 		else
-			echo "</br><span class='success'><b>'$q' added</b></span></br>";
+			echo "<div class='alert alert-success'><strong>'$q' added</strong></div>";
 		
 	}	
 	
@@ -51,7 +51,7 @@ if($q!=null)
 			$group=$row['name'];
 		
 		
-			echo "<span style='color:#3B5998;font-weight:normal;'><b>".$i.".</b>&nbsp; &nbsp; <b>$group </b>&nbsp; &nbsp;<a href="."javascript:del('$group')".">delete</a></span><hr>";
+			echo "<strong class='text-info'>".$i.".</strong>&nbsp; &nbsp; <big class=''>$group </big>&nbsp; &nbsp;<a class='text-danger glyphicon glyphicon-remove-circle' data-toggle='tooltip' title='Delete' href="."javascript:del('$group')"."></a><hr>";
 			$i++;
 		
 		
@@ -72,7 +72,7 @@ if($sensor!=null)
 	$results=mysql_query($query);
 	if (mysql_num_rows($results) > 0) 
 	{
-	echo "<span class='error'>Enter Unique sensor name</span>";
+	echo "<div class='alert alert-danger'>Enter Unique sensor name</div>";
 	}
 	else
 	{
@@ -81,7 +81,7 @@ if($sensor!=null)
 		if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))
 			echo "INSERT failed: $query".mysql_error()."<br/>";
 		else
-			echo "</br><span class='success'><b>'$sensor' added</b></span></br>";
+			echo "<div class='alert alert-success'><strong>'$sensor' added</strong></div>";
 		
 	}	
 	
@@ -90,13 +90,13 @@ if($sensor!=null)
 	$results=mysql_query($query);
 	if (mysql_num_rows($results) > 0) 
 	{	$i=1;
-		echo "</br></br><h2>Sensors available</h2>";		
+		echo "</br></br><h2>Device Types available</h2>";		
 		while($row=mysql_fetch_assoc($results)) 
 		{	//$id=$row['id'];
 			$sensor=$row['name'];
 		
 		
-			echo "<span style='color:#3B5998;font-weight:normal;'><b>".$i.".</b>&nbsp; &nbsp; <b>$sensor </b>&nbsp; &nbsp;<a href="."javascript:dels('$sensor')".">delete</a></span><hr>";
+			echo "<strong class='text-info'>".$i.".</strong>&nbsp; &nbsp; <big class=''>$sensor </big>&nbsp; &nbsp;<a class='text-danger glyphicon glyphicon-remove-circle' data-toggle='tooltip' title='Delete' href="."javascript:dels('$sensor')"."></a><hr>";
 			$i++;
 		
 		
@@ -141,7 +141,11 @@ if($del!=null)//perform deletion task for group
 	$query = "DELETE FROM groups WHERE name='$del'";
 
 	if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))
-	echo "INSERT failed: $query<br/><div class='error'>".mysql_error()."</div><br/><br/>";
+	echo "Deletion failed: $query<br/><div class='alert alert-danger'>".mysql_error()."</div><br/><br/>";
+	else
+	{
+		echo "<div class='alert alert-success'><strong>'$del' deleted</strong></div>";		
+	}
 	$query="SELECT * FROM groups"; //displaying groups
 	$results=mysql_query($query);
 	if (mysql_num_rows($results) > 0) 
@@ -152,7 +156,7 @@ if($del!=null)//perform deletion task for group
 			$group=$row['name'];
 		
 		
-			echo "<span style='color:#3B5998;font-weight:normal;'><b>".$i.".</b>&nbsp; &nbsp; <b>$group </b>&nbsp; &nbsp;<a href="."javascript:del('$group')".">delete</a><hr>";
+			echo "<strong class='text-info'>".$i.".</strong>&nbsp; &nbsp; <big class=''>$group </big>&nbsp; &nbsp;<a class='text-danger glyphicon glyphicon-remove-circle' data-toggle='tooltip' title='Delete' href="."javascript:del('$group')"."></a><hr>";
 			$i++;
 		
 		
@@ -160,7 +164,7 @@ if($del!=null)//perform deletion task for group
 	}
 	else
 	{
-		echo "</br><div class='notice'><b>No groups created yet.</b></div>";
+		echo "</br><div class='alert alert-info'><b>No groups created yet.</b></div>";
 	}
 	
 	
@@ -171,18 +175,22 @@ if($dels!=null) //for deleting selected sensor type
 	$query = "DELETE FROM sensors WHERE name='$dels'";
 
 	if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))
-	echo "INSERT failed: $query<br/><div class='error'>".mysql_error()."</div><br/><br/>";
+	echo "Deletion failed: $query<br/><div class='alert alert-danger'>".mysql_error()."</div><br/><br/>";
+	else
+	{
+		echo "<div class='alert alert-success'><strong>'$dels' deleted</strong></div>";		
+	}
 	$query="SELECT * FROM sensors"; //displaying groups
 	$results=mysql_query($query);
 	if (mysql_num_rows($results) > 0) 
 	{	$i=1;
-		echo "</br></br><h2>Sensors available</h2>";		
+		echo "</br></br><h2>Device Types available</h2>";		
 		while($row=mysql_fetch_assoc($results)) 
 		{	//$id=$row['id'];
 			$sensor=$row['name'];
 		
 		
-			echo "<span style='color:#3B5998;font-weight:normal;'><b>".$i.".</b>&nbsp; &nbsp; <b>$sensor </b>&nbsp; &nbsp;<a href="."javascript:dels('$sensor')".">delete</a><hr>";
+			echo "<strong class='text-info'>".$i.".</strong>&nbsp; &nbsp; <big class=''>$sensor </big>&nbsp; &nbsp;<a class='text-danger glyphicon glyphicon-remove-circle' data-toggle='tooltip' title='Delete' href="."javascript:dels('$sensor')"."></a><hr>";
 			$i++;
 		
 		
@@ -200,8 +208,11 @@ if($ddel!=null) //for deleting selected device
 	
 	$query = "DELETE FROM devices WHERE devices.macid='$ddel'";
 	if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))
-	echo "INSERT failed: $query<br/><div class='error'>".mysql_error()."</div><br/><br/>";
-
+	echo "Deletion failed: $query<br/><div class='alert alert-danger'>".mysql_error()."</div><br/><br/>";
+	else
+	{
+		echo "<div class='alert alert-success'><strong>'$ddel' deleted</strong></div>";		
+	}
 	$query="SELECT * FROM devices"; //displaying groups
 	$results=mysql_query($query);
 	if (mysql_num_rows($results) > 0) 
@@ -216,8 +227,8 @@ if($ddel!=null) //for deleting selected device
 			$grp=mysql_fetch_assoc($grps);
 			$name=$grp['name'];
 			if($name=='')
-			 	$name="<span style='color: #0088FF;'><b>New Device Found</b></span>";
-			echo "".$i.". <span id='$macid' style='color:#3B5998;font-weight:normal;'><b></b><b>MAC id:</b> $macid &nbsp; &nbsp;<b>Group:</b> $name &nbsp; &nbsp;<a href="."javascript:edit('$macid')".">edit</a>&nbsp; &nbsp;<a href="."javascript:ddel('$macid')".">Delete</a></span><hr>";
+			 	$name="<span class='label label-info'><b>New Device Found</b></span>";
+			echo "<strong class='text-info'>".$i.".</strong>&nbsp; &nbsp; <big id='$macid'><strong>Device id:</strong> <span class='text-info'>$macid</span></big> &nbsp; &nbsp;<big><strong>Group:</strong> <span class='text-danger'>$name</span></big> &nbsp; &nbsp;<a class='text-muted glyphicon glyphicon-pencil' data-toggle='tooltip' title='Edit' href="."javascript:edit('$macid')"."></a>&nbsp; &nbsp;<a class='text-danger glyphicon glyphicon-remove-circle' data-toggle='tooltip' title='Delete' href="."javascript:ddel('$macid')"."></a></span><hr>";
 			$i++;
 			
 			

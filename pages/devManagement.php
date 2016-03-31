@@ -61,119 +61,135 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
                     </div>
                     <!-- /.col-lg-12 -->
                 </div>
-                <div class="row">
-                    <div  id="main">
-                        <div class="header" >
-                              <h2>Manage Devices</h2>
-                            </div>
-                            <div class="content">
-                        <pre>
-                        <span><b>Add Sensor :</b></span>
-                        <input type='text' id='sensor' name='sensor'/>
+                <div class="row">                  
+                  <div class="row"><!-- 1st inner row -->
+                    <div class="col-md-8">
+                    <div class = "panel panel-info ">
+                       <div class = "panel-heading">
+                          <h3>Manage Devices <small>Add your new type of device/group here</small></h3>
+                       </div>
+                       <div class = "panel-body">
+                        <div class='col-md-6'>
+                            <form class="form-inline">
+                              <fieldset  class="form-group form-inline">
+                              <label>Add Type</label>
+                              <input type='text' id='sensor' name='sensor' placeholder="new device type" required/>
+                              </fieldset>
+                              <button class="btn btn-primary" id='button' type='button' onclick='addsen();' value='add' required>Add</button>
+                            </form>
+                            <div id='sensors'>
 
-                        <button id='button' type='button' onclick='addsen();' value='add'>Add</button>
+                              <?php
+                                mysql_select_db($dbname) or die(mysql_error());
+                                $query="SELECT * FROM sensors"; //displaying groups
+                                $results=mysql_query($query);
+                                if (mysql_num_rows($results) > 0) 
+                                {   $i=1;
+                                    echo "</br></br><h2>Device Types available</h2>";        
+                                    while($row=mysql_fetch_assoc($results)) 
+                                    {   //$id=$row['id'];
+                                        $sensor=$row['name'];
+                                        
+                                        
+                                        echo "<strong class='text-info'>".$i.".</strong>&nbsp; &nbsp; <big class=''>$sensor </big>&nbsp; &nbsp;<a class='text-danger glyphicon glyphicon-remove-circle' data-toggle='tooltip' title='Delete' href="."javascript:dels('$sensor')"."></a><hr>";
+                                        $i++;
+                                        
+                                        
+                                    }
+                                }
+                                else
+                                {
+                                    echo "</br><div class='notice'><b>No Sensors added yet.</b></div>";
+                                }
 
-                        </pre>
-                        <div id='sensors'>
+                              ?>  
+                            </div><!-- sensors ends -->
+                          </div><!-- 1st column -->
+                          <div class='col-md-6 '>
+                            <form class="form-inline">
+                              <fieldset  class="form-group form-inline">
+                              <label>Add Group</label>
+                              <input type='text' id='group' name='group' placeholder="new group name" required/>
+                              </fieldset>
+                              <button class="btn btn-primary" id='button' type='button' onclick='addgrp();' value='add'>Add</button>
+                            </form>
+                            <div id='groups'>
 
-                        <?php
-                        mysql_select_db($dbname) or die(mysql_error());
-                        $query="SELECT * FROM sensors"; //displaying groups
-                        $results=mysql_query($query);
-                        if (mysql_num_rows($results) > 0) 
-                        {   $i=1;
-                            echo "</br></br><h2>Sensors available</h2>";        
-                            while($row=mysql_fetch_assoc($results)) 
-                            {   //$id=$row['id'];
-                                $sensor=$row['name'];
-                                
-                                
-                                echo "<span style='color:#3B5998;font-weight:normal;'><b>".$i.".</b>&nbsp; &nbsp; <b>$sensor </b>&nbsp; &nbsp;<a href="."javascript:dels('$sensor')".">delete</a></span><hr>";
-                                $i++;
-                                
-                                
-                            }
-                        }
-                        else
-                        {
-                            echo "</br><div class='notice'><b>No Sensors added yet.</b></div>";
-                        }
+                              <?php
+                                  mysql_select_db($dbname) or die(mysql_error());
+                                  $query="SELECT * FROM groups"; //displaying groups
+                                  $results=mysql_query($query);
+                                  if (mysql_num_rows($results) > 0) 
+                                  {   $i=1;
+                                      echo "</br></br><h2>Groups available</h2>";     
+                                      while($row=mysql_fetch_assoc($results)) 
+                                      {   //$id=$row['id'];
+                                          $group=$row['name'];
+                                          
+                                          
+                                          echo "<strong class='text-info'>".$i.".</strong>&nbsp; &nbsp; <big class=''>$group </big>&nbsp; &nbsp;<a class='text-danger glyphicon glyphicon-remove-circle' data-toggle='tooltip' title='Delete' href="."javascript:del('$group')"."></a><hr>";
+                                          $i++;
+                                          
+                                          
+                                      }
+                                  }
+                                  else
+                                  {
+                                      echo "</br><div class='notice'><b>No groups created yet.</b></div>";
+                                  }
 
-                         ?>  
-                        </div>
-                        </br>
-                        <pre>
-                        <span><b>Add Group :</b></span>
-                        <input type='text' id='group' name='group'/>
+                              ?>  
+                            </div><!-- groups ends -->
+                          </div><!-- 2nd column -->
+                      </div><!-- panel body -->
+                    </div><!-- panel ends here -->
+                  </div>
+                  </div><!--1st inner row ends here-->
+                  <div class="row"><!-- 2nd inner row -->
+                    <div class='col-md-8'>
+                      <div class = "panel panel-info ">
+                         <div class = "panel-heading">
+                            <h3>Devices available <small>Manage individual devices</small></h3>
+                         </div>
+                         <div class = "panel-body">
+                            <div id='items'>
 
-                        <button id='button' type='button' onclick='addgrp();' value='add'>Add</button>
+                                <?php
+                                mysql_select_db($dbname) or die(mysql_error());
+                                $query="SELECT * FROM devices"; //displaying groups
+                                $results=mysql_query($query);
+                                if (mysql_num_rows($results) > 0) 
+                                {   $i=1;    
+                                    while($row=mysql_fetch_assoc($results)) 
+                                    {   $macid=$row['macid'];
+                                        $group=$row['group'];
+                                        $status=$row['status'];
+                                        //$group=$row['name'];
+                                        $query="SELECT name FROM groups WHERE id='$group'";
+                                        $grps=mysql_query($query);
+                                        $grp=mysql_fetch_assoc($grps);
+                                        $name=$grp['name'];
+                                        if($status==2)
+                                            $name="<span class='label label-info'><b>New Device Found</b></span>";
+                                        
+                                        echo "<strong class='text-info'>".$i.".</strong>&nbsp; &nbsp; <big id='$macid'><strong>Device id:</strong> <span class='text-info'>$macid</span></big> &nbsp; &nbsp;<big><strong>Group:</strong> <span class='text-danger'>$name</span></big> &nbsp; &nbsp;<a class='text-muted glyphicon glyphicon-pencil' data-toggle='tooltip' title='Edit' href="."javascript:edit('$macid')"."></a>&nbsp; &nbsp;<a class='text-danger glyphicon glyphicon-remove-circle' data-toggle='tooltip' title='Delete' href="."javascript:ddel('$macid')"."></a></span><hr>";
+                                        $i++;
+                                        
+                                        
+                                    }
+                                }
+                                else
+                                {
+                                    echo "</br><div class='notice'><b>No devices added yet.</b></div>";
+                                }
 
-                        </pre>
-                        <div id='groups'>
-
-                        <?php
-                        mysql_select_db($dbname) or die(mysql_error());
-                        $query="SELECT * FROM groups"; //displaying groups
-                        $results=mysql_query($query);
-                        if (mysql_num_rows($results) > 0) 
-                        {   $i=1;
-                            echo "</br></br><h2>Groups available</h2>";     
-                            while($row=mysql_fetch_assoc($results)) 
-                            {   //$id=$row['id'];
-                                $group=$row['name'];
-                                
-                                
-                                echo "<span style='color:#3B5998;font-weight:normal;'><b>".$i.".</b>&nbsp; &nbsp; <b>$group </b>&nbsp; &nbsp;<a href="."javascript:del('$group')".">delete</a></span><hr>";
-                                $i++;
-                                
-                                
-                            }
-                        }
-                        else
-                        {
-                            echo "</br><div class='notice'><b>No groups created yet.</b></div>";
-                        }
-
-                         ?>  
-                        </div>
-
-                        <div id='items'>
-
-                        <?php
-                        mysql_select_db($dbname) or die(mysql_error());
-                        $query="SELECT * FROM devices"; //displaying groups
-                        $results=mysql_query($query);
-                        if (mysql_num_rows($results) > 0) 
-                        {   $i=1;
-                            echo "</br></br><h2>Devices available</h2>";      
-                            while($row=mysql_fetch_assoc($results)) 
-                            {   $macid=$row['macid'];
-                                $group=$row['group'];
-                                $status=$row['status'];
-                                //$group=$row['name'];
-                                $query="SELECT name FROM groups WHERE id='$group'";
-                                $grps=mysql_query($query);
-                                $grp=mysql_fetch_assoc($grps);
-                                $name=$grp['name'];
-                                if($status==2)
-                                    $name="<span style='color: #0088FF;'><b>New Device Found</b></span>";
-                                
-                                echo "".$i.". <span id='$macid' style='color:#3B5998;font-weight:normal;'><b></b><b>MAC id:</b> $macid &nbsp; &nbsp;<b>Group:</b> $name &nbsp; &nbsp;<a href="."javascript:edit('$macid')".">edit</a>&nbsp; &nbsp;<a href="."javascript:ddel('$macid')".">Delete</a></span><hr>";
-                                $i++;
-                                
-                                
-                            }
-                        }
-                        else
-                        {
-                            echo "</br><div class='notice'><b>No devices added yet.</b></div>";
-                        }
-
-                         ?>  
-                        </div>
-                             </div><!-- end of content div -->
-                </div>
-                <!-- /.row -->
+                             ?>  
+                            </div><!-- items ends -->
+                          </div><!-- panel body -->
+                    </div><!-- panel ends here -->
+                    </div><!--column ends for the device list-->
+                </div><!--2nd inner row ends here-->
+                </div><!-- outer.row -->
             </div>
             <!-- /.container-fluid -->
         </div>
@@ -209,7 +225,7 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
          */
         function addsen()
         {
-
+        var sensor = document.getElementById("sensor").value;
         if (window.XMLHttpRequest)
           {
           xmlhttp=new XMLHttpRequest();
@@ -229,10 +245,13 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
             document.getElementById("sensors").innerHTML=xmlhttp.responseText;
             }
           }
-        var sensor = document.getElementById("sensor").value;
-        xmlhttp.open('GET','managedev.php?sensor='+sensor,true);
-        //alert("Hello! I am an alert box!!");
-        xmlhttp.send();
+        if(sensor=='')
+          alert('Input field is blank');
+        else{
+          xmlhttp.open('GET','managedev.php?sensor='+sensor,true);
+          //alert("Hello! I am an alert box!!");
+          xmlhttp.send();
+        }
         }
         </script>
         <script type='text/javascript'>
@@ -268,9 +287,13 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
             }
           }
         var group = document.getElementById("group").value;
-        xmlhttp.open('GET','managedev.php?q='+group,true);
-        //alert("Hello! I am an alert box!!");
-        xmlhttp.send();
+        if(group=='')
+          alert('Input field is blank');
+        else{
+          xmlhttp.open('GET','managedev.php?q='+group,true);
+          //alert("Hello! I am an alert box!!");
+          xmlhttp.send();
+        }
         }
         </script>
         <script type='text/javascript'>
@@ -345,9 +368,13 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
             document.getElementById(macid).innerHTML=xmlhttp.responseText;
             }
           }
-        xmlhttp.open('GET','managedev.php?update='+macid+'&gid='+gid+'&dname='+dname+'&sentyp='+sentyp,true);
-        //alert(macid);
-        xmlhttp.send();
+        if(macid=='')
+          alert('Input field is blank');
+        else{
+          xmlhttp.open('GET','managedev.php?update='+macid+'&gid='+gid+'&dname='+dname+'&sentyp='+sentyp,true);
+          //alert(macid);
+          xmlhttp.send();
+        }
         }
         </script>
         <script type='text/javascript'>
@@ -362,29 +389,31 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
          */
         function del(str)
         {
-
-        if (window.XMLHttpRequest)
-          {
-          xmlhttp=new XMLHttpRequest();
-          }
-        else
-          {
-          xmlhttp=new ActiveXObject('Microsoft.XMLHTTP');
-          }
-        xmlhttp.onreadystatechange=function()
-          {
-            if (xmlhttp.readyState==3 && xmlhttp.status==200)
-              {
-              document.getElementById("groups").innerHTML="deleting...";
-              }
-          if (xmlhttp.readyState==4 && xmlhttp.status==200)
+          if(confirm('Confirm Delete'))
             {
-            document.getElementById("groups").innerHTML=xmlhttp.responseText;
+              if (window.XMLHttpRequest)
+                {
+                xmlhttp=new XMLHttpRequest();
+                }
+              else
+                {
+                xmlhttp=new ActiveXObject('Microsoft.XMLHTTP');
+                }
+              xmlhttp.onreadystatechange=function()
+                {
+                  if (xmlhttp.readyState==3 && xmlhttp.status==200)
+                    {
+                    document.getElementById("groups").innerHTML="deleting...";
+                    }
+                if (xmlhttp.readyState==4 && xmlhttp.status==200)
+                  {
+                  document.getElementById("groups").innerHTML=xmlhttp.responseText;
+                  }
+                }
+              xmlhttp.open('GET','managedev.php?del='+str,true);
+              //alert(macid);
+              xmlhttp.send();
             }
-          }
-        xmlhttp.open('GET','managedev.php?del='+str,true);
-        //alert(macid);
-        xmlhttp.send();
         }
         </script>
         <script type='text/javascript'>
@@ -399,58 +428,63 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
          */
         function dels(str)
         {
-
-        if (window.XMLHttpRequest)
-          {
-          xmlhttp=new XMLHttpRequest();
-          }
-        else
-          {
-          xmlhttp=new ActiveXObject('Microsoft.XMLHTTP');
-          }
-        xmlhttp.onreadystatechange=function()
-          {
-            if (xmlhttp.readyState==3 && xmlhttp.status==200)
-              {
-              document.getElementById("sensors").innerHTML="deleting...";
-              }
-          if (xmlhttp.readyState==4 && xmlhttp.status==200)
+          if(confirm('Confirm Delete'))
             {
-            document.getElementById("sensors").innerHTML=xmlhttp.responseText;
+            if (window.XMLHttpRequest)
+              {
+              xmlhttp=new XMLHttpRequest();
+              }
+            else
+              {
+              xmlhttp=new ActiveXObject('Microsoft.XMLHTTP');
+              }
+            xmlhttp.onreadystatechange=function()
+              {
+                if (xmlhttp.readyState==3 && xmlhttp.status==200)
+                  {
+                  document.getElementById("sensors").innerHTML="deleting...";
+                  }
+              if (xmlhttp.readyState==4 && xmlhttp.status==200)
+                {
+                document.getElementById("sensors").innerHTML=xmlhttp.responseText;
+                }
+              }
+            xmlhttp.open('GET','managedev.php?dels='+str,true);
+            //alert(macid);
+            xmlhttp.send();
             }
+            else{}
           }
-        xmlhttp.open('GET','managedev.php?dels='+str,true);
-        //alert(macid);
-        xmlhttp.send();
-        }
-        </script>
-        <script type='text/javascript'>
-        function ddel(macid)
+      </script>
+      <script type='text/javascript'>
+      function ddel(macid)
+      {
+        if(confirm('Confirm Delete'))
         {
-
-        if (window.XMLHttpRequest)
-          {
-          xmlhttp=new XMLHttpRequest();
-          }
-        else
-          {
-          xmlhttp=new ActiveXObject('Microsoft.XMLHTTP');
-          }
-        xmlhttp.onreadystatechange=function()
-          {
-            if (xmlhttp.readyState==3 && xmlhttp.status==200)
-              {
-              document.getElementById("items").innerHTML="deleting...";
-              
-              }
-          if (xmlhttp.readyState==4 && xmlhttp.status==200)
+          if (window.XMLHttpRequest)
             {
-            document.getElementById("items").innerHTML=xmlhttp.responseText;
+            xmlhttp=new XMLHttpRequest();
             }
-          }
-        xmlhttp.open('GET','managedev.php?ddel='+macid,true);
-        //alert(macid);
-        xmlhttp.send();
+          else
+            {
+            xmlhttp=new ActiveXObject('Microsoft.XMLHTTP');
+            }
+          xmlhttp.onreadystatechange=function()
+            {
+              if (xmlhttp.readyState==3 && xmlhttp.status==200)
+                {
+                document.getElementById("items").innerHTML="deleting...";
+                
+                }
+            if (xmlhttp.readyState==4 && xmlhttp.status==200)
+              {
+              document.getElementById("items").innerHTML=xmlhttp.responseText;
+              }
+            }
+          xmlhttp.open('GET','managedev.php?ddel='+macid,true);
+          //alert(macid);
+          xmlhttp.send();
+        }
         }
     </script>
 
