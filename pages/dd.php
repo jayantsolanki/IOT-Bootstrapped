@@ -100,10 +100,12 @@ function display($grp)
 			$grp=$row['group'];//group in which it belongs
 			$dname=$row['name'];
 			$sense=$row['type'];//sensor type id
-			$batquery="SELECT battery_value, created_at FROM feeds WHERE feeds.device_id='$macid' order by feeds.id desc limit 1";
+			$batquery="SELECT device_type, battery_value, temp_value, created_at FROM feeds WHERE feeds.device_id='$macid' order by feeds.id desc limit 1";
 			$batresult=mysql_query($batquery);
 			$batfetch=mysql_fetch_assoc($batresult);
-			$batvalue=$batfetch['battery_value'];
+			$Pbatvalue=$batfetch['battery_value'];
+			$Sbatvalue=$batfetch['temp_value'];
+			$devType=$batfetch['device_type'];
 			$batTime=$batfetch['created_at'];
 			$query="SELECT name FROM groups WHERE id='$grp'";
 			$grps=mysql_query($query);
@@ -118,7 +120,7 @@ function display($grp)
 			$seenfetch=mysql_fetch_assoc($seenresult);
 			$seen=$seenfetch['created_At'];
 			$status=$seenfetch['status']; //online offline or new, 1, 0, 2
-			
+
 			$jsonArrayItem['deviceName'] = $dname;
 			$jsonArrayItem['deviceId'] = $macid;
 			if($action==1)
@@ -132,7 +134,13 @@ function display($grp)
 			$jsonArrayItem['seen'] = $seen;
 			$jsonArrayItem['groupName'] = $name;
 			$jsonArrayItem['type'] = $sensor;
-			$jsonArrayItem['batValue'] = $batvalue;
+			$jsonArrayItem['PbatValue'] = $Pbatvalue;
+			if($devType==1 && $Sbatvalue!=null){
+				$jsonArrayItem['SbatValue'] = $Sbatvalue;
+				$jsonArrayItem['devType'] = true;
+			}
+			else
+				$jsonArrayItem['devType'] = false;
 			$jsonArrayItem['batTime'] = $batTime;
 			array_push($jsonArray, $jsonArrayItem);
 			/*if($battery==1) //changing into user readable form
