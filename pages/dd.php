@@ -95,8 +95,8 @@ function display($grp)
 			$macid=$row['macid'];
 			$action=$row['action'];
 			$battery=$row['battery'];
-			$status=$row['status']; //online offline or new, 1, 0, 2
-			$seen=$row['seen'];
+			//$status=$row['status']; //online offline or new, 1, 0, 2
+			//$seen=$row['seen'];
 			$grp=$row['group'];//group in which it belongs
 			$dname=$row['name'];
 			$sense=$row['type'];//sensor type id
@@ -113,7 +113,12 @@ function display($grp)
 			$grps=mysql_query($query);
 			$rows=mysql_fetch_assoc($grps);
 			$sensor=$rows['name'];
-
+			$seenquery="Select status, created_At from deviceStatus where deviceStatus.deviceId='$macid' order by deviceStatus.id desc limit 1";//getting last seen status
+			$seenresult=mysql_query($seenquery);
+			$seenfetch=mysql_fetch_assoc($seenresult);
+			$seen=$seenfetch['created_At'];
+			$status=$seenfetch['status']; //online offline or new, 1, 0, 2
+			
 			$jsonArrayItem['deviceName'] = $dname;
 			$jsonArrayItem['deviceId'] = $macid;
 			if($action==1)
