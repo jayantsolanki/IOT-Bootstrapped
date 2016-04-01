@@ -22,7 +22,7 @@ if(isset($_GET['grp']))
 	$rows=mysql_fetch_assoc($grps);
 	$gname=$rows['name'];
 	echo "<h4>Valves grouped under <label class='badge'>".$gname."</label></h4>";
-	$query="SELECT * FROM devices WHERE devices.group=$grp and devices.type='1'";
+	$query="SELECT * FROM switches WHERE switches.groupId=$grp";
 	$results=mysql_query($query);
 
 	//echo " <button id='1' type='button' onclick='updateall(this.value)' value='1'>Switch all ON</button>";
@@ -48,10 +48,16 @@ if(isset($_GET['grp']))
 		while($row=mysql_fetch_assoc($results)) 
 		{	
 			$i++;
-			$macid=$row['macid'];
+			$macid=$row['deviceId'];
+			$switchId=$row['switchId'];
 			$action=$row['action'];
-			$name=$row['name'];
-			$type=$row['type'];
+			$devquery="SELECT name, type, switches FROM devices WHERE deviceId='$macid'";
+			$devs=mysql_query($devquery);
+			$dev=mysql_fetch_assoc($devs);
+			$name=$dev['name'];
+			$type=$dev['type'];//valve, sensor
+			$switches=$dev['switches'];
+
 			$query="SELECT name FROM sensors WHERE id='$type'";
 			$sens=mysql_query($query);
 			$sen=mysql_fetch_assoc($sens);
@@ -73,9 +79,9 @@ if(isset($_GET['grp']))
 				$status="<span class='label label-info'>New Device Found</span>";
 				echo "
 			<tr>
-			<td><strong class='text text-info'>".$i.". $sname sensor: $name </strong>&nbsp; &nbsp;<strong class='text text-info'>MacId:</b> $macid &nbsp;</td>";
+			<td><strong>".$i.". </strong><big class='text text-warning'>$name</big> <strong>Type:</strong> <big class='text text-warning'>$sname/$switches</big>&nbsp; &nbsp;<strong class='text text-info'>DeviceId:</strong> $macid &nbsp;<strong class='text text-danger'>SwitchId:</strong> $switchId</td>";
 			
-			echo "<td><button class='item btn btn-primary' id='$macid' type='button'  onclick='update(this.value)' value='$macid'>Switch ".$action."</button></td>
+			echo "<td><button class='item btn btn-primary' id='".$macid."".$switchId."' type='button'  onclick=update('$macid','$switchId') value='$macid'>Switch ".$action."</button></td>
 			<td class='$macid'>$status</td>
 				</tr>";
 			

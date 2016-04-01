@@ -8,7 +8,8 @@ require 'settings/iotdb.php';
 require(__DIR__ . '/spMQTT.class.php');
 date_default_timezone_set('Asia/Kolkata');//setting IST
 spMQTTDebug::Enable();
-$q=$_GET["q"]; //q is the macid received
+$q=$_GET["devId"]; //q is the macid received
+$s=$_GET["switchId"]; //q is the macid received
 $gid=$_GET['gid'];
 $duration=$_GET['duration'];
 $starth=date('H');
@@ -21,7 +22,7 @@ if($q!=0 and $q!=1 )//individual on/off
 {
 //echo "Hello World".$q;
 mysql_select_db($dbname) or die(mysql_error());//manual on/off
-$query="SELECT * FROM devices where"."(macid='$q')";
+$query="SELECT * FROM switches where"."(deviceId='$q' and switchId=$s)";
 $results=mysql_query($query);
 
 
@@ -30,18 +31,18 @@ $results=mysql_query($query);
 	{
 		while($row = mysql_fetch_assoc($results))
 		{
-			$macid=$row['macid'];
+			$macid=$row['deviceId'];
 			$action=$row['action'];
 			//$status=$row['status'];
 			if($action==0)//checking valve is off or not
 			{
 				//command($macid,1);	//switch ON			
 				//echo "Switch OFF"; //update button status
-				$query = "UPDATE devices SET action ='1' WHERE macid='$macid'"; //updating action status in device table and also chanign new device status
+				$query = "UPDATE switches SET action ='1' WHERE deviceId='$macid' and switchId=$s"; //updating action status in device table
 				//echo "</br>".$query;
 				if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))
 					echo "UPDATE failed: $query<br/>".mysql_error()."<br/><br/>";
-				$query="INSERT INTO tasks VALUES". "(DEFAULT,NULL,'$macid','$start','$stop', '0','0')";
+				$query="INSERT INTO tasks VALUES". "(DEFAULT,NULL,'$macid','$s','$start','$stop', '0','0')"; //changed here for switches, last zero is for manual task identification
 				if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))
 					echo "INSERT failed: $query<br/>".mysql_error()."<br/><br/>";
 				
@@ -50,11 +51,11 @@ $results=mysql_query($query);
 			{
 				//command($macid,0);	//Switch off
 				//echo "Switch ON";
-				$query = "UPDATE devices SET action ='0' WHERE macid='$macid'"; //updating action status in device table 
+				$query = "UPDATE switches SET action ='0' WHERE deviceId='$macid' and switchId=$s"; //updating action status in device table 
 				//echo "</br>".$query;
 				if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))
 					echo "UPDATE failed: $query<br/>".mysql_error()."<br/><br/>";
-				$query= "DELETE FROM tasks where macid='$macid'";//possible collision with sql query running in mosca server
+				$query= "DELETE FROM tasks where deviceId='$macid' and switchId=$s";//possible collision with sql query running in mosca server
 				if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))
 					echo "UPDATE failed: $query<br/>".mysql_error()."<br/><br/>";
 				

@@ -22,7 +22,7 @@ if(isset($_GET['grp']))
 	$rows=mysql_fetch_assoc($grps);
 	$gname=$rows['name'];
 	echo "<h4>Valves grouped under <label class='badge'>".$gname."</label><br/></h4>";
-	$query="SELECT * FROM devices WHERE devices.group=$grp";
+	$query="SELECT * FROM devices WHERE devices.groupId=$grp";
 	$results=mysql_query($query);
 	
 	if (mysql_num_rows($results) > 0) 
@@ -32,7 +32,7 @@ if(isset($_GET['grp']))
 		while($row=mysql_fetch_assoc($results)) 
 		{	
 			$i++;
-			$macid=$row['macid'];
+			$macid=$row['deviceId'];
 			$action=$row['action'];
 			$status=$row['status']; //online offline or new, 1, 0, 2
 			$name=$row['name'];

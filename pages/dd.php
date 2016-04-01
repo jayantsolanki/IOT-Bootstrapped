@@ -85,21 +85,20 @@ function display($grp)
 	$jsonArray = array();//creating a json response
 	//echo "<button id='bat' type='button' onclick='checkbat(this.value)' value='$grp'>Check Battery status</button></br></br>";
 	//$query="SELECT * FROM devices";
-	$query="SELECT * FROM devices WHERE devices.group=$grp";
+	$query="SELECT * FROM devices WHERE devices.groupId=$grp";
 	$results=mysql_query($query);
 	if (mysql_num_rows($results) > 0) 
 	{	
 		while($row=mysql_fetch_assoc($results)) 
 		{	
 			$jsonArrayItem = array();
-			$macid=$row['macid'];
-			$action=$row['action'];
-			$battery=$row['battery'];
+			$macid=$row['deviceId'];
 			//$status=$row['status']; //online offline or new, 1, 0, 2
 			//$seen=$row['seen'];
-			$grp=$row['group'];//group in which it belongs
+			$grp=$row['groupId'];//group in which it belongs
 			$dname=$row['name'];
-			$sense=$row['type'];//sensor type id
+			$sense=$row['type'];//device type id
+			$newDevice=$row['status'];
 			$batquery="SELECT device_type, battery_value, temp_value, created_at FROM feeds WHERE feeds.device_id='$macid' order by feeds.id desc limit 1";
 			$batresult=mysql_query($batquery);
 			$batfetch=mysql_fetch_assoc($batresult);
@@ -123,10 +122,10 @@ function display($grp)
 
 			$jsonArrayItem['deviceName'] = $dname;
 			$jsonArrayItem['deviceId'] = $macid;
-			if($action==1)
-			$jsonArrayItem['action'] = 'Running';
-			if($action==0)
-			$jsonArrayItem['action'] = 'Idle';	
+			if($newDevice==1)
+			$jsonArrayItem['newDevice'] = true;
+			if($newDevice==0)
+			$jsonArrayItem['newDevice'] = false;	
 			if($status==1)
 				$jsonArrayItem['status'] = true;
 			if($status==0)
@@ -175,7 +174,9 @@ function display($grp)
 	}
 	else
 		{
-			echo "<h3>No Devices added yet</h3>";
+			$jsonArray=array();
+			echo json_encode($jsonArray);
+			//echo "<h3>No Devices added yet</h3>";
 		}
 	
 }

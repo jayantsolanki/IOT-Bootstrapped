@@ -94,7 +94,7 @@ error_reporting(-1); //for suppressing errors and notices
                           <div id='dev'>
                               <div class="row" ng-repeat="device in devices">
                                   <div class="col-md-2">
-                                       <h2 class="text-danger" >{{device.deviceName}}</h2>
+                                       <h2 class="text-danger" ><small ng-if="device.newDevice"><span class="label label-info">New Device</span> <br></small>{{device.deviceName}}</h2>
                                   </div>
                                   <div class="col-md-7">
                                      <blockquote>
@@ -163,7 +163,7 @@ error_reporting(-1); //for suppressing errors and notices
             $scope.groupId = 1;//default
 
             $scope.selectGroup = function() {
-                $http.get("dd.php?grp="+$scope.groupId)
+                $http.get("dd.php?grp="+$scope.groupId)//calling dd.php for retrieving the data
                 .then(function(response) {
                     $scope.devices = response.data;                
                 });

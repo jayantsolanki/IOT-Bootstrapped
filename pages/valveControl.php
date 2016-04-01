@@ -141,7 +141,7 @@ include_once 'settings/iotdb.php';
       var ws=null;
       $(function() { //websocket
           //var wscon=null;
-          ws = new WebSocket("ws://10.129.28.118:8180");
+          ws = new WebSocket("ws://10.129.28.118:8180");//changer later for production release
           ws.onopen = function(e) {
             console.log('Connection to server opened');
           }
@@ -153,9 +153,9 @@ include_once 'settings/iotdb.php';
            // valElem.html(e.data);
             //alert(status.deviceId+' '+status.status);
             if(response.action==1)
-              document.getElementById(response.deviceId).innerHTML='Switch OFF';
+              document.getElementById(response.deviceId+response.switchId).innerHTML='Switch OFF';//changed to switchId for respective valves
             else if(response.action==0)
-              document.getElementById(response.deviceId).innerHTML='Switch ON';
+              document.getElementById(response.deviceId+response.switchId).innerHTML='Switch ON';
             if(response.status==0)
               document.getElementsByClassName(response.deviceId)[0].innerHTML="<span class='label label-danger'>OFFLINE</span>";
             else if(response.status==1)
@@ -252,10 +252,11 @@ xmlhttp.send();
  * Example Call: update(12-14-AA-54-76-BB)
  *
  */
-function update(str)
+function update(deviceId, switchId)
 {
-  //alert(str);
-  var action=document.getElementById(str).innerHTML;
+  //alert(deviceId+switchId);
+  var action=document.getElementById(deviceId+switchId).innerHTML;
+  //alert(action);
   var payload;
   //alert(action);
   //alert(action);
@@ -268,7 +269,8 @@ function update(str)
                 payload=1;
               }
               var jsonS={
-                  "deviceId":str,
+                   "deviceId":deviceId,
+                   "switchId":switchId,
                    "payload":payload
                    };
                 ws.send(JSON.stringify(jsonS));
@@ -277,7 +279,7 @@ function update(str)
 
            // }
         }
-var duration=document.getElementById('duration').value;
+var duration=document.getElementById('duration').value;//mysql and mqtt are going separately, one via ajax and other via websocket
 //alert(duration);
 if (window.XMLHttpRequest)
   {
@@ -291,17 +293,17 @@ xmlhttp.onreadystatechange=function()
   {
     if (xmlhttp.readyState==3 && xmlhttp.status==200)
       {
-      document.getElementById(str).innerHTML="Switching ....";
+      document.getElementById(deviceId+switchId).innerHTML="Switching ....";
       }
   if (xmlhttp.readyState==4 && xmlhttp.status==200)
     {
       if(payload==0)
-        document.getElementById(str).innerHTML='Switch ON';
+        document.getElementById(deviceId+switchId).innerHTML='Switch ON';
      else if(payload==1)
-        document.getElementById(str).innerHTML='Switch OFF';
+        document.getElementById(deviceId+switchId).innerHTML='Switch OFF';
     }
   }
-xmlhttp.open('GET','com.php?q='+str+'&duration='+duration,true);
+xmlhttp.open('GET','com.php?devId='+deviceId+'&switchId='+switchId+'&duration='+duration,true);//modified for the switch ids
 xmlhttp.send();
 }
 </script>

@@ -58,189 +58,180 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-12">
-                        <h1 class="page-header">Scheduler</h1>
+                        <h1 class="page-header text-info">Scheduler</h1>
                     </div>
                     <!-- /.col-lg-12 -->
                 </div>
                 <div class="row">
-                    <div class="col-lg-12">
-                       <div  id="main">
-                            <div class="header" >
-                              <h2>Add Schedule</h2>
+                        <div class="header text-danger" >
+                          <h2>Add Schedule</h2>
+                        </div>
+                        <div class="row">
+                            <div class='col-md-6 col-lg-6'>
+                                <label class='text-muted'>Choose Group</label>
+                                <select class="form-control" id="grps">
+                                    <option selected="true" disabled='disabled'>Choose</option>
+                                    <?php
+                                    mysql_select_db($dbname) or die(mysql_error());
+                                    $query="SELECT * FROM groups"; //displaying groups
+                                    $results=mysql_query($query);
+                                    if (mysql_num_rows($results) > 0) 
+                                        {       
+                                            while($row=mysql_fetch_assoc($results)) 
+                                            {   //$id=$row['id'];
+                                                $group=$row['name'];
+                                                $id=$row['id'];
+                                                echo " <option value='$id'>$group</option>";
+                                            }
+                                        }
+
+                                    ?>
+
+                                </select>
                             </div>
-
-                            <div class="content">
-                        <b>Choose Group</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<select class="col-md-2 form-control" id="grps">
-                        <option selected="true" disabled='disabled'>Choose</option>
-                        <?php
-                        mysql_select_db($dbname) or die(mysql_error());
-                        $query="SELECT * FROM groups"; //displaying groups
-                        $results=mysql_query($query);
-                        if (mysql_num_rows($results) > 0) 
-                            {       
-                                while($row=mysql_fetch_assoc($results)) 
-                                {   //$id=$row['id'];
-                                    $group=$row['name'];
-                                    $id=$row['id'];
-                                    echo " <option value='$id'>$group</option>";
-                                }
-                            }
-
-                        ?>
-
-                        </select>
                          </div>
-                        <div class='choose'>
-                        <b>Type of Schedule</b>&nbsp;&nbsp;&nbsp;<select class="col-xs-5 form-control" id="time">
-                        <option selected="true" disabled='disabled'>Choose</option>
-                          <option value="period">Period</option>
-                          <option value="duration">Duration</option>
-                          <option value="frequency">Frequency</option>
-                        </select>
-                        <div id='period' class="time">
-                        <pre>
-                        </br>
-                        <span style='color:#3B5998;font-weight:normal;'>Start time:(hhmm)</span>
-
-                        <?php
-                        echo "Hrs:<select class='form-control' id='starth' name='starth'>";
-                        $i=0; 
-                        while($i<=24)
-                        {
-                        echo "<option value='$i'>$i</option>";
-                        $i++;
-                        } 
-                        echo "</select>";
-                        echo " Mins:<select class='form-control' id='startm' name='startm'>";
-                        $j=0; 
-                        while($j<=60)
-                        {
-                        echo "<option value='$j'>$j</option>";
-                        $j=$j+5;
-                        } 
-                        echo "</select>";
-                        ?>
-
-                        </br><span style='color:#3B5998;font-weight:normal;
-                            '>Stop time:(hhmm)</span></br>
-                        <?php
-                        echo "Hrs:<select class='form-control' id='stoph' name='stoph'>";
-                        $i=0; 
-                        while($i<=24)
-                        {
-                        echo "<option value='$i'>$i</option>";
-                        $i++;
-                        } 
-                        echo "</select>";
-                        echo " Mins:<select class='form-control' id='stopm' name='stopm'>";
-                        $j=0; 
-                        while($j<=60)
-                        {
-                        echo "<option value='$j'>$j</option>";
-                        $j=$j+5;
-                        } 
-                        echo "</select>";
-                        ?>
-                        </br>
-                        <input type='submit' name='submit' onclick='period()' value='Submit' />
-                        </pre>
-                        </div>
-                        <div id='duration' class="time">
-                        <pre>
-
-
-                        <span style='color:#3B5998;font-weight:normal;'>Start time:(hhmm)</span></br>
-                        <?php
-                        echo "Hrs:<select class='form-control' id='dstarth' name='starth'>";
-                        $i=0; 
-                        while($i<=24)
-                        {
-                        echo "<option value='$i'>$i</option>";
-                        $i++;
-                        } 
-                        echo "</select>";
-                        echo " Mins:<select id='dstartm' name='startm'>";
-                        $j=0; 
-                        while($j<=60)
-                        {
-                        echo "<option value='$j'>$j</option>";
-                        $j=$j+5;
-                        } 
-                        echo "</select>";
-                        ?>
-                        </br></br><span style='color:#3B5998;font-weight:normal;'>Duration:(mm)</span></br>
-                        <?php
-
-                        echo "Mins:<select class='form-control' id='dduration' name='duration'>";
-                        $j=5; 
-                        while($j<=60)
-                        {
-                        echo "<option value='$j'>$j</option>";
-                        $j=$j+5;
-                        } 
-                        echo "</select>";
-                        ?>
-                        </br>
-                        <input type='submit' name='submit' onclick='duration()' value='Submit' />
-
-                        </pre>
-                        </div>
-                        <div id='frequency' class="time">
-                        <pre>
-
-
-                        <span style='color:#3B5998;font-weight:normal;'>Start time:(hhmm)</span></br>
-                        <?php
-                        echo "Hrs:<select class='form-control' id='fstarth' name='starth'>";
-                        $i=0; 
-                        while($i<=24)
-                        {
-                        echo "<option value='$i'>$i</option>";
-                        $i++;
-                        } 
-                        echo "</select>";
-                        echo "</br></br><span style='color:#3B5998;font-weight:normal;'>Duration:(mm)</span></br>";
-                        echo "Mins:<select class='form-control' id='fduration' name='duration'>";
-                        $j=5; 
-                        while($j<=60)
-                        {
-                        echo "<option value='$j'>$j</option>";
-                        $j=$j+5;
-                        } 
-                        echo "</select>";
-
-                        ?>
-                        </br></br><span style='color:#3B5998;font-weight:normal;'>Repeat after every :(hh)</span></br>
-                        <?php
-
-                        echo "Hrs:<select id='repeath' name='repeath'>";
-                        $i=4; 
-                        while($i<=12)
-                        {
-                        echo "<option value='$i'>$i</option>";
-                        $i=$i+4;
-                        } 
-                        echo "</select>";
-                        ?>
-                        </br>
-                        <input type='submit' name='submit' onclick='frequency()' value='Submit' />
-
-                        </pre>
-                        </div>
+                         <div class='row'>
+                            <div class='choose col-md-6'>
+                                <label class='text-muted'>Type of Schedule</label>
+                                <select class="col-xs-5 form-control" id="time">
+                                <option selected="true" disabled='disabled'>Choose</option>
+                                  <option value="period">Period</option>
+                                  <option value="duration">Duration</option>
+                                  <option value="frequency">Frequency</option>
+                                </select>
+                            </div>
                         </div>
                         <div class='row'>
-                        <div class='col-md-6' id='display'>
-                        <?php display();?>
-                        </div>
-                         </div>
-                          </div><!-- end of content div -->
-                        <?php
-                        include_once "app.php";?>
-                            </div><!-- end of main div -->
-                        </div><!-- end of layout -->
-                           
-                        <div class="push"></div>
-                        <?php //include_once "footer.php";?></div>
+                            <div id='period' class="time col-md-6">
+                                <hr/>
+                                <fieldset  class="form-group form-inline">
+                                <label class='text-danger'>Start time:(hhmm)</label>
+
+                                <?php
+                                echo "Hrs:<select class='form-control' id='starth' name='starth'>";
+                                $i=0; 
+                                while($i<=24)
+                                {
+                                echo "<option value='$i'>$i</option>";
+                                $i++;
+                                } 
+                                echo "</select>";
+                                echo " Mins:<select class='form-control' id='startm' name='startm'>";
+                                $j=0; 
+                                while($j<=60)
+                                {
+                                echo "<option value='$j'>$j</option>";
+                                $j=$j+5;
+                                } 
+                                echo "</select>";
+                                ?>
+                                <hr/>
+                                <label class='text-danger'>Stop time:(hhmm)</label>
+                                <?php
+                                echo "Hrs:<select class='form-control' id='stoph' name='stoph'>";
+                                $i=0; 
+                                while($i<=24)
+                                {
+                                echo "<option value='$i'>$i</option>";
+                                $i++;
+                                } 
+                                echo "</select>";
+                                echo " Mins:<select class='form-control' id='stopm' name='stopm'>";
+                                $j=0; 
+                                while($j<=60)
+                                {
+                                echo "<option value='$j'>$j</option>";
+                                $j=$j+5;
+                                } 
+                                echo "</select>";
+                                ?>
+                                
+                                </fieldset>
+                                <button class="btn btn-danger" id='button' type='button' onclick='period()' value='add'>Add</button>
+                                
+                            </div>
+                            <div id='duration' class="time col-md-6">
+                                <hr/>
+                                <fieldset  class="form-group form-inline">
+                                <label class='text-danger'>Start time:(hhmm)</label>
+                                <?php
+                                echo "Hrs:<select class='form-control' id='dstarth' name='starth'>";
+                                $i=0; 
+                                while($i<=24)
+                                {
+                                echo "<option value='$i'>$i</option>";
+                                $i++;
+                                } 
+                                echo "</select>";
+                                echo " Mins:<select class='form-control' id='dstartm' name='startm'>";
+                                $j=0; 
+                                while($j<=60)
+                                {
+                                echo "<option value='$j'>$j</option>";
+                                $j=$j+5;
+                                } 
+                                echo "</select>";
+                                ?>
+                                <hr/>
+                                <label class='text-danger'>Duration:(mm)</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <?php
+
+                                echo "Mins:<select class='form-control' id='dduration' name='duration'>";
+                                $j=5; 
+                                while($j<=60)
+                                {
+                                echo "<option value='$j'>$j</option>";
+                                $j=$j+5;
+                                } 
+                                echo "</select>";
+                                ?>
+                                </fieldset>
+                                <button class="btn btn-danger" id='button' type='button' onclick='duration()' value='add'>Add</button>
+                            </div>
+                            <div id='frequency' class="time col-md-6">
+                                <hr/>
+                                <fieldset  class="form-group form-inline">
+                                    <label class='text-danger'>Start time:(hhmm)</label>
+                                <?php
+                                echo "Hrs:<select class='form-control' id='fstarth' name='starth'>";
+                                $i=0; 
+                                while($i<=24)
+                                {
+                                echo "<option value='$i'>$i</option>";
+                                $i++;
+                                } 
+                                echo "</select>";
+                                echo "</br></br><label class='text-danger'>Duration:(mm)</label>";
+                                echo "Mins:<select class='form-control' id='fduration' name='duration'>";
+                                $j=5; 
+                                while($j<=60)
+                                {
+                                echo "<option value='$j'>$j</option>";
+                                $j=$j+5;
+                                } 
+                                echo "</select>";
+
+                                ?>
+                                <label class='text-info'>Repeat after every :(hh)</label>
+                                <?php
+
+                                echo "Hrs:<select class='form-control' id='repeath' name='repeath'>";
+                                $i=4; 
+                                while($i<=12)
+                                {
+                                echo "<option value='$i'>$i</option>";
+                                $i=$i+4;
+                                } 
+                                echo "</select>";
+                                ?></fieldset>
+                                <button class="btn btn-danger" id='button' type='button' onclick='frequency()' value='add'>Add</button>
+                            </div><!-- time ends here -->
+                        </div><!-- row ends here -->
+                        <div class='row'>
+                            <div class='col-md-9 col-lg-6' id='display'>
+                            <?php display();?>
+                            </div><!-- display -->
+                        </div><!-- row ends here -->
                         <?php
 
 
@@ -253,7 +244,7 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
                          * 
                          *
                          */
-                        function display()
+                       function display()
                         {
                             $dbname='IOT';
                             mysql_select_db($dbname) or die(mysql_error());
@@ -267,17 +258,38 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
                                 {   $id=$row['id'];
                                     $start=$row['start'];
                                     $stop=$row['stop']; //online offline or new, 1, 0, 2
-                                    $item=$row['item'];
+                                    $groupId=$row['groupId'];
+                                    $deviceId=$row['deviceId'];
+                                    $switchId=$row['switchId'];
+
                                     if($start>=2100 or $start<=300)
-                                        $status="<span class='label label-warning'>Shouldn't water plants during night</span>";
+                                        $status="<a class='label label-danger' data-toggle='tooltip' title='Should not water plants during night' ><strong><big>!</big></strong></a>";
                                     else
                                         $status='';
                                     echo "<tr>
-                                    <td><b>Task ".$i."</b></td>
-                                    <td><b>Item:</b> $item</td>
-                                    <td> Start time : $start</td>
-                                    <td> Stop time : $stop</td>
-                                    <td><a class='label label-danger' href='javascript:del($id)'><b>DELETE</b></a> </td>
+                                    <td><strong class='text-muted'>".$i.".</strong></td>";
+                                    if($groupId!=null){
+                                        $grpq="SELECT name FROM groups where id=$groupId"; //getting group name
+                                        $grpres=mysql_query($grpq);
+                                        $grprow=mysql_fetch_assoc($grpres);
+                                        $grpname=$grprow['name'];
+                                        echo"<td><b>Group:</b> $grpname</td>";
+                                    }
+                                    if($deviceId!=null){
+                                        echo"<td><b>DeviceId:</b> $deviceId/<strong class='text-danger'>$switchId</strong> <span data-toggle='tooltip' title='Device manually switched on' class='badge'>M</span></td>";
+                                    }
+                                    if($start<1000){
+                                        echo"<td class='text-info'> Starts on: <strong>0$start Hrs</strong<</td>";
+                                    }
+                                    else
+                                        echo"<td class='text-info'> Starts on: <strong>$start Hrs</strong<</td>";
+                                    if($stop<1000){
+                                        echo"<td class='text-warning'> Stops on: <strong>0$stop Hrs</strong<</td>";
+                                    }
+                                    else
+                                        echo"<td class='text-warning'> Stops on: <strong>$stop Hrs</strong<</td>";
+                                    echo"
+                                    <td><a class='text-danger glyphicon glyphicon-remove-circle' data-toggle='tooltip' title='Delete' href='javascript:del($id)'></a> </td>
                                     <td> $status</td>
                                     </tr>";
                                     $i++;
@@ -293,8 +305,6 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
 
                         }
                         ?>
-                    </div>
-                    <!-- /.col-lg-12 -->
                 </div>
                 <!-- /.row -->
             </div>
@@ -351,28 +361,30 @@ $(document).ready(function () {
  */
 function del(str)
 {
-
-if (window.XMLHttpRequest)
-  {
-  xmlhttp=new XMLHttpRequest();
-  }
-else
-  {
-  xmlhttp=new ActiveXObject('Microsoft.XMLHTTP');
-  }
-xmlhttp.onreadystatechange=function()
-  {
-    if (xmlhttp.readyState==3 && xmlhttp.status==200)
-      {
-      document.getElementById(str).innerHTML="Switching ....";
-      }
-  if (xmlhttp.readyState==4 && xmlhttp.status==200)
+if(confirm('Confirm Delete'))
     {
-    document.getElementById("display").innerHTML=xmlhttp.responseText;
+        if (window.XMLHttpRequest)
+          {
+          xmlhttp=new XMLHttpRequest();
+          }
+        else
+          {
+          xmlhttp=new ActiveXObject('Microsoft.XMLHTTP');
+          }
+        xmlhttp.onreadystatechange=function()
+          {
+            if (xmlhttp.readyState==3 && xmlhttp.status==200)
+              {
+              document.getElementById(str).innerHTML="Switching ....";
+              }
+          if (xmlhttp.readyState==4 && xmlhttp.status==200)
+            {
+            document.getElementById("display").innerHTML=xmlhttp.responseText;
+            }
+          }
+        xmlhttp.open('GET','timetasker.php?del='+str,true);
+        xmlhttp.send();
     }
-  }
-xmlhttp.open('GET','timetasker.php?del='+str,true);
-xmlhttp.send();
 }
 </script>
 <script type='text/javascript'>

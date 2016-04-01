@@ -43,16 +43,16 @@ if(isset($_GET['grp']))
 		while($i<=2400) //time should be greater than 2400, military format
 		{	
 			$query="SELECT name FROM groups WHERE id='$grp'";
-			$grps=mysql_query($query);
+			/*$grps=mysql_query($query);
 			$grp=mysql_fetch_assoc($grps);
-			$name=$grp['name'];
+			$name=$grp['name'];*/
 			$start=$i;
 			$stop=$start+$duration;
 			if($stop>2400)
 				break;
 			if($stop==2400) //marks stop time as 0000
 				$stop=0;
-			$query="INSERT INTO tasks VALUES". "(DEFAULT,'$name', NULL,'$start','$stop', '1','1')";
+			$query="INSERT INTO tasks VALUES". "(DEFAULT,$grp, NULL,NULL,'$start','$stop', '1','1')";
 			//if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))		
 			//	echo "INSERT failed: $query<br/>".mysql_error()."<br/><br/>";
 			//echo $query;
@@ -63,31 +63,31 @@ if(isset($_GET['grp']))
 			
 			$i=$i+$repeath*100;		
 		}
-		echo "</br></br><span class='success'><b>New Time schedule added</b></span>";	
+		echo "</br></br><span class='alert alert-success'><b>New Time schedule added</b></span><br/>";	
 	}
 		if($repeath==NULL) // for setting period
 			if($start==$stop) //start time cannot be equal to stop time
 			{
-				echo"<span class='error'>Start time and stop time cannot be same</span>";	
+				echo"<span class='alert alert-danger'>Start time and stop time cannot be same</span><br/>";	
 			}
 			elseif($start>=$stop) //start cannot be greater than stop time
 			{
-				echo"<span class='error'>Start time cannot be greater than stop time </span>";	
+				echo"<span class='alert alert-danger'>Start time cannot be greater than stop time </span><br/>";	
 			}
 			else
 			{
-				$query="SELECT name FROM groups WHERE id='$grp'";
+				/*$query="SELECT name FROM groups WHERE id='$grp'";
 				$grps=mysql_query($query);
 				$grp=mysql_fetch_assoc($grps);
-				$name=$grp['name'];
-				$query="INSERT INTO tasks VALUES". "(DEFAULT,'$name',NULL,'$start','$stop', '1','1')";
+				$name=$grp['name'];*/
+				$query="INSERT INTO tasks VALUES". "(DEFAULT,$grp,NULL,NULL,'$start','$stop', '1','1')";
 			//if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))		
 			//	echo "INSERT failed: $query<br/>".mysql_error()."<br/><br/>";
 			//echo $query;
 				if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))
 					echo "INSERT failed: $query<br/>".mysql_error()."<br/><br/>";
 				else
-					echo "</br></br><span class='success'><b>New Time schedule added</b></span>";
+					echo "</br></br><span class='alert alert-success'><b>New Time schedule added</b></span><br/>";
 			}
 		
 }
@@ -101,7 +101,7 @@ if(isset($_GET['del'])) //deleting the entry
 	$query = "DELETE FROM tasks WHERE id='$del'";
 
 	if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))
-	echo "INSERT failed: $query<br/><div class='error'>".mysql_error()."</div><br/><br/>";
+	echo "Deletion failed: $query<br/><div class='alert alert-danger'>".mysql_error()."</div><br/><br/>";
 
 }
 
@@ -158,17 +158,38 @@ function display()
         {   $id=$row['id'];
             $start=$row['start'];
             $stop=$row['stop']; //online offline or new, 1, 0, 2
-            $item=$row['item'];
+            $groupId=$row['groupId'];
+            $deviceId=$row['deviceId'];
+            $switchId=$row['switchId'];
+
             if($start>=2100 or $start<=300)
-                $status="<span class='label label-warning'>Shouldn't water plants during night</span>";
+                $status="<a class='label label-danger' data-toggle='tooltip' title='Should not water plants during night' ><strong><big>!</big></strong></a>";
             else
                 $status='';
             echo "<tr>
-            <td><b>Task ".$i."</b></td>
-            <td><b>Item:</b> $item</td>
-            <td> Start time : $start</td>
-            <td> Stop time : $stop</td>
-            <td><a class='label label-danger' href='javascript:del($id)'><b>DELETE</b></a> </td>
+            <td><strong class='text-muted'>".$i.".</strong></td>";
+            if($groupId!=null){
+                $grpq="SELECT name FROM groups where id=$groupId"; //getting group name
+                $grpres=mysql_query($grpq);
+                $grprow=mysql_fetch_assoc($grpres);
+                $grpname=$grprow['name'];
+                echo"<td><b>Group:</b> $grpname</td>";
+            }
+            if($deviceId!=null){
+                echo"<td><b>DeviceId:</b> $deviceId/<strong class='text-danger'>$switchId</strong> <span data-toggle='tooltip' title='Device manually switched on' class='badge'>M</span></td>";
+            }
+            if($start<1000){
+                echo"<td class='text-info'> Starts on: <strong>0$start Hrs</strong<</td>";
+            }
+            else
+                echo"<td class='text-info'> Starts on: <strong>$start Hrs</strong<</td>";
+            if($stop<1000){
+                echo"<td class='text-warning'> Stops on: <strong>0$stop Hrs</strong<</td>";
+            }
+            else
+                echo"<td class='text-warning'> Stops on: <strong>$stop Hrs</strong<</td>";
+            echo"
+            <td><a class='text-danger glyphicon glyphicon-remove-circle' data-toggle='tooltip' title='Delete' href='javascript:del($id)'></a> </td>
             <td> $status</td>
             </tr>";
             $i++;

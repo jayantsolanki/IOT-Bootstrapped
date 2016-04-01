@@ -9,16 +9,18 @@
 */
 include 'settings/iotdb.php';
 $q=$_GET["q"]; //q is the group name received
-$macid=$_GET['edit'];
+$deviceId=$_GET['editdev'];
+$switchId=$_GET['editswi'];
 $id=$_GET['id'];
-$update=$_GET['update'];
+$updatedev=$_GET['updatedev'];
+$updateswi=$_GET['updateswi'];
 $gid=$_GET['gid'];
 $del=$_GET['del'];
 $dels=$_GET['dels'];
 $ddel=$_GET['ddel'];
 $dname=$_GET['dname'];
 $sensor=$_GET['sensor'];
-$sentyp=$_GET['sentyp'];
+//$sentyp=$_GET['sentyp'];
 if($q!=null)
 {
 	
@@ -109,28 +111,65 @@ if($sensor!=null)
 	
 
 }
-if($macid!=null)//update group and sensor type for selected deviceS
+if($deviceId!=null and $switchId!=null)//update group and sensor type for selected deviceS
 {
 
-echo "<span id='$macid' style='color:#3B5998;font-weight:normal;'>&nbsp;<b>Allot group and sensor type</b>  </br><b>&nbsp; &nbsp;</b><input type='text' name='dname' id='dname'> <b>Name </b></br><b>MAC id:</b> $macid &nbsp; &nbsp; ".groups()."&nbsp;".sensors()."<button id='$macid' type='button' onclick="."update('$macid')".">Update</button></span><hr>";
+echo "<label>&nbsp;Name</label>&nbsp;<input type='text' id='dname' name='dname' placeholder='name the device' required/> ".groups()."<button class='btn btn-danger' id='$deviceId' type='button' onclick="."update('$deviceId','$switchId')".">Update</button>";
 
 }
 
-if($update!=null)//perform the updation task
+if($updatedev!=null and $updateswi!=null)//perform the updation task
 {
 	
 	mysql_select_db($dbname) or die(mysql_error());
-	$query="SELECT name FROM groups WHERE id='$gid'";
-	$grps=mysql_query($query);
-	$grp=mysql_fetch_assoc($grps);
-	$name=$grp['name'];
-	if($name=='')
-		$name="<span style='color: #0088FF;'><b>New Device Found</b></span>";
-	$query = "UPDATE devices SET devices.group = '$gid', devices.status='1', devices.name='$dname', devices.type='$sentyp' WHERE devices.macid = '$update'"; //updating item with group id
-				
-	if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))
-		echo "UPDATE failed: $query<br/>".mysql_error()."<br/><br/>";
-	echo " <span id='$update' style='color:#3B5998;font-weight:normal;'><b></b><b>MAC id:</b> $update &nbsp; &nbsp;<b>Group:</b> $name&nbsp; &nbsp; <a href="."javascript:edit('$update')".">edit</a></span>";
+	if($gid!=null and $dname!=null){//update only if both fields are not empty
+		$query="SELECT name FROM groups WHERE id='$gid'";
+		$grps=mysql_query($query);
+		$grp=mysql_fetch_assoc($grps);
+		$name=$grp['name'];
+		if($updateswi==0){//simply the device
+			$query = "UPDATE devices SET devices.groupId = '$gid', devices.status=0, devices.name='$dname' WHERE devices.deviceId = '$updatedev'"; //updating item such as sensors which dont have switches
+			if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))
+			echo "UPDATE failed: $query<br/>".mysql_error()."<br/><br/>";
+		}
+		else{//updating the switch and device
+			$query = "UPDATE switches SET switches.groupId = '$gid', switches.newSwitch=0 WHERE switches.deviceId = '$updatedev' and switches.switchId=$updateswi"; //updating switche with group Id
+			if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))
+				echo "UPDATE failed: $query<br/>".mysql_error()."<br/><br/>";
+			//updating the name
+			$query = "UPDATE devices SET devices.status=0, devices.name='$dname' WHERE devices.deviceId = '$updatedev'"; //updating item such as sensors which dont have switches
+					
+			if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))
+				echo "UPDATE failed: $query<br/>".mysql_error()."<br/><br/>";		
+		}
+
+		
+	}
+	else{
+		if($updateswi==0)
+			$query="SELECT devices.name as dname, groups.name as name FROM groups inner join devices on devices.groupid=groups.id WHERE devices.deviceId='$deviceId'";
+		else
+			$query="SELECT devices.name as dname, groups.name as name FROM groups inner join switches on switches.groupid=groups.id inner join devices on devices.deviceId = switches.deviceId WHERE switches.deviceId='$deviceId' and switches.switchId=$switchId";
+		$grps=mysql_query($query);
+		$grp=mysql_fetch_assoc($grps);
+		$name=$grp['name'];
+		$dname=$grp['name'];
+	}
+	echo "
+        <span id='".$updatedev."".$updateswi."'><strong class='text-info'>Updated</strong>&nbsp; &nbsp; 
+        <big><strong>Name:</strong> <span class='text-danger'>$dname</span></big>
+        <big><strong>Device:</strong> <span class='text-muted'>$updatedev";
+    if($updateswi!=0)
+        echo"/<big class='text-danger'data-toggle='tooltip' title='Switch $updateswi' >$updateswi</big>";
+    echo"</span></big> &nbsp;
+         <big><strong>Type:</strong> <span class='text-danger'>$type</span></big>";
+    echo"
+        <big><strong>Group:</strong> <span class='text-danger'>$name</span></big>
+         &nbsp; &nbsp;<a class='text-muted glyphicon glyphicon-pencil' data-toggle='tooltip' title='Edit' href="."javascript:edit('$updatedev','$updateswi')"."></a>
+         &nbsp; &nbsp;<a class='text-danger glyphicon glyphicon-remove-circle' data-toggle='tooltip' title='Delete' href="."javascript:ddel('$updatedev','$updateswi')"."></a></span> 
+         </span>";
+
+	//echo " <span id='$update' style='color:#3B5998;font-weight:normal;'><b></b><b>MAC id:</b> $update &nbsp; &nbsp;<b>Group:</b> $name&nbsp; &nbsp; <a href="."javascript:edit('$update')".">edit</a></span>";
 	
 	
 }
@@ -256,10 +295,11 @@ $dbname='IOT';
 mysql_select_db($dbname) or die(mysql_error());
 $query="SELECT * FROM groups"; //displaying groups
 $results=mysql_query($query);
-echo "<select id='groupadd'>";	
+echo "<label>Choose Group for the Switch</label>";	
+echo "<select lass='form-control' id='groupadd'>";	
 if (mysql_num_rows($results) > 0) 
 	{
-	echo "<option selected='true' disabled='disabled'>Choose</option>";
+	echo "<option selected='true' disabled='disabled' value=0>Choose</option>";
 	while($row=mysql_fetch_assoc($results)) 
 		{	//$id=$row['id'];
 			$group=$row['name'];
@@ -292,7 +332,8 @@ $dbname='IOT';
 mysql_select_db($dbname) or die(mysql_error());
 $query="SELECT * FROM sensors"; //displaying groups
 $results=mysql_query($query);
-echo "<select id='sensoradd'>";	
+echo "<label>Choose Type</label>";
+echo "<select lass='form-control' id='sensoradd'>";	
 if (mysql_num_rows($results) > 0) 
 	{
 	echo "<option selected='true' disabled='disabled'>Choose</option>";

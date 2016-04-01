@@ -111,7 +111,7 @@ include_once 'settings/iotdb.php';
                         <div class="row">
                             <div class="col-md-4">
                             <select class='mobileSelect form-control' id='chartselect' name='chartselect' >
-                                <option selected="true" disabled='disabled'>Choose</option>
+                               <!--  <option selected="true" disabled='disabled'>Choose</option> -->
                               <?php 
                                 mysql_select_db($dbname) or die(mysql_error());
                                 $query="SELECT * FROM groups"; //displaying groups
