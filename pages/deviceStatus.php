@@ -89,7 +89,7 @@ error_reporting(-1); //for suppressing errors and notices
                                   }
                               }
                           ?>
-                          </select>&nbsp; &nbsp;</br></br>
+                          </select>&nbsp; &nbsp; <span id='battery'><button id='batterycheck' class='btn btn-success' onclick="checkbattery()">Check Battery</button></span></br></br>
                           <strong>Group Selected <label class ="badge">{{devices[0].groupName}}</label></strong><hr/>
                           <div id='dev'>
                               <div class="row" ng-repeat="device in devices">
@@ -148,6 +148,45 @@ error_reporting(-1); //for suppressing errors and notices
     <!-- Custom Theme JavaScript -->
     <script src="../dist/js/sb-admin-2.js"></script>
      <script type="text/javascript" src="../dist/js/bootstrap-fullscreen-select.js"></script>
+     <script>
+      //var ws=null;
+      function checkbattery() { //websocket
+          //var wscon=null;
+            var ws = new WebSocket("ws://10.129.28.181:8180");//changer later for production release;
+            
+          
+          ws.onopen = function(e) {
+            console.log('Connection to server opened');
+            if(ws!=null){//sending data via websocket
+          //if(ws.readyState == 1) {
+              var jsonS={
+                   "check":'battery',
+                   "device":0,//0 for all device
+                   "payload":2
+                   };
+                ws.send(JSON.stringify(jsonS));
+                console.log('Battery request sent');
+                document.getElementById('battery').innerHTML="<big><span class='label label-info'>Battery Status requested</span></big>";
+               // var valElem = $('#sss');
+                //valElem.html(JSON.stringify(jsonS));
+
+           // }
+          }
+          }
+              //var valElem = $('#sss');
+          
+          ws.onclose = function(e) {
+            console.log("Connection closed");
+          }
+          ws.onerror = function(e) {
+            console.log("Connection error");
+            document.getElementById('battery').innerHTML="<big><span class='label label-danger'> Mosca Server Offline</span></big>";
+          }
+          function disconnect() {
+            ws.close();
+          }
+      }
+    </script>
      <script>
         var app = angular.module('IOT-App',[]);
       

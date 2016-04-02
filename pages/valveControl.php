@@ -65,6 +65,7 @@ include_once 'settings/iotdb.php';
                 </div>
                 <div class="row">
                     <div class="header" >
+                      <div class="text-center" id='server'></div>
                       <h2 class="text-center">Valve Controls</h2>
                     </div>
                       <div class=" col-md-9 content">
@@ -141,7 +142,7 @@ include_once 'settings/iotdb.php';
       var ws=null;
       $(function() { //websocket
           //var wscon=null;
-          ws = new WebSocket("ws://10.129.28.118:8180");//changer later for production release
+          ws = new WebSocket("ws://10.129.28.181:8180");//changer later for production release
           ws.onopen = function(e) {
             console.log('Connection to server opened');
           }
@@ -162,6 +163,10 @@ include_once 'settings/iotdb.php';
               document.getElementsByClassName(response.deviceId)[0].innerHTML="<span class='label label-success'>ONLINE</span>";
             
                    
+          }
+          ws.onerror = function(e) {
+            document.getElementById('server').innerHTML="<span class='label label-danger'>MQTT Server connection unavailable, please refresh the page, if problem persists, contact Jay</span>";
+            console.log("Connection error");
           }
           ws.onclose = function(e) {
             console.log("Connection closed");
