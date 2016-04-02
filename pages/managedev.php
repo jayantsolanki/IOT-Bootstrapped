@@ -17,7 +17,8 @@ $updateswi=$_GET['updateswi'];
 $gid=$_GET['gid'];
 $del=$_GET['del'];
 $dels=$_GET['dels'];
-$ddel=$_GET['ddel'];
+$ddeldev=$_GET['ddeldev'];
+$ddelswi=$_GET['ddelswi'];
 $dname=$_GET['dname'];
 $sensor=$_GET['sensor'];
 //$sentyp=$_GET['sentyp'];
@@ -114,7 +115,7 @@ if($sensor!=null)
 if($deviceId!=null and $switchId!=null)//update group and sensor type for selected deviceS
 {
 
-echo "<label>&nbsp;Name</label>&nbsp;<input type='text' id='dname' name='dname' placeholder='name the device' required/> ".groups()."<button class='btn btn-danger' id='$deviceId' type='button' onclick="."update('$deviceId','$switchId')".">Update</button>";
+echo "<label>&nbsp;Name</label>&nbsp;<input type='text' id='dname' name='dname' placeholder='name the device' required/> ".groups($switchId)."<button class='btn btn-danger' id='$deviceId' type='button' onclick="."update('$deviceId','$switchId')".">Update</button> <button class='btn btn-info' id='$deviceId' type='button' onclick="."update(0,0)".">Cancel</button>";
 
 }
 
@@ -122,6 +123,9 @@ if($updatedev!=null and $updateswi!=null)//perform the updation task
 {
 	
 	mysql_select_db($dbname) or die(mysql_error());
+	if($updatedev==0 and $updateswi==0){
+		display();
+	}
 	if($gid!=null and $dname!=null){//update only if both fields are not empty
 		$query="SELECT name FROM groups WHERE id='$gid'";
 		$grps=mysql_query($query);
@@ -155,7 +159,7 @@ if($updatedev!=null and $updateswi!=null)//perform the updation task
 		$name=$grp['name'];
 		$dname=$grp['name'];
 	}
-	echo "
+	/*echo "
         <span id='".$updatedev."".$updateswi."'><strong class='text-info'>Updated</strong>&nbsp; &nbsp; 
         <big><strong>Name:</strong> <span class='text-danger'>$dname</span></big>
         <big><strong>Device:</strong> <span class='text-muted'>$updatedev";
@@ -167,7 +171,8 @@ if($updatedev!=null and $updateswi!=null)//perform the updation task
         <big><strong>Group:</strong> <span class='text-danger'>$name</span></big>
          &nbsp; &nbsp;<a class='text-muted glyphicon glyphicon-pencil' data-toggle='tooltip' title='Edit' href="."javascript:edit('$updatedev','$updateswi')"."></a>
          &nbsp; &nbsp;<a class='text-danger glyphicon glyphicon-remove-circle' data-toggle='tooltip' title='Delete' href="."javascript:ddel('$updatedev','$updateswi')"."></a></span> 
-         </span>";
+         </span>";*/
+        display();
 
 	//echo " <span id='$update' style='color:#3B5998;font-weight:normal;'><b></b><b>MAC id:</b> $update &nbsp; &nbsp;<b>Group:</b> $name&nbsp; &nbsp; <a href="."javascript:edit('$update')".">edit</a></span>";
 	
@@ -242,43 +247,22 @@ if($dels!=null) //for deleting selected sensor type
 	
 	
 }
-if($ddel!=null) //for deleting selected device
+if($ddeldev!=null and $ddelswi!=null) //for deleting selected device
 {
-	
-	$query = "DELETE FROM devices WHERE devices.macid='$ddel'";
-	if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))
-	echo "Deletion failed: $query<br/><div class='alert alert-danger'>".mysql_error()."</div><br/><br/>";
-	else
-	{
-		echo "<div class='alert alert-success'><strong>'$ddel' deleted</strong></div>";		
-	}
-	$query="SELECT * FROM devices"; //displaying groups
-	$results=mysql_query($query);
-	if (mysql_num_rows($results) > 0) 
-	{	$i=1;
-		echo "</br></br><h2>Items available</h2>";		
-		while($row=mysql_fetch_assoc($results)) 
-		{	$macid=$row['macid'];
-			$group=$row['group'];
-			//$group=$row['name'];
-			$query="SELECT name FROM groups WHERE id='$group'";
-			$grps=mysql_query($query);
-			$grp=mysql_fetch_assoc($grps);
-			$name=$grp['name'];
-			if($name=='')
-			 	$name="<span class='label label-info'><b>New Device Found</b></span>";
-			echo "<strong class='text-info'>".$i.".</strong>&nbsp; &nbsp; <big id='$macid'><strong>Device id:</strong> <span class='text-info'>$macid</span></big> &nbsp; &nbsp;<big><strong>Group:</strong> <span class='text-danger'>$name</span></big> &nbsp; &nbsp;<a class='text-muted glyphicon glyphicon-pencil' data-toggle='tooltip' title='Edit' href="."javascript:edit('$macid')"."></a>&nbsp; &nbsp;<a class='text-danger glyphicon glyphicon-remove-circle' data-toggle='tooltip' title='Delete' href="."javascript:ddel('$macid')"."></a></span><hr>";
-			$i++;
-			
-			
-		}
-	}
-	else
-	{
-		echo "</br><div class='notice'><b>No devices added yet.</b></div>";
-	}
-	
-	
+	if($ddeldev!=0 and $ddelswi==0){//delete the device and its related switches
+		$query = "DELETE FROM devices WHERE devices.deviceId='$ddeldev'";
+		if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))
+		echo "Deletion failed: $query<br/><div class='alert alert-danger'>".mysql_error()."</div><br/><br/>";
+		$query = "DELETE FROM switches WHERE switches.deviceId='$ddeldev'";//deleting all concerned device switches
+		if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))
+		echo "Deletion failed: $query<br/><div class='alert alert-danger'>".mysql_error()."</div><br/><br/>";
+	}	
+	if($ddeldev!=0 and $ddelswi!=0){//delete the switches
+		$query = "DELETE FROM switches WHERE switches.deviceId='$ddeldev' and switches.switchId=$ddelswi";
+		if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))//deleting concerned device switch
+		echo "Deletion failed: $query<br/><div class='alert alert-danger'>".mysql_error()."</div><br/><br/>";
+	}	
+	display();
 }
  /*
  *
@@ -289,13 +273,13 @@ if($ddel!=null) //for deleting selected device
  *
  */
 
-function groups()
+function groups($switchId)
 {
 $dbname='IOT';
 mysql_select_db($dbname) or die(mysql_error());
 $query="SELECT * FROM groups"; //displaying groups
 $results=mysql_query($query);
-echo "<label>Choose Group for the Switch</label>";	
+echo "<label>Choose Group for the Switch $switchId</label>";	
 echo "<select lass='form-control' id='groupadd'>";	
 if (mysql_num_rows($results) > 0) 
 	{
@@ -355,6 +339,87 @@ else
 echo "</select>";
 
 }
+
+ /*
+ *
+ * Function Name: sensors()
+ * Input: -
+ * Output: displays the device list
+ * 
+ *
+ */
+function display(){
+      
+      $query="SELECT devices.name as name,devices.groupId as dgroupId, devices.type as type, devices.status as status, devices.deviceId as deviceId, switches.switchId as switchId, switches.groupId as sgroupId, switches.newSwitch as newSwitch, switches.created_at as created_at FROM devices left join switches on switches.deviceId=devices.deviceId"; //displaying groups
+      $results=mysql_query($query);
+      if (mysql_num_rows($results) > 0) 
+      {   $i=1;    
+          while($row=mysql_fetch_assoc($results)) 
+          {   
+              $deviceId=$row['deviceId'];//for switches
+              $switchId=$row['switchId'];//for switches
+              $deviceName=$row['name'];//for devices
+              $sgroupId=$row['sgroupId'];//for switches
+              $dgroupId=$row['dgroupId']; //for devices
+              $sstatus=$row['newSwitch'];
+              $dstatus=$row['status'];
+              $type=$row['type'];
+              $created_at=$row['created_at'];
+              //$group=$row['name'];
+              
+
+              $query="SELECT name FROM sensors WHERE id=$type";
+              $typename=mysql_query($query);
+              $typerow=mysql_fetch_assoc($typename);
+              $type=$typerow['name'];
+              $status=null;
+              if($switchId==null){//if it is a switchless device like sensor node
+                $groupId=$dgroupId;
+
+                $switchId=0;
+                //if($dstatus==1)
+                  //$status="<span data-toggle='tooltip' title='New Device' class='text-info fa fa-cog fa-spin fa-2x'></span>";
+              }
+              else
+                $groupId=$sgroupId;
+              $query="SELECT name FROM groups WHERE id=$groupId";
+              $grps=mysql_query($query);
+              $grp=mysql_fetch_assoc($grps);
+              $name=$grp['name'];
+              if($switchId!=0 and $sstatus==1)
+                $status="<span data-toggle='tooltip' title='New Device' class='text-info fa fa-cog fa-spin fa-2x'></span>";
+              if($switchId==0 and $dstatus==1)
+                $status="<span data-toggle='tooltip' title='New Device' class='text-info fa fa-cog fa-spin fa-2x'></span>";
+              echo "
+              <span id='".$deviceId."".$switchId."'><strong class='text-info'>".$i.".</strong>&nbsp; &nbsp; 
+              <big><strong>Name:</strong> <span class='text-danger'>$deviceName</span></big>
+              <big><strong>Device:</strong> <span class='text-muted'>$deviceId";
+              if($switchId!=0)
+                echo"/<big class='text-danger'data-toggle='tooltip' title='Switch $switchId' >$switchId</big>";
+              echo"</span></big> &nbsp;
+              <big><strong>Type:</strong> <span class='text-danger'>$type</span></big>";
+              
+              echo"
+              <big><strong>Group:</strong> <span class='text-danger'>$name</span></big>
+               &nbsp; &nbsp;<a class='text-muted glyphicon glyphicon-pencil' data-toggle='tooltip' title='Edit' href="."javascript:edit('$deviceId','$switchId')"."></a>
+               &nbsp; &nbsp;";
+               if($switchId!=0){//delete switches
+                 echo"
+                 <a class='text-danger glyphicon glyphicon-remove-circle' data-toggle='tooltip' title='Delete' href="."javascript:ddel('$deviceId','$switchId')"."></a>";
+               }
+               echo"
+               &nbsp; &nbsp;<big><a class='text-danger glyphicon glyphicon-remove' data-toggle='tooltip' title='Remove device and its switches' href="."javascript:ddel('$deviceId',0)"."></a></big>";
+              echo"
+               </span>&nbsp;<strong><big>$status</big></strong><br/><hr/></span>";
+              $i++;
+          }
+      }
+      else
+      {
+          echo "</br><div class='notice'><b>No devices added yet.</b></div>";
+      }
+    }
+
 
 ?>
 

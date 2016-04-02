@@ -63,10 +63,10 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
                 </div>
                 <div class="row">                  
                   <div class="row"><!-- 1st inner row -->
-                    <div class="col-md-8">
+                    <div class="col-md-10">
                     <div class = "panel panel-info ">
                        <div class = "panel-heading">
-                          <h3>Manage Devices <small>Add your new type of device/group here</small></h3>
+                          <big>Manage Devices</big><small class="text-muted">Add your new type of device/group here</small>
                        </div>
                        <div class = "panel-body">
                         <div class='col-md-6'>
@@ -85,7 +85,7 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
                                 $results=mysql_query($query);
                                 if (mysql_num_rows($results) > 0) 
                                 {   $i=1;
-                                    echo "</br></br><h2>Device Types available</h2>";        
+                                    echo "</br></br><big>Device Types available</big><hr/>";        
                                     while($row=mysql_fetch_assoc($results)) 
                                     {   //$id=$row['id'];
                                         $sensor=$row['name'];
@@ -121,7 +121,7 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
                                   $results=mysql_query($query);
                                   if (mysql_num_rows($results) > 0) 
                                   {   $i=1;
-                                      echo "</br></br><h2>Groups available</h2>";     
+                                      echo "</br></br><big>Groups available</big><hr/>";     
                                       while($row=mysql_fetch_assoc($results)) 
                                       {   //$id=$row['id'];
                                           $group=$row['name'];
@@ -147,78 +147,88 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
                   </div><!--1st inner row ends here-->
                   <div class="row"><!-- 2nd inner row -->
                     <div class='col-md-10'>
-                      <div class = "panel panel-info ">
+                      <div class = "panel panel-danger ">
                          <div class = "panel-heading">
-                            <h3>Devices available <small>Manage individual devices</small> <a href="" data-toggle='tooltip' title='Refresh' class='text-warning glyphicon glyphicon-refresh'></a></h3>
+                            <big>Devices available</big> <small class='text-muted'>Manage individual devices</small>
                          </div>
                          <div class = "panel-body">
                             <div id='items'>
 
                                 <?php
+
                                 mysql_select_db($dbname) or die(mysql_error());
-                                $query="SELECT devices.name as name,devices.groupId as dgroupId, devices.type as type, devices.status as status, devices.deviceId as deviceId, switches.switchId as switchId, switches.groupId as sgroupId, switches.newSwitch as newSwitch, switches.created_at as created_at FROM devices left join switches on switches.deviceId=devices.deviceId"; //displaying groups
-                                $results=mysql_query($query);
-                                if (mysql_num_rows($results) > 0) 
-                                {   $i=1;    
-                                    while($row=mysql_fetch_assoc($results)) 
-                                    {   
-                                        $deviceId=$row['deviceId'];//for switches
-                                        $switchId=$row['switchId'];//for switches
-                                        $deviceName=$row['name'];//for devices
-                                        $sgroupId=$row['sgroupId'];//for switches
-                                        $dgroupId=$row['dgroupId']; //for devices
-                                        $sstatus=$row['newSwitch'];
-                                        $dstatus=$row['status'];
-                                        $type=$row['type'];
-                                        $created_at=$row['created_at'];
-                                        //$group=$row['name'];
-                                        
+                                display();
+                                function display(){
+                                  $query="SELECT devices.name as name,devices.groupId as dgroupId, devices.type as type, devices.status as status, devices.deviceId as deviceId, switches.switchId as switchId, switches.groupId as sgroupId, switches.newSwitch as newSwitch, switches.created_at as created_at FROM devices left join switches on switches.deviceId=devices.deviceId"; //displaying groups
+                                  $results=mysql_query($query);
+                                  if (mysql_num_rows($results) > 0) 
+                                  {   $i=1;    
+                                      while($row=mysql_fetch_assoc($results)) 
+                                      {   
+                                          $deviceId=$row['deviceId'];//for switches
+                                          $switchId=$row['switchId'];//for switches
+                                          $deviceName=$row['name'];//for devices
+                                          $sgroupId=$row['sgroupId'];//for switches
+                                          $dgroupId=$row['dgroupId']; //for devices
+                                          $sstatus=$row['newSwitch'];
+                                          $dstatus=$row['status'];
+                                          $type=$row['type'];
+                                          $created_at=$row['created_at'];
+                                          //$group=$row['name'];
+                                          
 
-                                        $query="SELECT name FROM sensors WHERE id=$type";
-                                        $typename=mysql_query($query);
-                                        $typerow=mysql_fetch_assoc($typename);
-                                        $type=$typerow['name'];
-                                        $status=null;
-                                        if($switchId==null){//if it is a switchless device like sensor node
-                                          $groupId=$dgroupId;
+                                          $query="SELECT name FROM sensors WHERE id=$type";
+                                          $typename=mysql_query($query);
+                                          $typerow=mysql_fetch_assoc($typename);
+                                          $type=$typerow['name'];
+                                          $status=null;
+                                          if($switchId==null){//if it is a switchless device like sensor node
+                                            $groupId=$dgroupId;
 
-                                          $switchId=0;
-                                          //if($dstatus==1)
-                                            //$status="<span data-toggle='tooltip' title='New Device' class='text-info fa fa-cog fa-spin fa-2x'></span>";
-                                        }
-                                        else
-                                          $groupId=$sgroupId;
-                                        $query="SELECT name FROM groups WHERE id=$groupId";
-                                        $grps=mysql_query($query);
-                                        $grp=mysql_fetch_assoc($grps);
-                                        $name=$grp['name'];
-                                        if($switchId!=0 and $sstatus==1)
-                                          $status="<span data-toggle='tooltip' title='New Device' class='text-info fa fa-cog fa-spin fa-2x'></span>";
-                                        if($switchId==0 and $dstatus==1)
-                                          $status="<span data-toggle='tooltip' title='New Device' class='text-info fa fa-cog fa-spin fa-2x'></span>";
-                                        echo "
-                                        <span id='".$deviceId."".$switchId."'><strong class='text-info'>".$i.".</strong>&nbsp; &nbsp; 
-                                        <big><strong>Name:</strong> <span class='text-danger'>$deviceName</span></big>
-                                        <big><strong>Device:</strong> <span class='text-muted'>$deviceId";
-                                        if($switchId!=0)
-                                          echo"/<big class='text-danger'data-toggle='tooltip' title='Switch $switchId' >$switchId</big>";
-                                        echo"</span></big> &nbsp;
-                                        <big><strong>Type:</strong> <span class='text-danger'>$type</span></big>";
-                                        
-                                        echo"
-                                        <big><strong>Group:</strong> <span class='text-danger'>$name</span></big>
-                                         &nbsp; &nbsp;<a class='text-muted glyphicon glyphicon-pencil' data-toggle='tooltip' title='Edit' href="."javascript:edit('$deviceId','$switchId')"."></a>
-                                         &nbsp; &nbsp;<a class='text-danger glyphicon glyphicon-remove-circle' data-toggle='tooltip' title='Delete' href="."javascript:ddel('$deviceId','$switchId')"."></a></span> 
-                                         &nbsp;<strong><big>$status</big></strong><br/><hr/></span>";
-                                         echo"";
-                                        $i++;
-                                        
-                                        
-                                    }
-                                }
-                                else
-                                {
-                                    echo "</br><div class='notice'><b>No devices added yet.</b></div>";
+                                            $switchId=0;
+                                            //if($dstatus==1)
+                                              //$status="<span data-toggle='tooltip' title='New Device' class='text-info fa fa-cog fa-spin fa-2x'></span>";
+                                          }
+                                          else
+                                            $groupId=$sgroupId;
+                                          $query="SELECT name FROM groups WHERE id=$groupId";
+                                          $grps=mysql_query($query);
+                                          $grp=mysql_fetch_assoc($grps);
+                                          $name=$grp['name'];
+                                          if($switchId!=0 and $sstatus==1)
+                                            $status="<span data-toggle='tooltip' title='New Device' class='text-info fa fa-cog fa-spin fa-2x'></span>";
+                                          if($switchId==0 and $dstatus==1)
+                                            $status="<span data-toggle='tooltip' title='New Device' class='text-info fa fa-cog fa-spin fa-2x'></span>";
+                                          echo "
+                                          <span id='".$deviceId."".$switchId."'><strong class='text-info'>".$i.".</strong>&nbsp; &nbsp; 
+                                          <big><strong>Name:</strong> <span class='text-danger'>$deviceName</span></big>
+                                          <big><strong>Device:</strong> <span class='text-muted'>$deviceId";
+                                          if($switchId!=0)
+                                            echo"/<big class='text-danger'data-toggle='tooltip' title='Switch $switchId' >$switchId</big>";
+                                          echo"</span></big> &nbsp;
+                                          <big><strong>Type:</strong> <span class='text-danger'>$type</span></big>";
+                                          
+                                          echo"
+                                          <big><strong>Group:</strong> <span class='text-danger'>$name</span></big>
+                                           &nbsp; &nbsp;<a class='text-muted glyphicon glyphicon-pencil' data-toggle='tooltip' title='Edit' href="."javascript:edit('$deviceId','$switchId')"."></a>
+                                           &nbsp; &nbsp;";
+                                           if($switchId!=0){//delete switches
+                                             echo"
+                                             <a class='text-danger glyphicon glyphicon-remove-circle' data-toggle='tooltip' title='Delete' href="."javascript:ddel('$deviceId','$switchId')"."></a>";
+                                           }
+                                           echo"
+                                           &nbsp; &nbsp;<big><a class='text-danger glyphicon glyphicon-remove' data-toggle='tooltip' title='Remove device and its switches' href="."javascript:ddel('$deviceId',0)"."></a></big>";
+                                          echo"
+                                           </span>&nbsp;<strong><big>$status</big></strong><br/><hr/></span>";
+                                          $i++;
+                                          
+                                          
+                                      }
+                                  }
+                                  else
+                                  {
+                                      echo "</br><div class='notice'><b>No devices added yet.</b></div>";
+                                  }
                                 }
 
                              ?>  
@@ -398,16 +408,16 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
           {
             if (xmlhttp.readyState==3 && xmlhttp.status==200)
               {
-              document.getElementById(deviceId+switchId).innerHTML="loading...";
+              document.getElementById('items').innerHTML="loading...";
               }
           if (xmlhttp.readyState==4 && xmlhttp.status==200)
             {
-            document.getElementById(deviceId+switchId).innerHTML=xmlhttp.responseText;
+            document.getElementById('items').innerHTML=xmlhttp.responseText;
             }
           }
-        if(dname=='')
+        if(dname=='' && (deviceId!=0 && switchId!=0))
           alert('Name field is blank');
-        else if(gid==0)
+        else if(gid==0 && (deviceId!=0 && switchId!=0))
           alert('Choose a group');
         else{
           xmlhttp.open('GET','managedev.php?updatedev='+deviceId+'&updateswi='+switchId+'&gid='+gid+'&dname='+dname,true);
@@ -496,9 +506,9 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
           }
       </script>
       <script type='text/javascript'>
-      function ddel(macid)
+      function ddel(deviceId, switchId)
       {
-        if(confirm('Confirm Delete'))
+        if(switchId!=0 && confirm('Switch '+switchId+' will be Deleted!'))
         {
           if (window.XMLHttpRequest)
             {
@@ -520,7 +530,33 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
               document.getElementById("items").innerHTML=xmlhttp.responseText;
               }
             }
-          xmlhttp.open('GET','managedev.php?ddel='+macid,true);
+          xmlhttp.open('GET','managedev.php?ddeldev='+deviceId+'&ddelswi='+switchId,true);
+          //alert(macid);
+          xmlhttp.send();
+        }
+        if(switchId==0 && confirm('Device '+deviceId+' and its switches will be Deleted!'))
+        {
+          if (window.XMLHttpRequest)
+            {
+            xmlhttp=new XMLHttpRequest();
+            }
+          else
+            {
+            xmlhttp=new ActiveXObject('Microsoft.XMLHTTP');
+            }
+          xmlhttp.onreadystatechange=function()
+            {
+              if (xmlhttp.readyState==3 && xmlhttp.status==200)
+                {
+                document.getElementById("items").innerHTML="deleting...";
+                
+                }
+            if (xmlhttp.readyState==4 && xmlhttp.status==200)
+              {
+              document.getElementById("items").innerHTML=xmlhttp.responseText;
+              }
+            }
+          xmlhttp.open('GET','managedev.php?ddeldev='+deviceId+'&ddelswi='+switchId,true);
           //alert(macid);
           xmlhttp.send();
         }
