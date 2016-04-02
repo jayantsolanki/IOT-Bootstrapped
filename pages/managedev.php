@@ -114,9 +114,12 @@ if($sensor!=null)
 }
 if($deviceId!=null and $switchId!=null)//update group and sensor type for selected deviceS
 {
-
-echo "<label>&nbsp;Name</label>&nbsp;<input type='text' id='dname' name='dname' placeholder='name the device' required/> ".groups($switchId)."<button class='btn btn-danger' id='$deviceId' type='button' onclick="."update('$deviceId','$switchId')".">Update</button> <button class='btn btn-info' id='$deviceId' type='button' onclick="."update(0,0)".">Cancel</button>";
-
+	mysql_select_db($dbname) or die(mysql_error());
+	$query="SELECT name FROM devices WHERE deviceId='$deviceId'";
+	$devnames=mysql_query($query);
+	$devrow=mysql_fetch_assoc($devnames);
+	$name=$devrow['name'];	
+	echo "<label>&nbsp;Name</label>&nbsp;<input type='text' id='dname' name='dname' placeholder='name the device' value='$name' required/> ".groups($switchId)."<button class='btn btn-danger' id='$deviceId' type='button' onclick="."update('$deviceId','$switchId')".">Update</button> <button class='btn btn-info' id='$deviceId' type='button' onclick="."update(0,0)".">Cancel</button>";
 }
 
 if($updatedev!=null and $updateswi!=null)//perform the updation task
@@ -279,7 +282,10 @@ $dbname='IOT';
 mysql_select_db($dbname) or die(mysql_error());
 $query="SELECT * FROM groups"; //displaying groups
 $results=mysql_query($query);
-echo "<label>Choose Group for the Switch $switchId</label>";	
+if($switchId!=0)
+	echo "<label>Choose Group for the Switch $switchId</label>";	
+else 
+	echo "<label>Choose Group for the Device</label>";
 echo "<select lass='form-control' id='groupadd'>";	
 if (mysql_num_rows($results) > 0) 
 	{

@@ -21,7 +21,7 @@ if(isset($_GET['grp']))
 	$grps=mysql_query($query);
 	$rows=mysql_fetch_assoc($grps);
 	$gname=$rows['name'];
-	echo "<h4>Valves grouped under <label class='badge'>".$gname."</label><br/></h4>";
+	echo "<h4>Devices grouped under <label class='badge'>".$gname."</label><br/></h4>";
 	$query="SELECT * FROM devices WHERE devices.groupId=$grp";
 	$results=mysql_query($query);
 	

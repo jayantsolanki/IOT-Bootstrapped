@@ -178,16 +178,23 @@ function display()
             if($deviceId!=null){
                 echo"<td><b>DeviceId:</b> $deviceId/<strong class='text-danger'>$switchId</strong> <span data-toggle='tooltip' title='Device manually switched on' class='badge'>M</span></td>";
             }
-            if($start<1000){
-                echo"<td class='text-info'> Starts on: <strong>0$start Hrs</strong<</td>";
-            }
-            else
-                echo"<td class='text-info'> Starts on: <strong>$start Hrs</strong<</td>";
-            if($stop<1000){
-                echo"<td class='text-warning'> Stops on: <strong>0$stop Hrs</strong<</td>";
-            }
-            else
-                echo"<td class='text-warning'> Stops on: <strong>$stop Hrs</strong<</td>";
+                if(strlen((string) $start)==3)
+                    echo"<td class='text-info'> Starts on: <strong>0$start Hrs</strong<</td>";
+                else if(strlen((string) $start)==2)
+                    echo"<td class='text-info'> Starts on: <strong>00$start Hrs</strong<</td>";
+                else if(strlen((string) $start)==1)
+                    echo"<td class='text-info'> Starts on: <strong>000$start Hrs</strong<</td>";
+                else
+                    echo"<td class='text-info'> Starts on: <strong>$start Hrs</strong<</td>";
+                
+                if(strlen((string) $stop)==3)
+                    echo"<td class='text-warning'> Stops on: <strong>0$stop Hrs</strong<</td>";
+                else if(strlen((string) $stop)==2)
+                    echo"<td class='text-warning'> Stops on: <strong>00$stop Hrs</strong<</td>";
+                else if(strlen((string) $stop)==1)
+                    echo"<td class='text-warning'> Stops on: <strong>000$stop Hrs</strong<</td>";
+                else
+                    echo"<td class='text-warning'> Stops on: <strong>$stop Hrs</strong<</td>";
             echo"
             <td><a class='text-danger glyphicon glyphicon-remove-circle' data-toggle='tooltip' title='Delete' href='javascript:del($id)'></a> </td>
             <td> $status</td>

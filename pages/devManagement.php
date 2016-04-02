@@ -63,10 +63,10 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
                 </div>
                 <div class="row">                  
                   <div class="row"><!-- 1st inner row -->
-                    <div class="col-md-10">
+                    <div class="col-md-12">
                     <div class = "panel panel-info ">
                        <div class = "panel-heading">
-                          <big>Manage Devices</big><small class="text-muted">Add your new type of device/group here</small>
+                          <big>Manage Devices</big> <small class="text-muted">Add your new type of device/group here</small>
                        </div>
                        <div class = "panel-body">
                         <div class='col-md-6'>
@@ -146,7 +146,7 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
                   </div>
                   </div><!--1st inner row ends here-->
                   <div class="row"><!-- 2nd inner row -->
-                    <div class='col-md-10'>
+                    <div class='col-md-12'>
                       <div class = "panel panel-danger ">
                          <div class = "panel-heading">
                             <big>Devices available</big> <small class='text-muted'>Manage individual devices</small>
