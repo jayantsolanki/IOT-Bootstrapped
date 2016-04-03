@@ -44,10 +44,7 @@ if($deviceId!=null){
 			if($newSwitch==0)
 				$jsonArrayItem['newSwitch'] = false;
 			$jsonArrayItem['groupName'] = $gname;
-			if($action==1)
-				$jsonArrayItem['action'] = "On";
-			if($action==0)
-				$jsonArrayItem['action'] = "Off";
+			$jsonArrayItem['action'] = $action;
 			$jsonArrayItem['actionSince'] = $actionSince;
 
 			array_push($jsonArray, $jsonArrayItem);

@@ -130,7 +130,8 @@ error_reporting(-1); //for suppressing errors and notices
                                             <tr ng-repeat="switch in devices[$index].switches">
                                                 <td>{{switch.switchId}} <small ng-if="switch.newSwitch"><a href="devManagement.php" data-toggle='tooltip' title='New Device' class='text-info fa fa-cog fa-spin fa-2x'></a></small></td>
                                                 <td>{{switch.groupName}}</td>
-                                                <td>{{switch.action}}</td>
+                                                <td ng-if="switch.action==1"><span class="label label-success">Opened</span></td>
+                                                <td ng-if="switch.action==0"><span class="label label-danger">Closed</span></td>
                                             </tr><!-- loop ends here -->
                                         <tbody>
                                       </table>
