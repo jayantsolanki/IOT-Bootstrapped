@@ -89,14 +89,18 @@ error_reporting(-1); //for suppressing errors and notices
                                   }
                               }
                           ?>
-                          </select>&nbsp; &nbsp; <span id='battery'><button id='batterycheck' class='btn btn-success' onclick="checkbattery()">Check Battery</button></span></br></br>
+                          </select>&nbsp; &nbsp; <span id='battery'><button id='batterycheck' class='btn btn-success badge' onclick="checkbattery()">Check Battery</button></span></br></br>
                           <strong>Group Selected <label class ="badge">{{devices[0].groupName}}</label></strong><hr/>
                           <div id='dev'>
                               <div class="row" ng-repeat="device in devices">
                                   <div class="col-md-2">
-                                       <h2 class="text-danger" ><small ng-if="device.newDevice"><span class="label label-info">New Device</span> <br></small>{{device.deviceName}}</h2>
+                                       <h4 class="text-danger" ><small ng-if="device.newDevice"><a href="devManagement.php" data-toggle='tooltip' title='New Device' class='text-info fa fa-cog fa-spin fa-2x'></a> <br></small>{{device.deviceName}}</h4>
+                                       <p><strong class='text-danger'>Type:</strong> {{device.type}}</p>
+                                        <span ng-if="device.devType">
+                                          <p><button class="btn btn-info badge" ng-click="selectDevice(device.deviceId,$index)">Switches:</button> {{device.switchCount}}</p>
+                                        </span>
                                   </div>
-                                  <div class="col-md-7">
+                                  <div class="col-md-5">
                                      <blockquote>
                                          <p>
                                             <span ng-if="device.status" class="label label-success">Online</span>
@@ -104,17 +108,35 @@ error_reporting(-1); //for suppressing errors and notices
                                             <cite class="text-info">since {{device.seen}}</cite>
                                         </p>
                                         <p><strong class="text text-info">Device Id:</strong> {{device.deviceId}}</p>
-                                        <p><strong class="text text-info">Status:</strong> {{device.action}}</p>
-                                        <p><strong class="text text-danger">Type:</strong> {{device.type}}</p>
-                                        <p><strong class="text text-info">Group:</strong> {{device.groupName}}</p>
+                                        <!-- <p><strong class="text text-info">Status:</strong> {{device.action}}</p> -->
                                         <p>
-                                          <strong class="text text-success">Primary Battery Level:</strong> {{device.PbatValue}} mV <br>
-                                          <span ng-if="device.devType"><strong class="text text-success">Secondary Battery Level:</strong> {{device.SbatValue}} mV <br></span>
-                                          <cite class="text-warning">Battery level update {{device.batTime}}</cite>
+                                          <strong class="text text-info">Battery Level:</strong>
+                                          <blockquote>
+                                          <span class='text-success'>Primary: <strong>{{device.PbatValue}} mV </strong>
+                                          <span class='text-danger' ng-if="device.devType"><br>Secondary:  <strong>{{device.SbatValue}} mV </strong></span><br>
+                                          <cite class="text-warning">Last updated {{device.batTime}}</cite>
+                                        </blockquote>
                                         </p>
                                     </blockquote>
                                   </div><!-- end inner div -->
-                              </div>
+                                  <div ng-if="devices[$index].switches[0].deviceId==device.deviceId" class="col-md-5" id="{{device.deviceId}}">
+                                      <table class='table table-striped'>
+                                       
+                                        <caption class="text-info text-center">{{device.deviceId}}</caption>
+                                        <thead>
+                                          <th>SwitchId</th><th>Group</th><th>Status</th>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="switch in devices[$index].switches">
+                                                <td>{{switch.switchId}} <small ng-if="switch.newSwitch"><a href="devManagement.php" data-toggle='tooltip' title='New Device' class='text-info fa fa-cog fa-spin fa-2x'></a></small></td>
+                                                <td>{{switch.groupName}}</td>
+                                                <td>{{switch.action}}</td>
+                                            </tr><!-- loop ends here -->
+                                        <tbody>
+                                      </table>
+
+                                  </div><!-- switches -->
+                              </div><!-- loop ends here -->
                             </div>
                           </div><!-- ending dev div -->
                         </div><!-- ending panel body -->
@@ -192,6 +214,7 @@ error_reporting(-1); //for suppressing errors and notices
       
        app.controller('devicesStatus', function($scope, $http) {
             var devices=null;
+            var switches=null;
             var groupId=null;
            /* $http.get("dd.php")
             .then(function(response) {
@@ -208,39 +231,16 @@ error_reporting(-1); //for suppressing errors and notices
                 });
                 
             }
+            $scope.selectDevice = function(deviceId, index) {//getting switches
+              //alert(index);
+                $http.get("dd.php?deviceId="+deviceId)//calling dd.php for retrieving the data
+                .then(function(response) {
+                    $scope.devices[index].switches = response.data;
+                });
+                
+            }
             $scope.selectGroup();//calling first group initially
         });
-    </script>
-     <script>
-      var ws=null;
-      $(function() { //websocket
-          //var wscon=null;
-          ws = new WebSocket("ws://10.129.28.118:8180");
-          ws.onopen = function(e) {
-            console.log('Connection to server opened');
-          }
-              //var valElem = $('#sss');
-                 
-          ws.onmessage = function(e) {
-            var response = JSON.parse(e.data);
-            //alert(3);
-           // valElem.html(e.data);
-            //alert(status.deviceId+' '+status.status);
-            if(response.status==0)
-               document.getElementById(response.deviceId).innerHTML="<span class='label label-danger'>OFFLINE</span>";
-            else if(response.status==1)
-               document.getElementById(response.deviceId).innerHTML="<span class='label label-success'>ONLINE</span>";
-            
-                   
-          }
-          ws.onclose = function(e) {
-            console.log("Connection closed");
-          }
-
-          function disconnect() {
-            ws.close();
-          }
-      });
     </script>
     <script>
         $('.mobileSelect').mobileSelect({

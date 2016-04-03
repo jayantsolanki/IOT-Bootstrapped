@@ -8,78 +8,56 @@
 include 'settings/iotdb.php';
 include 'settings/mqttsetting.php';
 $grp=$_GET["grp"]; //grp is the group id received
-$bat=$_GET["bat"]; //bat  is group id received fro battery status
+$deviceId=$_GET["deviceId"]; //bat  is group id received fro battery status
+if($grp!=null){
+	display($grp);
+}
+if($deviceId!=null){
 
-display($grp);
-/*if($bat!=NULL)
-{
-	//
-	mysql_select_db($dbname) or die(mysql_error());
-	$query="SELECT * FROM devices WHERE devices.group='$bat'";
-
+	$jsonArray=array();
+	$query="SELECT * FROM switches WHERE switches.deviceId='$deviceId'";
 	$results=mysql_query($query);
 	if (mysql_num_rows($results) > 0) 
-	{
-	
-		while($row = mysql_fetch_assoc($results))
-		{
-			$macid=$row['macid'];
-				
-				command($macid,2);	//publish for getting bat status
-							
-				$query = "UPDATE devices SET battery ='3', status='0' WHERE macid='$macid'"; //updating battery status in device table and also changing new device status,, initially keeping status as offline and bat unavailable
-				//echo "</br>".$query;
-				if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))
-					echo "UPDATE failed: $query<br/>".mysql_error()."<br/><br/>";
-				
-				
-			
-			
-           	    	
+	{	
+		while($row=mysql_fetch_assoc($results)) 
+		{	
+			$deviceId=$row['deviceId'];
+			$switchId=$row['switchId'];
+			$action=$row['action'];
+			$actionSince=$row['updated_at'];
+			//$status=$row['status']; //online offline or new, 1, 0, 2
+			//$seen=$row['seen'];
+			$grp=$row['groupId'];//group in which it belongs
+			//$dname=$row['name'];
+			//$sense=$row['type'];//device type id
+			//$switches=$row['switches'];
+			$newSwitch=$row['newSwitch'];
+			$query="SELECT name FROM groups WHERE id='$grp'";
+			$grps=mysql_query($query);
+			$rows=mysql_fetch_assoc($grps);
+			$gname=$rows['name'];
+
+			$jsonArrayItem['deviceId'] = $deviceId;
+			$jsonArrayItem['switchId'] = $switchId;
+			if($newSwitch==1)
+				$jsonArrayItem['newSwitch'] = true;
+			if($newSwitch==0)
+				$jsonArrayItem['newSwitch'] = false;
+			$jsonArrayItem['groupName'] = $gname;
+			if($action==1)
+				$jsonArrayItem['action'] = "On";
+			if($action==0)
+				$jsonArrayItem['action'] = "Off";
+			$jsonArrayItem['actionSince'] = $actionSince;
+
+			array_push($jsonArray, $jsonArrayItem);
 		}
+		header('Content-type: application/json');
+		//output the return value of json encode using the echo function. 
+		echo json_encode($jsonArray);
+		
 	}
-	
-
-	display($bat);
-}*/
- /*
- *
- * Function Name: command($macid,$action)
- * Input: $ macid for macid, and $action for defining 0/1 for OFF/ON commands
- * Output: publish battery status commands to esp device.
- * each msg has macid, which will enable the script to generate a macid based topic(esp/macid)
- * Logic: msg format is 0, 1, 2, for OFF, ON and battery status.
- * 
- *
- */
-/*function command($macid,$action) //for sending mqtt commands
-	{
-		//$mqtt->setAuth('sskaje', '123123');
-		include 'settings/mqttsetting.php';
-		$mqtt = new spMQTT($mqttaddress);
-		$connected = $mqtt->connect();
-		if (!$connected) 
-			{
-			    die(" <span class='text text-danger'>Mosca MQTT Server is Offline\n</span>");
-			}
-
-		$mqtt->ping();
-
-		$msg = str_repeat($action, 1);
-
-		//echo "</br>esp/valve/".$macid;
-		$mqtt->publish('esp/'.$macid, $msg, 0, 1, 0, 1);
-		//echo "</br>Success";
-	}*/
- /*
- *
- * Function Name: display()
- * Input: -
- * Output: display devices under a group
- * Logic: fetches devices from devices table where group = group id
- * 
- *
- */
+}
 function display($grp)
 {
 	$jsonArray = array();//creating a json response
@@ -98,6 +76,7 @@ function display($grp)
 			$grp=$row['groupId'];//group in which it belongs
 			$dname=$row['name'];
 			$sense=$row['type'];//device type id
+			$switches=$row['switches'];
 			$newDevice=$row['status'];
 			$batquery="SELECT device_type, battery_value, temp_value, created_at FROM feeds WHERE feeds.device_id='$macid' order by feeds.id desc limit 1";
 			$batresult=mysql_query($batquery);
@@ -122,6 +101,7 @@ function display($grp)
 
 			$jsonArrayItem['deviceName'] = $dname;
 			$jsonArrayItem['deviceId'] = $macid;
+			$jsonArrayItem['switchCount'] = $switches;
 			if($newDevice==1)
 			$jsonArrayItem['newDevice'] = true;
 			if($newDevice==0)
@@ -142,30 +122,6 @@ function display($grp)
 				$jsonArrayItem['devType'] = false;
 			$jsonArrayItem['batTime'] = $batTime;
 			array_push($jsonArray, $jsonArrayItem);
-			/*if($battery==1) //changing into user readable form
-				$batterymsg="<span class='label label-success' ><b>Healthy</b></span>";
-			elseif($battery==2)
-				$batterymsg="<span class='label label-danger'><b>Status unavailable</b></span>";
-			elseif($battery==3)
-				$batterymsg="<span class='label label-warning''><b>Checking status...</b></span>";
-			elseif ($battery==0)
-				$batterymsg="<span class='label label-danger''><b>Replace battery</b></span>";
-			*/
-			/*if($action==1) //changing into user readable form
-				$action="<b><span style='color: #FFAA00;'>Device is ON</b></span>";
-			elseif($action==0)
-				$action="<b><span style='color: #AA6600;'>Device is OFF</span></b>";
-			else 
-			{
-				if($action<260)
-				    $action="<b><span style='color: #AA6600;'>Soil is wet</span></b>";
-				else
-				    $action="<b><span style='color: #AA6600;'>Soil is dry</span></b>";
-				
-			}*/
-			
-		
-		
 		}
 		header('Content-type: application/json');
 		//output the return value of json encode using the echo function. 

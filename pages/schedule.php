@@ -63,174 +63,179 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
                     <!-- /.col-lg-12 -->
                 </div>
                 <div class="row">
-                        <div class="header text-danger" >
-                          <h2>Add Schedule</h2>
-                        </div>
-                        <div class="row">
-                            <div class='col-md-6 col-lg-6'>
-                                <label class='text-muted'>Choose Group</label>
-                                <select class="form-control" id="grps">
-                                    <option selected="true" disabled='disabled'>Choose</option>
-                                    <?php
-                                    mysql_select_db($dbname) or die(mysql_error());
-                                    $query="SELECT * FROM groups"; //displaying groups
-                                    $results=mysql_query($query);
-                                    if (mysql_num_rows($results) > 0) 
-                                        {       
-                                            while($row=mysql_fetch_assoc($results)) 
-                                            {   //$id=$row['id'];
-                                                $group=$row['name'];
-                                                $id=$row['id'];
-                                                echo " <option value='$id'>$group</option>";
+                        <div class="col-md-5">
+                            <div class="header text-danger" >
+                              <h2>Add Schedule</h2>
+                            </div>
+                            <div class="row">
+                                <div class='col-md-12'>
+                                    <label class='text-muted'>Choose Group</label>
+                                    <select class="form-control" id="grps">
+                                        <option selected="true" disabled='disabled'>Choose</option>
+                                        <?php
+                                        mysql_select_db($dbname) or die(mysql_error());
+                                        $query="SELECT * FROM groups"; //displaying groups
+                                        $results=mysql_query($query);
+                                        if (mysql_num_rows($results) > 0) 
+                                            {       
+                                                while($row=mysql_fetch_assoc($results)) 
+                                                {   //$id=$row['id'];
+                                                    $group=$row['name'];
+                                                    $id=$row['id'];
+                                                    echo " <option value='$id'>$group</option>";
+                                                }
                                             }
-                                        }
 
+                                        ?>
+
+                                    </select>
+                                </div>
+                             </div>
+                             <div class='row'>
+                                <div class='choose col-md-12'>
+                                    <label class='text-muted'>Type of Schedule</label>
+                                    <select class=" form-control" id="time">
+                                    <option selected="true" disabled='disabled'>Choose</option>
+                                      <option value="period">Period</option>
+                                      <option value="duration">Duration</option>
+                                      <option value="frequency">Frequency</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class='row'>
+                                <div id='period' class="time col-md-12">
+                                    <hr/>
+                                    <fieldset  class="form-group form-inline">
+                                    <label class='text-danger'>Start:(hhmm)</label>
+
+                                    <?php
+                                    echo "Hrs:<select class='form-control' id='starth' name='starth'>";
+                                    $i=0; 
+                                    while($i<=24)
+                                    {
+                                    echo "<option value='$i'>$i</option>";
+                                    $i++;
+                                    } 
+                                    echo "</select>";
+                                    echo " Mins:<select class='form-control' id='startm' name='startm'>";
+                                    $j=0; 
+                                    while($j<=60)
+                                    {
+                                    echo "<option value='$j'>$j</option>";
+                                    $j=$j+5;
+                                    } 
+                                    echo "</select>";
                                     ?>
+                                    <hr/>
+                                    <label class='text-warning'>Stop:(hhmm)</label>
+                                    <?php
+                                    echo "Hrs:<select class='form-control' id='stoph' name='stoph'>";
+                                    $i=0; 
+                                    while($i<=24)
+                                    {
+                                    echo "<option value='$i'>$i</option>";
+                                    $i++;
+                                    } 
+                                    echo "</select>";
+                                    echo " Mins:<select class='form-control' id='stopm' name='stopm'>";
+                                    $j=0; 
+                                    while($j<=60)
+                                    {
+                                    echo "<option value='$j'>$j</option>";
+                                    $j=$j+5;
+                                    } 
+                                    echo "</select>";
+                                    ?>
+                                    
+                                    </fieldset>
+                                    <button class="btn btn-danger" id='button' type='button' onclick='period()' value='add'>Add</button>
+                                    
+                                </div>
+                                <div id='duration' class="time col-md-12">
+                                    <hr/>
+                                    <fieldset  class="form-group form-inline">
+                                    <label class='text-danger'>Start:(hhmm)</label>
+                                    <?php
+                                    echo "Hrs:<select class='form-control' id='dstarth' name='starth'>";
+                                    $i=0; 
+                                    while($i<=24)
+                                    {
+                                    echo "<option value='$i'>$i</option>";
+                                    $i++;
+                                    } 
+                                    echo "</select>";
+                                    echo " Mins:<select class='form-control' id='dstartm' name='startm'>";
+                                    $j=0; 
+                                    while($j<=60)
+                                    {
+                                    echo "<option value='$j'>$j</option>";
+                                    $j=$j+5;
+                                    } 
+                                    echo "</select>";
+                                    ?>
+                                    <hr/>
+                                    <label class='text-warning'>Duration:</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <?php
 
-                                </select>
-                            </div>
-                         </div>
-                         <div class='row'>
-                            <div class='choose col-md-6'>
-                                <label class='text-muted'>Type of Schedule</label>
-                                <select class="col-xs-5 form-control" id="time">
-                                <option selected="true" disabled='disabled'>Choose</option>
-                                  <option value="period">Period</option>
-                                  <option value="duration">Duration</option>
-                                  <option value="frequency">Frequency</option>
-                                </select>
-                            </div>
+                                    echo "Mins:<select class='form-control' id='dduration' name='duration'>";
+                                    $j=5; 
+                                    while($j<=60)
+                                    {
+                                    echo "<option value='$j'>$j</option>";
+                                    $j=$j+5;
+                                    } 
+                                    echo "</select>";
+                                    ?>
+                                    </fieldset>
+                                    <button class="btn btn-danger" id='button' type='button' onclick='duration()' value='add'>Add</button>
+                                </div>
+                                <div id='frequency' class="time col-md-12">
+                                    <hr/>
+                                    <fieldset  class="form-group form-inline">
+                                        <label class='text-danger'>Start:(hh)&nbsp;&nbsp;</label>
+                                    <?php
+                                    echo "Hrs:<select class='form-control' id='fstarth' name='starth'>";
+                                    $i=0; 
+                                    while($i<=24)
+                                    {
+                                    echo "<option value='$i'>$i</option>";
+                                    $i++;
+                                    } 
+                                    echo "</select>";
+                                    echo "<hr/><label class='text-warning'>Duration:&nbsp;</label>";
+                                    echo "Mins:<select class='form-control' id='fduration' name='duration'>";
+                                    $j=5; 
+                                    while($j<=60)
+                                    {
+                                    echo "<option value='$j'>$j</option>";
+                                    $j=$j+5;
+                                    } 
+                                    echo "</select>";
+
+                                    ?><hr/>
+                                    <label class='text-info'>Repeat every:(hh)</label>
+                                    <?php
+
+                                    echo "Hrs:<select class='form-control' id='repeath' name='repeath'>";
+                                    $i=4; 
+                                    while($i<=12)
+                                    {
+                                    echo "<option value='$i'>$i</option>";
+                                    $i=$i+4;
+                                    } 
+                                    echo "</select>";
+                                    ?></fieldset>
+                                    <button class="btn btn-danger" id='button' type='button' onclick='frequency()' value='add'>Add</button>
+                                </div><!-- time ends here -->
+                            </div><!-- row ends here -->
                         </div>
-                        <div class='row'>
-                            <div id='period' class="time col-md-6">
-                                <hr/>
-                                <fieldset  class="form-group form-inline">
-                                <label class='text-danger'>Start time:(hhmm)</label>
-
-                                <?php
-                                echo "Hrs:<select class='form-control' id='starth' name='starth'>";
-                                $i=0; 
-                                while($i<=24)
-                                {
-                                echo "<option value='$i'>$i</option>";
-                                $i++;
-                                } 
-                                echo "</select>";
-                                echo " Mins:<select class='form-control' id='startm' name='startm'>";
-                                $j=0; 
-                                while($j<=60)
-                                {
-                                echo "<option value='$j'>$j</option>";
-                                $j=$j+5;
-                                } 
-                                echo "</select>";
-                                ?>
-                                <hr/>
-                                <label class='text-danger'>Stop time:(hhmm)</label>
-                                <?php
-                                echo "Hrs:<select class='form-control' id='stoph' name='stoph'>";
-                                $i=0; 
-                                while($i<=24)
-                                {
-                                echo "<option value='$i'>$i</option>";
-                                $i++;
-                                } 
-                                echo "</select>";
-                                echo " Mins:<select class='form-control' id='stopm' name='stopm'>";
-                                $j=0; 
-                                while($j<=60)
-                                {
-                                echo "<option value='$j'>$j</option>";
-                                $j=$j+5;
-                                } 
-                                echo "</select>";
-                                ?>
-                                
-                                </fieldset>
-                                <button class="btn btn-danger" id='button' type='button' onclick='period()' value='add'>Add</button>
-                                
-                            </div>
-                            <div id='duration' class="time col-md-6">
-                                <hr/>
-                                <fieldset  class="form-group form-inline">
-                                <label class='text-danger'>Start time:(hhmm)</label>
-                                <?php
-                                echo "Hrs:<select class='form-control' id='dstarth' name='starth'>";
-                                $i=0; 
-                                while($i<=24)
-                                {
-                                echo "<option value='$i'>$i</option>";
-                                $i++;
-                                } 
-                                echo "</select>";
-                                echo " Mins:<select class='form-control' id='dstartm' name='startm'>";
-                                $j=0; 
-                                while($j<=60)
-                                {
-                                echo "<option value='$j'>$j</option>";
-                                $j=$j+5;
-                                } 
-                                echo "</select>";
-                                ?>
-                                <hr/>
-                                <label class='text-danger'>Duration:(mm)</label>&nbsp;&nbsp;&nbsp;&nbsp;
-                                <?php
-
-                                echo "Mins:<select class='form-control' id='dduration' name='duration'>";
-                                $j=5; 
-                                while($j<=60)
-                                {
-                                echo "<option value='$j'>$j</option>";
-                                $j=$j+5;
-                                } 
-                                echo "</select>";
-                                ?>
-                                </fieldset>
-                                <button class="btn btn-danger" id='button' type='button' onclick='duration()' value='add'>Add</button>
-                            </div>
-                            <div id='frequency' class="time col-md-6">
-                                <hr/>
-                                <fieldset  class="form-group form-inline">
-                                    <label class='text-danger'>Start time:(hhmm)</label>
-                                <?php
-                                echo "Hrs:<select class='form-control' id='fstarth' name='starth'>";
-                                $i=0; 
-                                while($i<=24)
-                                {
-                                echo "<option value='$i'>$i</option>";
-                                $i++;
-                                } 
-                                echo "</select>";
-                                echo "</br></br><label class='text-danger'>Duration:(mm)</label>";
-                                echo "Mins:<select class='form-control' id='fduration' name='duration'>";
-                                $j=5; 
-                                while($j<=60)
-                                {
-                                echo "<option value='$j'>$j</option>";
-                                $j=$j+5;
-                                } 
-                                echo "</select>";
-
-                                ?>
-                                <label class='text-info'>Repeat after every :(hh)</label>
-                                <?php
-
-                                echo "Hrs:<select class='form-control' id='repeath' name='repeath'>";
-                                $i=4; 
-                                while($i<=12)
-                                {
-                                echo "<option value='$i'>$i</option>";
-                                $i=$i+4;
-                                } 
-                                echo "</select>";
-                                ?></fieldset>
-                                <button class="btn btn-danger" id='button' type='button' onclick='frequency()' value='add'>Add</button>
-                            </div><!-- time ends here -->
-                        </div><!-- row ends here -->
-                        <div class='row'>
-                            <div class='col-md-9 col-lg-6' id='display'>
+                        <div class="col-md-7">
+                            <div class='' id='display'>
                             <?php display();?>
                             </div><!-- display -->
+                        </div>
+                        <div class='row'>
+                            
                         </div><!-- row ends here -->
                         <?php
 
