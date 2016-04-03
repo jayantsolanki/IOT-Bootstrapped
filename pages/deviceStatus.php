@@ -94,7 +94,7 @@ error_reporting(-1); //for suppressing errors and notices
                           <div id='dev'>
                               <div class="row" ng-repeat="device in devices">
                                   <div class="col-md-2">
-                                       <h4 class="text-danger" ><small ng-if="device.newDevice"><a href="devManagement.php" data-toggle='tooltip' title='New Device' class='text-info fa fa-cog fa-spin fa-2x'></a> <br></small>{{device.deviceName}}</h4>
+                                       <h4 class="text-danger" ><small ng-if="device.newDevice"><a href="devManagement.php" data-toggle='tooltip' title='New Device {{device.created}}' class='text-info fa fa-cog fa-spin fa-2x'></a> <br></small>{{device.deviceName}}</h4>
                                        <p><strong class='text-danger'>Type:</strong> {{device.type}}</p>
                                         <span ng-if="device.devType">
                                           <p><button class="btn btn-info badge" ng-click="selectDevice(device.deviceId,$index)">Switches:</button> {{device.switchCount}}</p>
@@ -112,10 +112,10 @@ error_reporting(-1); //for suppressing errors and notices
                                         <p>
                                           <strong class="text text-info">Battery Level:</strong>
                                           <blockquote>
-                                          <span class='text-success'>Primary: <strong>{{device.PbatValue}} mV </strong>
-                                          <span class='text-danger' ng-if="device.devType"><br>Secondary:  <strong>{{device.SbatValue}} mV </strong></span><br>
-                                          <cite class="text-warning">Last updated {{device.batTime}}</cite>
-                                        </blockquote>
+                                            <span class='text-success'>Primary: <strong>{{device.PbatValue}} mV </strong>
+                                            <span class='text-danger' ng-if="device.devType"><br>Secondary:  <strong>{{device.SbatValue}} mV </strong></span><br>
+                                            <cite class="text-warning">Last updated {{device.batTime}}</cite>
+                                          </blockquote>
                                         </p>
                                     </blockquote>
                                   </div><!-- end inner div -->
@@ -128,10 +128,10 @@ error_reporting(-1); //for suppressing errors and notices
                                         </thead>
                                         <tbody>
                                             <tr ng-repeat="switch in devices[$index].switches">
-                                                <td>{{switch.switchId}} <small ng-if="switch.newSwitch"><a href="devManagement.php" data-toggle='tooltip' title='New Device' class='text-info fa fa-cog fa-spin fa-2x'></a></small></td>
+                                                <td>{{switch.switchId}} <small ng-if="switch.newSwitch"><a href="devManagement.php" data-toggle='tooltip' title='New Device {{switch.created}}' class='text-info fa fa-cog fa-spin fa-2x'></a></small></td>
                                                 <td>{{switch.groupName}}</td>
-                                                <td ng-if="switch.action==1"><span class="label label-success">Opened</span></td>
-                                                <td ng-if="switch.action==0"><span class="label label-danger">Closed</span></td>
+                                                <td ng-if="switch.action==1"><span data-toggle='tooltip' title='New Device {{switch.actionSince}}' class="label label-success">Opened</span></td>
+                                                <td ng-if="switch.action==0"><span data-toggle='tooltip' title='New Device {{switch.actionSince}}' class="label label-danger">Closed</span></td>
                                             </tr><!-- loop ends here -->
                                         <tbody>
                                       </table>

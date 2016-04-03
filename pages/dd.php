@@ -24,6 +24,7 @@ if($deviceId!=null){
 			$deviceId=$row['deviceId'];
 			$switchId=$row['switchId'];
 			$action=$row['action'];
+			$created=$row['created_at'];
 			$actionSince=$row['updated_at'];
 			//$status=$row['status']; //online offline or new, 1, 0, 2
 			//$seen=$row['seen'];
@@ -45,6 +46,7 @@ if($deviceId!=null){
 				$jsonArrayItem['newSwitch'] = false;
 			$jsonArrayItem['groupName'] = $gname;
 			$jsonArrayItem['action'] = $action;
+			$jsonArrayItem['created'] = $created;
 			$jsonArrayItem['actionSince'] = $actionSince;
 
 			array_push($jsonArray, $jsonArrayItem);
@@ -75,6 +77,7 @@ function display($grp)
 			$sense=$row['type'];//device type id
 			$switches=$row['switches'];
 			$newDevice=$row['status'];
+			$created=$row['created_at'];
 			$batquery="SELECT device_type, battery_value, temp_value, created_at FROM feeds WHERE feeds.device_id='$macid' order by feeds.id desc limit 1";
 			$batresult=mysql_query($batquery);
 			$batfetch=mysql_fetch_assoc($batresult);
@@ -118,6 +121,7 @@ function display($grp)
 			else
 				$jsonArrayItem['devType'] = false;
 			$jsonArrayItem['batTime'] = $batTime;
+			$jsonArrayItem['created'] = $created;
 			array_push($jsonArray, $jsonArrayItem);
 		}
 		header('Content-type: application/json');

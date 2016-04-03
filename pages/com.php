@@ -38,7 +38,7 @@ $results=mysql_query($query);
 			{
 				//command($macid,1);	//switch ON			
 				//echo "Switch OFF"; //update button status
-				$query = "UPDATE switches SET action ='1' WHERE deviceId='$macid' and switchId=$s"; //updating action status in device table
+				$query = "UPDATE switches SET action ='1', updated_at=now() WHERE deviceId='$macid' and switchId=$s"; //updating action status in device table
 				//echo "</br>".$query;
 				if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))
 					echo "UPDATE failed: $query<br/>".mysql_error()."<br/><br/>";
@@ -51,7 +51,7 @@ $results=mysql_query($query);
 			{
 				//command($macid,0);	//Switch off
 				//echo "Switch ON";
-				$query = "UPDATE switches SET action ='0' WHERE deviceId='$macid' and switchId=$s"; //updating action status in device table 
+				$query = "UPDATE switches SET action ='0', updated_at=now() WHERE deviceId='$macid' and switchId=$s"; //updating action status in device table 
 				//echo "</br>".$query;
 				if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))
 					echo "UPDATE failed: $query<br/>".mysql_error()."<br/><br/>";
@@ -99,7 +99,7 @@ $results=mysql_query($query);
 		echo "Switch ON";
 			
 		}
-	$update="UPDATE devices SET action='$q' WHERE devices.group='$gid'"; //this is for updating running status off devices
+	$update="UPDATE devices SET action='$q', updated_at=now() WHERE devices.group='$gid'"; //this is for updating running status off devices
 
 	//echo "</br>".$query;
 	if(!mysql_query($update,mysql_connect($dbhost, $dbuser, $dbpass)))
