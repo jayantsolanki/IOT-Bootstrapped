@@ -59,7 +59,7 @@ error_reporting(-1); //for suppressing errors and notices
             <div id="devIds" class="container-fluid" ng-controller="devicesStatus">
                 <div class="row">
                     <div class="col-lg-12">
-                        <h1 class="page-header">Devices Status</h1>
+                        <h1 class="page-header text-info">Devices Status</h1>
                     </div>
                     <!-- /.col-lg-12 -->
                 </div>
@@ -94,7 +94,7 @@ error_reporting(-1); //for suppressing errors and notices
                           <div id='dev'>
                               <div class="row" ng-repeat="device in devices">
                                   <div class="col-md-2">
-                                       <h4 class="text-danger" ><small ng-if="device.newDevice"><a href="devManagement.php" data-toggle='tooltip' title='New Device {{device.created}}' class='text-info fa fa-cog fa-spin fa-2x'></a> <br></small>{{device.deviceName}}</h4>
+                                       <h4 class="text-danger" ><small ng-if="device.newDevice"><a href="devManagement.php" data-toggle='tooltip' title='New Device {{device.created}}' class='text-info fa fa-circle-o-notch fa-spin fa-2x'></a> <br></small>{{device.deviceName}}</h4>
                                        <p><strong class='text-danger'>Type:</strong> {{device.type}}</p>
                                         <span ng-if="device.devType">
                                           <p><button class="btn btn-info badge" ng-click="selectDevice(device.deviceId,$index)">Switches:</button> {{device.switchCount}}</p>

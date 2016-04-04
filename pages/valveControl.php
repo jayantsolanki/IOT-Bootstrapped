@@ -58,15 +58,11 @@ include_once 'settings/iotdb.php';
         <div id="page-wrapper">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-lg-12">
-                        <h1 class="page-header text-center">IOT Based Valve control</h1>
-                    </div>
-                    <!-- /.col-lg-12 -->
-                </div>
-                <div class="row">
-                    <div class="header" >
-                      <div class="text-center" id='server'></div>
-                      <h2 class="text-center">Valve Controls</h2>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h1 class="page-header text-info">Valve Control</h1>
+                        </div>
+                        <!-- /.col-lg-12 -->
                     </div>
                       <div class=" col-md-10 content">
                         <label class="text text-info">Select group</label>

@@ -58,7 +58,7 @@ if (mysql_num_rows($results) > 0)
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-12">
-                        <h1 class="page-header">Global Variables Configuration</h1>
+                        <h1 class="page-header text-info">Global Variables Configuration</h1>
                     </div>
                     <!-- /.col-lg-12 -->
                     <div class='col-lg-6'>

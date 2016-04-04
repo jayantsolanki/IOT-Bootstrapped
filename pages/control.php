@@ -27,7 +27,7 @@ if(isset($_GET['grp']))
 
 	//echo " <button id='1' type='button' onclick='updateall(this.value)' value='1'>Switch all ON</button>";
 	//echo " <button id='0' type='button' onclick='updateall(this.value)' value='0'>Switch all OFF</button>";
-	echo "</br></br><label class=''>Duration:(mm)</label></br>";
+	echo "<label class=''>Duration:(mm)</label></br>";
 	echo "<div class='row'>";
 	echo "<div class='col-xs-5'>";
 	echo "Mins:<select class='form-control' id='duration' name='duration'>";
@@ -79,10 +79,33 @@ if(isset($_GET['grp']))
 				$status="<span class='label label-info'>New Device Found</span>";
 				echo "
 			<tr>
-			<td><strong>".$i.". </strong><big class='text text-warning'>$name</big> <strong>Type:</strong> <big class='text text-warning'>$sname/$switches</big>&nbsp; &nbsp;<strong class='text text-info'>DeviceId:</strong> $macid &nbsp;<strong class='text text-danger'>SwitchId:</strong> $switchId</td>";
+			<td>
+				<table class='table table-striped'>
+					<tr><td>#$i</td>
+						<td class='text-info'>$name</td>
+					</tr>
+					<tr>
+						<td>Type:</td>
+						<td class='text-info'>$switch switches $sname</td>
+					</tr>
+					<tr>
+						<td>DeviceId</td>
+						<td class='text-info'>$macid</td>
+					</tr>
+					<tr>
+						<td>SwitchId</td>
+						<td class='text-info'>$switchId</td>
+					</tr>
+				</table>
+			</td>";
 			
-			echo "<td><button class='item btn btn-primary' id='".$macid."".$switchId."' type='button'  onclick=update('$macid','$switchId') value='$macid'>Switch ".$action."</button></td>
-			<td class='$macid'>$status</td>
+			
+			echo "<td style='vertical-align: middle;'>
+					<button class='item btn btn-primary' id='".$macid."".$switchId."' type='button'  onclick=update('$macid','$switchId') value='$macid'>Switch ".$action."</button>
+					<br/>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class='$macid'>$status</span>
+				</td>
+			
 				</tr>";
 			
 		

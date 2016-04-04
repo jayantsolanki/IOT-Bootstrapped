@@ -57,7 +57,7 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-12">
-                        <h1 class="page-header">Device Management</h1>
+                        <h1 class="page-header text-info">Device Management</h1>
                     </div>
                     <!-- /.col-lg-12 -->
                 </div>
@@ -196,9 +196,9 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
                                           $grp=mysql_fetch_assoc($grps);
                                           $name=$grp['name'];
                                           if($switchId!=0 and $sstatus==1)
-                                            $status="<span data-toggle='tooltip' title='New Device' class='text-info fa fa-cog fa-spin fa-2x'></span>";
+                                            $status="<span data-toggle='tooltip' title='New Device' class='text-info fa fa-circle-o-notch fa-spin'></span>";
                                           if($switchId==0 and $dstatus==1)
-                                            $status="<span data-toggle='tooltip' title='New Device' class='text-info fa fa-cog fa-spin fa-2x'></span>";
+                                            $status="<span data-toggle='tooltip' title='New Device' class='text-info fa fa-circle-o-notch fa-spin'></span>";
                                           echo "
                                           <span id='".$deviceId."".$switchId."'><strong class='text-info'>".$i.".</strong>&nbsp; &nbsp; 
                                           <big><strong>Name:</strong> <span class='text-danger'>$deviceName</span></big>
@@ -210,7 +210,7 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
                                           
                                           echo"
                                           <big><strong>Group:</strong> <span class='text-danger'>$name</span></big>
-                                           &nbsp; &nbsp;<a class='text-muted glyphicon glyphicon-pencil' data-toggle='tooltip' title='Edit' href="."javascript:edit('$deviceId','$switchId')"."></a>
+                                           &nbsp; &nbsp;<a class='text-muted glyphicon glyphicon-pencil' data-toggle='tooltip' title='Edit Switch' href="."javascript:edit('$deviceId','$switchId')"."></a>
                                            &nbsp; &nbsp;";
                                            if($switchId!=0){//delete switches
                                              echo"
@@ -219,6 +219,7 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
                                            echo"
                                            &nbsp; &nbsp;<big><a class='text-danger glyphicon glyphicon-remove' data-toggle='tooltip' title='Remove device and its switches' href="."javascript:ddel('$deviceId',0)"."></a></big>";
                                           echo"
+                                          &nbsp; &nbsp;<a class='text-danger glyphicon glyphicon-wrench' data-toggle='tooltip' title='Device Settings' href="."javascript:deviceSetting('$deviceId')"."></a>
                                            </span>&nbsp;<strong><big>$status</big></strong><br/><hr/></span>";
                                           $i++;
                                           
@@ -236,6 +237,32 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
                           </div><!-- panel body -->
                     </div><!-- panel ends here -->
                     </div><!--column ends for the device list-->
+                    <!-- Modal fullscreen -->
+                    
+                    <div class="modal modal-fullscreen fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                      
+                          <div class="modal-dialog">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                <h4 class="modal-title text text-danger text-center" id="myModalLabel">For Device <span id="devId"></span></h4>
+                              </div>
+                              <ul class="nav nav-tabs" role="tablist">
+                                    <li id="devInfo" name='Device Info' role="presentation">
+                                    <a class="text text-danger"  href="javascript:showTab(1)">Device Info</a></li>
+                                    <li id="editInfo" name="Edit Info" role="presentation">
+                                    <a class="text text-danger"  href="javascript:showTab(2)">Edit Info</a></li>
+                                </ul>
+                              <div class="modal-body" id="dumps">
+                                 
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                              </div>
+                            </div>
+                          </div>
+                        
+                    </div>
                 </div><!--2nd inner row ends here-->
                 </div><!-- outer.row -->
             </div>
@@ -258,9 +285,15 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
 
     <!-- Metis Menu Plugin JavaScript -->
     <script src="../bower_components/metisMenu/dist/metisMenu.min.js"></script>
-
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCuTDUpbZFeBQCPnoyH5HH1BlwcTHTqcQc"async defer></script>
     <!-- Custom Theme JavaScript -->
     <script src="../dist/js/sb-admin-2.js"></script>
+    <script type='text/javascript'> 
+              var map;
+              function togglemap() {
+                $("#map").toggle(500);
+              }
+          </script>
     <script type='text/javascript'>
         /*
          *
@@ -286,7 +319,7 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
           {
             if (xmlhttp.readyState==3 && xmlhttp.status==200)
               {
-              document.getElementById("sensors").innerHTML="Adding...";
+              document.getElementById("sensors").innerHTML="<span><img src='images/ajax.gif'/></span>";
               }
           if (xmlhttp.readyState==4 && xmlhttp.status==200)
             {
@@ -327,7 +360,7 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
           {
             if (xmlhttp.readyState==3 && xmlhttp.status==200)
               {
-              document.getElementById("groups").innerHTML="Adding...";
+              document.getElementById("groups").innerHTML="<span><img src='images/ajax.gif'/></span>";
               }
           if (xmlhttp.readyState==4 && xmlhttp.status==200)
             {
@@ -347,11 +380,11 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
         <script type='text/javascript'>
         /*
          *
-         * Function Name: edit()
-         * Input: -macid, for stroing mac id of esp modules
+         * Function Name: edit(deviceId, switchId)
+         * Input: -deviceId, for stroing device id of esp modules and switch id for storing the switch
          * Output: updates device table with group name, device name and sensor type
          * Logic: It is a AJAX call
-         * Example Call: edit()
+         * Example Call: edit(deviceId, switchId)
          *
          */
         function edit(deviceId, switchId)
@@ -369,7 +402,7 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
           {
             if (xmlhttp.readyState==3 && xmlhttp.status==200)
               {
-              document.getElementById(deviceId+switchId).innerHTML="loading...";
+              document.getElementById(deviceId+switchId).innerHTML="<span><img src='images/ajax.gif'/></span>";
               }
           if (xmlhttp.readyState==4 && xmlhttp.status==200)
             {
@@ -379,6 +412,125 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
         xmlhttp.open('GET','managedev.php?editdev='+deviceId+'&editswi='+switchId,true);
         //alert(macid);
         xmlhttp.send();
+        }
+        </script>
+        <script type='text/javascript'>
+        /*
+         *
+         * Function Name: deviceSettings(deviceId)
+         * Input: deviceId, for storing device id os the concerned device
+         * Output: show modal dialog box
+         * Logic: It is a AJAX call
+         * Example Call: deviceSettings(deviceId)
+         *
+         */
+         var DeviceId=null;//global variable
+        function deviceSetting(deviceId)
+        {
+          //alert(deviceId);
+          DeviceId=deviceId;
+        if (window.XMLHttpRequest)
+          {
+          xmlhttp=new XMLHttpRequest();
+          }
+        else
+          {
+          xmlhttp=new ActiveXObject('Microsoft.XMLHTTP');
+          }
+        xmlhttp.onreadystatechange=function()
+          {
+            if (xmlhttp.readyState==3 && xmlhttp.status==200)
+              {
+              document.getElementById('dumps').innerHTML="<span><img src='images/ajax.gif'/></span>";
+              }
+          if (xmlhttp.readyState==4 && xmlhttp.status==200)
+            {
+            document.getElementById('dumps').innerHTML=xmlhttp.responseText;
+            document.getElementById('myModalLabel').innerHTML=deviceId;
+            
+            
+            }
+          }
+        xmlhttp.open('GET','managedev.php?deviceSetting='+deviceId,true);
+        //alert(macid);
+        xmlhttp.send();
+        $("#modal").modal('show');
+        
+        }
+        function showTab(tab){
+          //deviceSetting(DeviceId);
+          if(tab==1){
+            $("#editDevice").hide(400);
+            $("#deviceInfo").show(400);
+          }
+          if(tab==2){
+            $("#deviceInfo").hide(400);
+            $("#editDevice").show(400);
+          }
+        }
+        </script>
+        <script type='text/javascript'>
+        /*
+         *
+         * Function Name: deviceSettings(deviceId)
+         * Input: deviceId, for storing device id os the concerned device
+         * Output: show modal dialog box
+         * Logic: It is a AJAX call
+         * Example Call: deviceSettings(deviceId)
+         *
+         */
+        function saveData(deviceId)
+        {
+          //alert(deviceId);
+        var deviceId=deviceId;
+        var name = $("#devicename").val();
+        var regionId = $("#regionid").val();
+        var groupId = $("#groupid").val();
+        var deviceInfo = $("#deviceDesc").val();
+        var latitude = $("#latitude").val();
+        var longitude = $("#longitude").val();
+        var elevation = $("#elevation").val();
+        var field1 = $("#field1").val();
+        var field2 = $("#field2").val();
+        var field3 = $("#field3").val();
+        var field4 = $("#field4").val();
+        var field5 = $("#field5").val();
+        var field6 = $("#field6").val();
+        var dataString='deviceData='+1+'&deviceId='+deviceId+'&name='+name+'&regionId='+regionId+'&groupId='+groupId+'&deviceInfo='+deviceInfo+'&latitude='+latitude+'&longitude='+longitude+'&elevation='+elevation+'&field1='+field1+'&field2='+field2+'&field3='+field3+'&field4='+field4+'&field5='+field5+'&field6='+field6;
+        if (window.XMLHttpRequest)
+          {
+          xmlhttp=new XMLHttpRequest();
+          }
+        else
+          {
+          xmlhttp=new ActiveXObject('Microsoft.XMLHTTP');
+          }
+        xmlhttp.onreadystatechange=function()
+          {
+            if (xmlhttp.readyState==3 && xmlhttp.status==200)
+              {
+              document.getElementById('editDevice').innerHTML="<span><img src='images/ajax.gif'/></span>";
+              }
+          if (xmlhttp.readyState==4 && xmlhttp.status==200)
+            {
+              document.getElementById('editDevice').innerHTML=xmlhttp.responseText;
+              update(0,0);
+              setTimeout(
+              function() 
+              {
+                $("#modal").modal('hide');
+              }, 500);
+              
+            //document.getElementById('myModalLabel').innerHTML=deviceId;
+            
+            
+            }
+          }
+        xmlhttp.open('POST','managedev.php',true);
+        xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        //alert(macid);
+        xmlhttp.send(dataString);
+        //$("#modal").modal('show');
         }
         </script>
         <script type='text/javascript'>
@@ -394,8 +546,16 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
         function update(deviceId, switchId)
         {
         //var sentyp=document.getElementById("sensoradd").value;
-        var gid=document.getElementById("groupadd").value;
-        var dname=document.getElementById("dname").value;
+       try{
+          var gid=document.getElementById("groupadd").value;
+          var dname=document.getElementById("dname").value;
+        }
+        catch(e){
+          console.log("Null values");
+          var gid=0;
+          var dname=0;
+        }
+
         if (window.XMLHttpRequest)
           {
           xmlhttp=new XMLHttpRequest();
@@ -408,7 +568,7 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
           {
             if (xmlhttp.readyState==3 && xmlhttp.status==200)
               {
-              document.getElementById('items').innerHTML="loading...";
+              document.getElementById('items').innerHTML="<span><img src='images/ajax.gif'/></span>";
               }
           if (xmlhttp.readyState==4 && xmlhttp.status==200)
             {
