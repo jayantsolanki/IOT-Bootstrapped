@@ -90,7 +90,7 @@ error_reporting(-1); //for suppressing errors and notices
                               }
                           ?>
                           </select>&nbsp; &nbsp; <span id='battery'><button id='batterycheck' class='btn btn-success badge' onclick="checkbattery()">Check Battery</button></span></br></br>
-                          <strong>Group Selected <label class ="badge">{{devices[0].groupName}}</label></strong><hr/>
+                          <strong>Group Selected <big class ="label label-primary">{{devices[0].groupName}}</big></strong><hr/>
                           <div id='dev'>
                               <div class="row" ng-repeat="device in devices">
                                   <div class="col-md-2">
@@ -99,6 +99,7 @@ error_reporting(-1); //for suppressing errors and notices
                                         <span ng-if="device.devType">
                                           <p><button class="btn btn-info badge" ng-click="selectDevice(device.deviceId,$index)">Switches:</button> {{device.switchCount}}</p>
                                         </span>
+                                        <p><button class="btn btn-info badge" ng-click="selectDevice(device.deviceId,$index)">Activity:</button></p>
                                   </div>
                                   <div class="col-md-5">
                                      <blockquote>
@@ -128,7 +129,7 @@ error_reporting(-1); //for suppressing errors and notices
                                         </thead>
                                         <tbody>
                                             <tr ng-repeat="switch in devices[$index].switches">
-                                                <td>{{switch.switchId}} <small ng-if="switch.newSwitch"><a href="devManagement.php" data-toggle='tooltip' title='New Device {{switch.created}}' class='text-info fa fa-cog fa-spin fa-2x'></a></small></td>
+                                                <td>{{switch.switchId}} <small ng-if="switch.newSwitch"><a href="devManagement.php" data-toggle='tooltip' title='New Device {{switch.created}}' class='text-info fa fa-circle-o-notch fa-spin fa-2x'></a></small></td>
                                                 <td>{{switch.groupName}}</td>
                                                 <td ng-if="switch.action==1"><span data-toggle='tooltip' title='New Device {{switch.actionSince}}' class="label label-success">Opened</span></td>
                                                 <td ng-if="switch.action==0"><span data-toggle='tooltip' title='New Device {{switch.actionSince}}' class="label label-danger">Closed</span></td>
@@ -212,7 +213,6 @@ error_reporting(-1); //for suppressing errors and notices
     </script>
      <script>
         var app = angular.module('IOT-App',[]);
-      
        app.controller('devicesStatus', function($scope, $http) {
             var devices=null;
             var switches=null;
@@ -234,9 +234,22 @@ error_reporting(-1); //for suppressing errors and notices
             }
             $scope.selectDevice = function(deviceId, index) {//getting switches
               //alert(index);
+                if($scope.devices[index].temp!=0 && $scope.devices[index].temp!=1)
+                  $scope.devices[index].temp=1;
+
                 $http.get("dd.php?deviceId="+deviceId)//calling dd.php for retrieving the data
                 .then(function(response) {
                     $scope.devices[index].switches = response.data;
+                    if($scope.devices[index].temp==0){
+                      $scope.devices[index].temp=1;
+                      $scope.devices[index].switches[0].deviceId=0;
+                      //console.log($scope.devices[index].temp);
+                    }
+                    else{
+                      $scope.devices[index].temp=0;
+                      //console.log($scope.devices[index].temp);
+
+                    }
                 });
                 
             }

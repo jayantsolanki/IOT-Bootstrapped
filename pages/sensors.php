@@ -33,9 +33,7 @@ if(isset($_GET['grp']))
 		{	
 			$i++;
 			$macid=$row['deviceId'];
-			$action=$row['action'];
-			$status=$row['status']; //online offline or new, 1, 0, 2
-			$name=$row['name'];
+			$deviceName=$row['name'];
 			$type=$row['type'];
 			$query="SELECT name FROM sensors WHERE id='$type'";
 			$sens=mysql_query($query);
@@ -44,7 +42,21 @@ if(isset($_GET['grp']))
 			// getting feeds
 			echo "
 			<tr>
-			<td ><strong class='text text-info'>".$i.". $sname Sensor: $name </strong>&nbsp; <strong class='text text-info'>Device Id:</strong> $macid</td>
+			<td>
+				<table class='table table-striped'>
+					<tr><td>#$i</td>
+						<td class='text-info'>$deviceName</td>
+					</tr>
+					<tr>
+						<td>Type:</td>
+						<td class='text-info'>$sname</td>
+					</tr>
+					<tr>
+						<td>DeviceId</td>
+						<td class='text-info'>$macid</td>
+					</tr>
+				</table>
+			</td>
 			<td ><button type='button' class='btn btn-primary' value=$macid onclick='showgraphBattery(this.value)'>Show graph</button>
 			</td>
 			</tr>";

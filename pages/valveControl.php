@@ -64,7 +64,7 @@ include_once 'settings/iotdb.php';
                         </div>
                         <!-- /.col-lg-12 -->
                     </div>
-                      <div class=" col-md-10 content">
+                      <div class=" col-md-6 content">
                         <label class="text text-info">Select group</label>
                         <div class="row">
                             <select class='mobileSelect form-control' id='chartselect' name='chartselect' >

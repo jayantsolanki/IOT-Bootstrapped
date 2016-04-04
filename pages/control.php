@@ -101,9 +101,9 @@ if(isset($_GET['grp']))
 			
 			
 			echo "<td style='vertical-align: middle;'>
-					<button class='item btn btn-primary' id='".$macid."".$switchId."' type='button'  onclick=update('$macid','$switchId') value='$macid'>Switch ".$action."</button>
+					<button class='item btn btn-warning' id='".$macid."".$switchId."' type='button'  onclick=update('$macid','$switchId') value='$macid'>Switch ".$action."</button>
 					<br/>
-					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class='$macid'>$status</span>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<big class='$macid'>$status</big>
 				</td>
 			
 				</tr>";
