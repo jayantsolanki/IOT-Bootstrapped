@@ -86,7 +86,7 @@ if(isset($_GET['grp']))
 					</tr>
 					<tr>
 						<td>Type:</td>
-						<td class='text-info'>$switch switches $sname</td>
+						<td class='text-info'>$switches switches $sname</td>
 					</tr>
 					<tr>
 						<td>DeviceId</td>
