@@ -108,6 +108,8 @@ if($deviceActivity!=null){
 					$phpdate=strtotime($segmentArrayItem['end']);
 					$stopF=date( 'H:i:s jS M ', $phpdate );
 					$segmentArrayItem['duration']=$startF." to ".$stopF;
+					if($i==$length-1)
+						$segmentArrayItem['duration']="since ".$startF;
 					//$startTime=$Statusrows['created_at'];
 
 					//$i=$i+1;
