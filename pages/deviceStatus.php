@@ -89,7 +89,7 @@ error_reporting(-1); //for suppressing errors and notices
                                   }
                               }
                           ?>
-                          </select>&nbsp; &nbsp; <span id='battery'><button id='batterycheck' class='btn btn-success badge' onclick="checkbattery()">Check Battery</button></span></br></br>
+                          </select>&nbsp; &nbsp; <span id='battery'><button id='batterycheck' class='btn btn-success' onclick="checkbattery()">Check Battery</button></span><span class="pull-right"><button id="activity" class="btn btn-primary" ng-click="showChart()">Show Activity</button>&nbsp;<button id="back" class="btn btn-primary" ng-click="showDevice()" style="display:none;">Back</button></span></br></br>
                           <strong>Group Selected <big class ="label label-primary">{{devices[0].groupName}}</big></strong><hr/>
                           <div id='dev'>
                               <div class="row" ng-repeat="device in devices">
@@ -99,7 +99,7 @@ error_reporting(-1); //for suppressing errors and notices
                                         <span ng-if="device.devType">
                                           <p><button class="btn btn-info badge" ng-click="selectDevice(device.deviceId,$index)">Switches:</button> {{device.switchCount}}</p>
                                         </span>
-                                        <p><button class="btn btn-info badge" ng-click="selectDevice(device.deviceId,$index)">Activity:</button></p>
+                                        
                                   </div>
                                   <div class="col-md-5">
                                      <blockquote>
@@ -141,6 +141,10 @@ error_reporting(-1); //for suppressing errors and notices
                               </div><!-- loop ends here -->
                             </div>
                           </div><!-- ending dev div -->
+                          <div class='row' id="chart" style="display:none;">
+                            <div class="col-md-12" id="deviceActivity"  style="height:500px;font-size:11px; ">
+                            </div>
+                          </div>
                         </div><!-- ending panel body -->
                       </div><!-- ending panel -->
                       
@@ -172,6 +176,11 @@ error_reporting(-1); //for suppressing errors and notices
     <!-- Custom Theme JavaScript -->
     <script src="../dist/js/sb-admin-2.js"></script>
      <script type="text/javascript" src="../dist/js/bootstrap-fullscreen-select.js"></script>
+     <script src="../bower_components/amcharts3/amcharts/amcharts.js"></script>
+     <script src="../bower_components/amcharts3/amcharts/serial.js"></script>
+     <script src="../bower_components/amcharts3/amcharts/themes/dark.js"></script>
+     <script src="../bower_components/amcharts3/amcharts/gantt.js"></script>
+    
      <script>
       //var ws=null;
       function checkbattery() { //websocket
@@ -217,21 +226,36 @@ error_reporting(-1); //for suppressing errors and notices
             var devices=null;
             var switches=null;
             var groupId=null;
+            var deviceActivities=null;
            /* $http.get("dd.php")
             .then(function(response) {
                 $scope.devices = response.data;                
             });*/
             $scope.devices = devices;
+            $scope.deviceActivities = deviceActivities;
             $scope.groupId = groupId;
             $scope.groupId = 1;//default
 
             $scope.selectGroup = function() {
                 $http.get("dd.php?grp="+$scope.groupId)//calling dd.php for retrieving the data
                 .then(function(response) {
-                    $scope.devices = response.data;                
+                    $scope.devices = response.data;
+                    $scope.showActivity();
                 });
                 
             }
+            $scope.showDevice=function() {
+                    $("#chart").fadeOut(100);
+                    $("#back").fadeOut(100);
+                    $("#dev").fadeIn(500);
+                    $("#activity").fadeIn(500);
+                  }
+            $scope.showChart=function() {
+                    $("#activity").fadeOut(100);
+                    $("#dev").fadeOut(100); 
+                    $("#chart").fadeIn(500);
+                    $("#back").fadeIn(500);
+                  }
             $scope.selectDevice = function(deviceId, index) {//getting switches
               //alert(index);
                 if($scope.devices[index].temp!=0 && $scope.devices[index].temp!=1)
@@ -253,6 +277,80 @@ error_reporting(-1); //for suppressing errors and notices
                 });
                 
             }
+            $scope.showActivity = function() {
+                $http.get("dd.php?deviceActivity="+1+"&grpId="+$scope.groupId)//calling dd.php for retrieving the data
+                .then(function(response) {
+                    $scope.deviceActivities = response.data;
+                    //alert(JSON.stringify(response.data));
+                    $scope.makechart();//create chart        
+                });
+                
+            }
+            $scope.makechart=function(){
+            //alert(JSON.stringify($scope.deviceActivities));
+            var chart = AmCharts.makeChart("deviceActivity", {
+                "type": "gantt",
+                "theme": "dark",
+                "marginRight": 70,
+                //"period": "ss",
+                "backgroundColor": "#525263",
+                //"dataDateFormat":"YYYY-MM-DD JJ:NN:SS",
+                "backgroundAlpha": 5,
+                "balloonDateFormat": "JJ:NN:SS, DD MMM",
+                "columnWidth": 0.2,
+                "autoDisplay":true,
+                "tapToActivate": true,
+                "autoResize": true,
+                "creditsPosition": "bottom-right",
+                "valueAxis": {
+                    "title": "duration",
+                    "type": "date",
+                    //"minimum": 0,
+                    //"maximum": 31,
+                    //"parseDates": true,
+                    //"equalSpacing" : true,
+                    //"Period":"ss"
+                   //"dashLength": 1,
+                    //"minorGridEnabled": true
+                },
+                "categoryAxis":{
+                  "title": "Devices"
+                },
+                //"brightnessStep": 10,
+                "graph": {
+                    "title": "Online/offline Status",
+                    "fillAlphas": 1,
+                    "balloonText": "<b>[[task]]</b>: [[duration]]"
+                },
+                "rotate": true,
+                "categoryField": "category",
+                "segmentsField": "segments",
+                "colorField": "color",
+                "startDate": "2016-03-28 11:40:20",
+                "startDateField": "start",
+                "endDateField": "end",
+                //"endDate":"2016-04-03 11:40:20",
+                //"durationField": "duration",
+                "dataProvider": $scope.deviceActivities,
+                "valueScrollbar": {
+                    "autoGridCount":true
+                },
+                "chartCursor": {
+                    "cursorColor":"#33DDe4",
+                    "valueBalloonsEnabled": false,
+                    "cursorAlpha": 0,
+                    "valueLineAlpha":0.5,
+                    "valueLineBalloonEnabled": true,
+                    "valueLineEnabled": true,
+                    "zoomable":true,
+                    "valueZoomable":true
+                },
+                "export": {
+                    "enabled": true
+                 }
+            } );
+  
+           }
             $scope.selectGroup();//calling first group initially
         });
     </script>

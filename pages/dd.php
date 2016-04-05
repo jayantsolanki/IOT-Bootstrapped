@@ -9,6 +9,7 @@ include 'settings/iotdb.php';
 include 'settings/mqttsetting.php';
 $grp=$_GET["grp"]; //grp is the group id received
 $deviceId=$_GET["deviceId"]; //bat  is group id received fro battery status
+$deviceActivity=$_GET['deviceActivity'];
 if($grp!=null){
 	display($grp);
 }
@@ -56,6 +57,73 @@ if($deviceId!=null){
 		echo json_encode($jsonArray);
 		
 	}
+}
+
+if($deviceActivity!=null){
+	$grpupId=$_GET['grpId'];
+	$jsonArray = array();
+	$query="SELECT * FROM devices WHERE groupId=$grpupId";
+	$results=mysql_query($query);
+	if (mysql_num_rows($results) > 0) 
+	{	
+		while($row=mysql_fetch_assoc($results)) 
+		{	
+			$deviceId=$row['deviceId'];
+			$deviceType=$row['type'];
+			if($deviceType==1)
+				$devStatus="SELECT * FROM deviceStatus WHERE deviceId='$deviceId' limit 20";
+			else
+				$devStatus="SELECT * FROM deviceStatus WHERE deviceId='$deviceId' limit 100";
+			$Statusresults=mysql_query($devStatus);
+			$length=mysql_num_rows($Statusresults);
+			if ($length > 0) 
+			{	
+				$jsonArrayItem['category'] = $deviceId;
+				$segments = array();//array for segments
+				$timeRows[]=null;
+				$i=0;
+				while ($timeRows[$i] = mysql_fetch_assoc($Statusresults)){
+					$i++;
+				}
+				for($i=0; $i<$length;$i++)
+				{
+					$status=$timeRows[$i]['status'];
+					$segmentArrayItem['start'] = $timeRows[$i]['created_At'];
+					if($i<$length-1)
+						$stopTime =$timeRows[$i+1]['created_At'];
+					//$duration=strtotime($stopTime)-strtotime($segmentArrayItem['start']);
+					$segmentArrayItem['end']=$stopTime;
+					if($status==1){
+						$segmentArrayItem['color'] = "#18C44E";
+						$segmentArrayItem['task'] = "Online";
+					}
+					if($status==0){
+						$segmentArrayItem['color'] = "#B32434";
+						$segmentArrayItem['task'] = "Offline";
+					}
+					$phpdate=strtotime($segmentArrayItem['start']);
+					$startF=date( 'h:i:s jS M ', $phpdate );
+					$phpdate=strtotime($segmentArrayItem['end']);
+					$stopF=date( 'h:i:s jS M ', $phpdate );
+					$segmentArrayItem['duration']=$startF." to ".$stopF;
+					//$startTime=$Statusrows['created_at'];
+
+					//$i=$i+1;
+					array_push($segments, $segmentArrayItem);
+
+				}
+				$jsonArrayItem['segments'] = $segments;
+				array_push($jsonArray, $jsonArrayItem);
+			}
+
+			
+		}
+		header('Content-type: application/json');
+		//output the return value of json encode using the echo function. 
+		echo json_encode($jsonArray);
+		
+	}
+
 }
 function display($grp)
 {
