@@ -26,7 +26,11 @@ if($deviceId!=null){
 			$switchId=$row['switchId'];
 			$action=$row['action'];
 			$created=$row['created_at'];
+			$phpdate=strtotime($created);
+			$created=date( 'h:i A jS M ', $phpdate );
 			$actionSince=$row['updated_at'];
+			$phpdate=strtotime($actionSince);
+			$actionSince=date( 'h:i A jS M ', $phpdate );
 			//$status=$row['status']; //online offline or new, 1, 0, 2
 			//$seen=$row['seen'];
 			$grp=$row['groupId'];//group in which it belongs
@@ -71,7 +75,7 @@ if($deviceActivity!=null){
 			$deviceId=$row['deviceId'];
 			$deviceType=$row['type'];
 			if($deviceType==1)
-				$devStatus="Select * FROM (SELECT * FROM deviceStatus WHERE deviceId='$deviceId' order by id desc limit 30) as temp order by id asc";
+				$devStatus="Select * FROM (SELECT * FROM deviceStatus WHERE deviceId='$deviceId' order by id desc limit 15) as temp order by id asc";
 			else
 				$devStatus="Select * FROM (SELECT * FROM deviceStatus WHERE deviceId='$deviceId' order by id desc limit 100) as temp order by id asc";
 			$Statusresults=mysql_query($devStatus);
@@ -182,6 +186,8 @@ function display($grp)
 				$jsonArrayItem['status'] = true;
 			if($status==0)
 				$jsonArrayItem['status'] = false;
+			$phpdate=strtotime($seen);
+			$seen=date( 'h:i A jS M ', $phpdate );
 			$jsonArrayItem['seen'] = $seen;
 			$jsonArrayItem['groupName'] = $name;
 			$jsonArrayItem['type'] = $sensor;
@@ -192,6 +198,8 @@ function display($grp)
 			}
 			else
 				$jsonArrayItem['devType'] = false;
+			$phpdate=strtotime($batTime);
+			$batTime=date( 'h:i A jS M ', $phpdate );
 			$jsonArrayItem['batTime'] = $batTime;
 			$jsonArrayItem['created'] = $created;
 			array_push($jsonArray, $jsonArrayItem);

@@ -89,7 +89,7 @@ error_reporting(-1); //for suppressing errors and notices
                                   }
                               }
                           ?>
-                          </select>&nbsp; &nbsp; <span id='battery'><button id='batterycheck' class='btn btn-success' onclick="checkbattery()">Check Battery</button></span><span class="pull-right"><button id="activity" class="btn btn-primary" ng-click="showChart()">Show Activity</button>&nbsp;<button id="back" class="btn btn-primary" ng-click="showDevice()" style="display:none;">Back</button></span></br></br>
+                          </select>&nbsp; &nbsp; <span id='battery'><button id='batterycheck' class='btn btn-success' onclick="checkbattery()">Check Battery</button></span><span class="pull-right"><button id="activity" class="btn btn-primary" ng-click="showChart()">Connection Activity</button>&nbsp;<button id="back" class="btn btn-primary" ng-click="showDevice()" style="display:none;">Back</button></span></br></br>
                           <strong>Group Selected <big class ="label label-primary">{{devices[0].groupName}}</big></strong><hr/>
                           <div id='dev'>
                               <div class="row" ng-repeat="device in devices">
@@ -249,10 +249,17 @@ error_reporting(-1); //for suppressing errors and notices
             $scope.showDevice=function() {
                     $("#chart").fadeOut(100);
                     $("#back").fadeOut(100);
+                    $('#demo').attr('id','page-wrapper');
                     $("#dev").fadeIn(500);
                     $("#activity").fadeIn(500);
+                    $(".navigationIOT").fadeIn(500);
+
                   }
             $scope.showChart=function() {
+                    $(".navigationIOT").fadeOut(100);
+                   // $('#wrapper').addClass('col-md-12');
+                    $('#page-wrapper').attr('id','demo');
+                    //$('#page-wrapper').addClass('col-md-12');
                     $("#activity").fadeOut(100);
                     $("#dev").fadeOut(100); 
                     $("#chart").fadeIn(500);
@@ -311,7 +318,7 @@ error_reporting(-1); //for suppressing errors and notices
                 "autoResize": true,
                 "creditsPosition": "bottom-right",
                 "valueAxis": {
-                    "title": "duration",
+                    "title": "Online/offline Status",
                     "type": "date",
                     //"minimum": 0,
                     //"maximum": 31,
