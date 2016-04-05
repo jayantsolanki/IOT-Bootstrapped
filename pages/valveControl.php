@@ -150,11 +150,11 @@ include_once 'settings/iotdb.php';
            // valElem.html(e.data);
             //alert(status.deviceId+' '+status.status);
             if(response.action==1){
-              document.getElementsByClassName(deviceId+switchId)[0].innerHTML="<span data-toggle='tooltip' title='Switch currently running' class='text text-success fa fa-refresh fa-spin'></span>";
+              document.getElementsByClassName(response.deviceId+response.switchId)[0].innerHTML="<span data-toggle='tooltip' title='Switch currently running' class='text text-success fa fa-refresh fa-spin'></span>";
               document.getElementById(response.deviceId+response.switchId).innerHTML='Switch OFF';//changed to switchId for respective valves
             }
             else if(response.action==0){
-              document.getElementsByClassName(deviceId+switchId)[0].innerHTML="<span data-toggle='tooltip' title='Switch currently stopped' class='text text-danger glyphicon glyphicon-ban-circle'></span>";
+              document.getElementsByClassName(response.deviceId+response.switchId)[0].innerHTML="<span data-toggle='tooltip' title='Switch currently stopped' class='text text-danger glyphicon glyphicon-ban-circle'></span>";
               document.getElementById(response.deviceId+response.switchId).innerHTML='Switch ON';
             }
             if(response.status==0)
