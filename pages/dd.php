@@ -92,7 +92,7 @@ if($deviceActivity!=null){
 					if($i<$length-1)
 						$stopTime =$timeRows[$i+1]['created_At'];
 					if($i==$length-1)
-						$stopTime =date('Y-m-d h:i:s');;
+						$stopTime =date('Y-m-d H:i:s');;
 					//$duration=strtotime($stopTime)-strtotime($segmentArrayItem['start']);
 					$segmentArrayItem['end']=$stopTime;
 					if($status==1){
@@ -104,9 +104,9 @@ if($deviceActivity!=null){
 						$segmentArrayItem['task'] = "Offline";
 					}
 					$phpdate=strtotime($segmentArrayItem['start']);
-					$startF=date( 'h:i:s jS M ', $phpdate );
+					$startF=date( 'H:i:s jS M ', $phpdate );
 					$phpdate=strtotime($segmentArrayItem['end']);
-					$stopF=date( 'h:i:s jS M ', $phpdate );
+					$stopF=date( 'H:i:s jS M ', $phpdate );
 					$segmentArrayItem['duration']=$startF." to ".$stopF;
 					//$startTime=$Statusrows['created_at'];
 
