@@ -52,7 +52,7 @@ if(isset($_GET['grp']))
 				break;
 			if($stop==2400) //marks stop time as 0000
 				$stop=0;
-			$query="INSERT INTO tasks VALUES". "(DEFAULT,$grp, NULL,NULL,'$start','$stop', '1','1')";
+			$query="INSERT INTO tasks VALUES". "(DEFAULT,$grp, NULL,NULL,'$start','$stop', '1','1',NULL)";
 			//if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))		
 			//	echo "INSERT failed: $query<br/>".mysql_error()."<br/><br/>";
 			//echo $query;
@@ -80,7 +80,7 @@ if(isset($_GET['grp']))
 				$grps=mysql_query($query);
 				$grp=mysql_fetch_assoc($grps);
 				$name=$grp['name'];*/
-				$query="INSERT INTO tasks VALUES". "(DEFAULT,$grp,NULL,NULL,'$start','$stop', '1','1')";
+				$query="INSERT INTO tasks VALUES". "(DEFAULT,$grp,NULL,NULL,'$start','$stop', '1','1',NULL)";
 			//if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))		
 			//	echo "INSERT failed: $query<br/>".mysql_error()."<br/><br/>";
 			//echo $query;

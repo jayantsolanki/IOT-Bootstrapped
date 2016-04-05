@@ -90,7 +90,7 @@ $results=mysql_query($query);
 		{
 
 		echo "Switch OFF";
-		$query="INSERT INTO tasks VALUES". "(DEFAULT,'$name',NULL,'$start','$stop', '0','0')";
+		$query="INSERT INTO tasks VALUES". "(DEFAULT,'$name',NULL,'$start','$stop', '0','0',NULL)";
 			if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))
 				echo "INSERT failed: $query<br/>".mysql_error()."<br/><br/>";
 		}
