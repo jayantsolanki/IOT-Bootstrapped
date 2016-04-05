@@ -149,10 +149,14 @@ include_once 'settings/iotdb.php';
             //alert(3);
            // valElem.html(e.data);
             //alert(status.deviceId+' '+status.status);
-            if(response.action==1)
+            if(response.action==1){
+              document.getElementsByClassName(deviceId+switchId)[0].innerHTML="<span data-toggle='tooltip' title='Switch currently running' class='text text-success fa fa-refresh fa-spin'></span>";
               document.getElementById(response.deviceId+response.switchId).innerHTML='Switch OFF';//changed to switchId for respective valves
-            else if(response.action==0)
+            }
+            else if(response.action==0){
+              document.getElementsByClassName(deviceId+switchId)[0].innerHTML="<span data-toggle='tooltip' title='Switch currently stopped' class='text text-danger glyphicon glyphicon-ban-circle'></span>";
               document.getElementById(response.deviceId+response.switchId).innerHTML='Switch ON';
+            }
             if(response.status==0)
               document.getElementsByClassName(response.deviceId)[0].innerHTML="<span class='label label-danger'>OFFLINE</span>";
             else if(response.status==1)
@@ -300,8 +304,9 @@ xmlhttp.onreadystatechange=function()
     {
       if(payload==0)
         document.getElementById(deviceId+switchId).innerHTML='Switch ON';
-     else if(payload==1)
+      else if(payload==1)
         document.getElementById(deviceId+switchId).innerHTML='Switch OFF';
+        document.getElementsByClassName(deviceId+switchId)[0].innerHTML=xmlhttp.response;
     }
   }
 xmlhttp.open('GET','com.php?devId='+deviceId+'&switchId='+switchId+'&duration='+duration,true);//modified for the switch ids

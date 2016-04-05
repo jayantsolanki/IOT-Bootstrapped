@@ -62,10 +62,14 @@ if(isset($_GET['grp']))
 			$sens=mysql_query($query);
 			$sen=mysql_fetch_assoc($sens);
 			$sname=$sen['name'];
-			if($action==1) //changing into user readable form
+			if($action==1){ //changing into user readable form
+				$active="<span data-toggle='tooltip' title='Switch currently running' class='text text-success fa fa-refresh fa-spin'></span>";
 				$action='OFF';
-			else
+			}
+			else{
+				$active="<span data-toggle='tooltip' title='Switch currently stopped' class='text text-danger glyphicon glyphicon-ban-circle'></span>";
 				$action='ON';
+			}
 			
 			$seenquery="Select status from deviceStatus where deviceStatus.deviceId='$macid' order by deviceStatus.id desc limit 1";//getting last seen status
 			$seenresult=mysql_query($seenquery);
@@ -101,6 +105,7 @@ if(isset($_GET['grp']))
 			
 			
 			echo "<td style='vertical-align: middle;'>
+					<span class='".$macid."".$switchId."'>".$active."</span>
 					<button class='item btn btn-warning' id='".$macid."".$switchId."' type='button'  onclick=update('$macid','$switchId') value='$macid'>Switch ".$action."</button>
 					<br/>
 					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<big class='$macid'>$status</big>

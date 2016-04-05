@@ -191,6 +191,7 @@ function display($grp)
 			$jsonArrayItem['seen'] = $seen;
 			$jsonArrayItem['groupName'] = $name;
 			$jsonArrayItem['type'] = $sensor;
+			$jsonArrayItem['typeId'] = $sense;//for getting the id of the devicetype
 			$jsonArrayItem['PbatValue'] = $Pbatvalue;
 			if($devType==1 && $Sbatvalue!=null){
 				$jsonArrayItem['SbatValue'] = $Sbatvalue;

@@ -36,8 +36,9 @@ $results=mysql_query($query);
 			//$status=$row['status'];
 			if($action==0)//checking valve is off or not
 			{
-				//command($macid,1);	//switch ON			
-				//echo "Switch OFF"; //update button status
+				//command($macid,1);	//switch ON	
+				$active="<span data-toggle='tooltip' title='Switch currently running' class='text text-success fa fa-refresh fa-spin'></span>";		
+				echo $active; //update button status
 				$query = "UPDATE switches SET action ='1', updated_at=now() WHERE deviceId='$macid' and switchId=$s"; //updating action status in device table
 				//echo "</br>".$query;
 				if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))
@@ -50,7 +51,8 @@ $results=mysql_query($query);
 			else
 			{
 				//command($macid,0);	//Switch off
-				//echo "Switch ON";
+				$active="<span data-toggle='tooltip' title='Switch currently stopped' class='text text-danger glyphicon glyphicon-ban-circle'></span>";
+				echo $active;
 				$query = "UPDATE switches SET action ='0', updated_at=now() WHERE deviceId='$macid' and switchId=$s"; //updating action status in device table 
 				//echo "</br>".$query;
 				if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))
