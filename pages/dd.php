@@ -91,6 +91,8 @@ if($deviceActivity!=null){
 					$segmentArrayItem['start'] = $timeRows[$i]['created_At'];
 					if($i<$length-1)
 						$stopTime =$timeRows[$i+1]['created_At'];
+					if($i==$length-1)
+						$stopTime =date('Y-m-d h:i:s');;
 					//$duration=strtotime($stopTime)-strtotime($segmentArrayItem['start']);
 					$segmentArrayItem['end']=$stopTime;
 					if($status==1){
