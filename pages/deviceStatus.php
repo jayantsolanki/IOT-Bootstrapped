@@ -142,7 +142,7 @@ error_reporting(-1); //for suppressing errors and notices
                             </div>
                           </div><!-- ending dev div -->
                           <div class='row' id="chart" style="display:none;">
-                            <div class="col-md-12" id="deviceActivity"  style="height:500px;font-size:11px; ">
+                            <div class="col-md-12" id="deviceActivity"  style="height:170px;font-size:11px; ">
                             </div>
                           </div>
                         </div><!-- ending panel body -->
@@ -226,12 +226,14 @@ error_reporting(-1); //for suppressing errors and notices
             var devices=null;
             var switches=null;
             var groupId=null;
+            var columnWidth=0.5;
             var deviceActivities=null;
            /* $http.get("dd.php")
             .then(function(response) {
                 $scope.devices = response.data;                
             });*/
             $scope.devices = devices;
+            $scope.columnWidth = columnWidth;
             $scope.deviceActivities = deviceActivities;
             $scope.groupId = groupId;
             $scope.groupId = 1;//default
@@ -282,6 +284,12 @@ error_reporting(-1); //for suppressing errors and notices
                 .then(function(response) {
                     $scope.deviceActivities = response.data;
                     //alert(JSON.stringify(response.data));
+                    $("#deviceActivity").height(170);
+                    if($scope.devices.length>2)
+                    {
+                      var height=45*$scope.devices.length;
+                       $("#deviceActivity").height(height);
+                    }
                     $scope.makechart();//create chart        
                 });
                 
@@ -297,7 +305,7 @@ error_reporting(-1); //for suppressing errors and notices
                 //"dataDateFormat":"YYYY-MM-DD JJ:NN:SS",
                 "backgroundAlpha": 5,
                 "balloonDateFormat": "JJ:NN:SS, DD MMM",
-                "columnWidth": 0.2,
+                "columnWidth": 0.5,
                 "autoDisplay":true,
                 "tapToActivate": true,
                 "autoResize": true,
@@ -339,7 +347,7 @@ error_reporting(-1); //for suppressing errors and notices
                     "cursorColor":"#33DDe4",
                     "valueBalloonsEnabled": false,
                     "cursorAlpha": 0,
-                    "valueLineAlpha":0.5,
+                    "valueLineAlpha":$scope.columnWidth,
                     "valueLineBalloonEnabled": true,
                     "valueLineEnabled": true,
                     "zoomable":true,

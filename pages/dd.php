@@ -96,11 +96,11 @@ if($deviceActivity!=null){
 					//$duration=strtotime($stopTime)-strtotime($segmentArrayItem['start']);
 					$segmentArrayItem['end']=$stopTime;
 					if($status==1){
-						$segmentArrayItem['color'] = "#18C44E";
+						$segmentArrayItem['color'] = "#FFFFC0";
 						$segmentArrayItem['task'] = "Online";
 					}
 					if($status==0){
-						$segmentArrayItem['color'] = "#B32434";
+						$segmentArrayItem['color'] = "#FF5F33";
 						$segmentArrayItem['task'] = "Offline";
 					}
 					$phpdate=strtotime($segmentArrayItem['start']);
