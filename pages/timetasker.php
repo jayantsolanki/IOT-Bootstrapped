@@ -52,7 +52,7 @@ if(isset($_GET['grp']))
 				break;
 			if($stop==2400) //marks stop time as 0000
 				$stop=0;
-			$query="INSERT INTO tasks VALUES". "(DEFAULT,$grp, NULL,NULL,'$start','$stop', '1','1',NULL)";
+			$query="INSERT INTO tasks VALUES". "(DEFAULT,$grp, NULL,NULL,'$start','$stop', '1','1',2, NULL)";
 			//if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))		
 			//	echo "INSERT failed: $query<br/>".mysql_error()."<br/><br/>";
 			//echo $query;
@@ -80,7 +80,7 @@ if(isset($_GET['grp']))
 				$grps=mysql_query($query);
 				$grp=mysql_fetch_assoc($grps);
 				$name=$grp['name'];*/
-				$query="INSERT INTO tasks VALUES". "(DEFAULT,$grp,NULL,NULL,'$start','$stop', '1','1',NULL)";
+				$query="INSERT INTO tasks VALUES". "(DEFAULT,$grp,NULL,NULL,'$start','$stop', '1','1',2, NULL)";
 			//if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))		
 			//	echo "INSERT failed: $query<br/>".mysql_error()."<br/><br/>";
 			//echo $query;
@@ -152,7 +152,11 @@ function display()
     $results=mysql_query($query);
     if (mysql_num_rows($results) > 0) 
     {   $i=1;
-        echo "</br></br><h2>Scheduled Tasks</h2>";
+        echo "</br></br><h2>Scheduled Tasks&nbsp;<small class='text-muted pull-right'><span data-toggle='tooltip' title='Task currently running' class='text text-success fa fa-refresh fa-spin'></span>
+        <span data-toggle='tooltip' title='Task currently stopped' class='text text-danger glyphicon glyphicon-ban-circle'></span>
+        <span data-toggle='tooltip' title='Newly created Task' class='text text-info glyphicon glyphicon-info-sign'></span>
+        <span data-toggle='tooltip' title='Task is disabled by the user' class='text text-warning glyphicon glyphicon-exclamation-sign'></span>
+        <span class='text text-muted glyphicon glyphicon-warning-sign' data-toggle='tooltip' title='Should not water plants during night'></span></small></h2>";
         echo "<table class='table table-striped'><tbody>";      
         while($row=mysql_fetch_assoc($results)) 
         {   $id=$row['id'];
@@ -161,13 +165,21 @@ function display()
             $groupId=$row['groupId'];
             $deviceId=$row['deviceId'];
             $switchId=$row['switchId'];
-
+            $active=$row['active'];
+            if($active==1)
+                $active="<span data-toggle='tooltip' title='Task currently running' class='text text-success fa fa-refresh fa-spin'></span>";
+            else if($active==0)
+                $active="<span data-toggle='tooltip' title='Task currently stopped' class='text text-danger glyphicon glyphicon-ban-circle'></span>";
+            else if($active==2)
+                $active="<span data-toggle='tooltip' title='Newly created Task' class='text text-info glyphicon glyphicon-info-sign'></span>";
+            else if($active=3)
+                $active="<span data-toggle='tooltip' title='Task is disabled by the user' class='text text-warning glyphicon glyphicon-exclamation-sign'></span>";
             if($start>=2100 or $start<=300)
-                $status="<a class='label label-danger' data-toggle='tooltip' title='Should not water plants during night' ><strong><big>!</big></strong></a>";
+                $status="<a class='text text-muted glyphicon glyphicon-warning-sign' data-toggle='tooltip' title='Should not water plants during night' ><strong><big></big></strong></a>";
             else
                 $status='';
             echo "<tr>
-            <td><strong class='text-muted'>".$i.".</strong></td>";
+            <td><strong class='text-muted'>".$i.".</strong> $active</td>";
             if($groupId!=null){
                 $grpq="SELECT name FROM groups where id=$groupId"; //getting group name
                 $grpres=mysql_query($grpq);
@@ -178,26 +190,26 @@ function display()
             if($deviceId!=null){
                 echo"<td><b>DeviceId:</b> $deviceId/<strong class='text-danger'>$switchId</strong> <span data-toggle='tooltip' title='Device manually switched on' class='badge'>M</span></td>";
             }
-                if(strlen((string) $start)==3)
-                    echo"<td class='text-info'> Starts on: <strong>0$start Hrs</strong<</td>";
-                else if(strlen((string) $start)==2)
-                    echo"<td class='text-info'> Starts on: <strong>00$start Hrs</strong<</td>";
-                else if(strlen((string) $start)==1)
-                    echo"<td class='text-info'> Starts on: <strong>000$start Hrs</strong<</td>";
-                else
-                    echo"<td class='text-info'> Starts on: <strong>$start Hrs</strong<</td>";
-                
-                if(strlen((string) $stop)==3)
-                    echo"<td class='text-warning'> Stops on: <strong>0$stop Hrs</strong<</td>";
-                else if(strlen((string) $stop)==2)
-                    echo"<td class='text-warning'> Stops on: <strong>00$stop Hrs</strong<</td>";
-                else if(strlen((string) $stop)==1)
-                    echo"<td class='text-warning'> Stops on: <strong>000$stop Hrs</strong<</td>";
-                else
-                    echo"<td class='text-warning'> Stops on: <strong>$stop Hrs</strong<</td>";
+            if(strlen((string) $start)==3)
+                echo"<td class='text-info'> Starts: <strong>0$start Hrs</strong<</td>";
+            else if(strlen((string) $start)==2)
+                echo"<td class='text-info'> Starts: <strong>00$start Hrs</strong<</td>";
+            else if(strlen((string) $start)==1)
+                echo"<td class='text-info'> Starts: <strong>000$start Hrs</strong<</td>";
+            else
+                echo"<td class='text-info'> Starts: <strong>$start Hrs</strong<</td>";
+            
+            if(strlen((string) $stop)==3)
+                echo"<td class='text-warning'> Stops: <strong>0$stop Hrs</strong<</td>";
+            else if(strlen((string) $stop)==2)
+                echo"<td class='text-warning'> Stops: <strong>00$stop Hrs</strong<</td>";
+            else if(strlen((string) $stop)==1)
+                echo"<td class='text-warning'> Stops: <strong>000$stop Hrs</strong<</td>";
+            else
+                echo"<td class='text-warning'> Stops: <strong>$stop Hrs</strong<</td>";
             echo"
-            <td><a class='text-danger glyphicon glyphicon-remove-circle' data-toggle='tooltip' title='Delete' href='javascript:del($id)'></a> </td>
-            <td> $status</td>
+            <td><a class='text-danger glyphicon glyphicon-trash' data-toggle='tooltip' title='Delete' href='javascript:del($id)'></a> </td>
+            <td>$status</td>
             </tr>";
             $i++;
         

@@ -217,7 +217,7 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
                                              <a class='text-danger glyphicon glyphicon-remove-circle' data-toggle='tooltip' title='Delete' href="."javascript:ddel('$deviceId','$switchId')"."></a>";
                                            }
                                            echo"
-                                           &nbsp; &nbsp;<big><a class='text-danger glyphicon glyphicon-remove' data-toggle='tooltip' title='Remove device and its switches' href="."javascript:ddel('$deviceId',0)"."></a></big>";
+                                           &nbsp; &nbsp;<big><a class='text-danger glyphicon glyphicon-trash' data-toggle='tooltip' title='Remove device and its switches' href="."javascript:ddel('$deviceId',0)"."></a></big>";
                                           echo"
                                           &nbsp; &nbsp;<a class='text-danger glyphicon glyphicon-wrench' data-toggle='tooltip' title='Device Settings' href="."javascript:deviceSetting('$deviceId')"."></a>
                                            </span>&nbsp;<strong><big>$status</big></strong><br/><hr/></span>";
