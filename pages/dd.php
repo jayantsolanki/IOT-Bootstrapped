@@ -71,9 +71,9 @@ if($deviceActivity!=null){
 			$deviceId=$row['deviceId'];
 			$deviceType=$row['type'];
 			if($deviceType==1)
-				$devStatus="SELECT * FROM deviceStatus WHERE deviceId='$deviceId' limit 20";
+				$devStatus="Select * FROM (SELECT * FROM deviceStatus WHERE deviceId='$deviceId' order by id desc limit 30) as temp order by id asc";
 			else
-				$devStatus="SELECT * FROM deviceStatus WHERE deviceId='$deviceId' limit 100";
+				$devStatus="Select * FROM (SELECT * FROM deviceStatus WHERE deviceId='$deviceId' order by id desc limit 100) as temp order by id asc";
 			$Statusresults=mysql_query($devStatus);
 			$length=mysql_num_rows($Statusresults);
 			if ($length > 0) 
