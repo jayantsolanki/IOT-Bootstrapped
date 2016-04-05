@@ -42,7 +42,7 @@ $results=mysql_query($query);
 				//echo "</br>".$query;
 				if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))
 					echo "UPDATE failed: $query<br/>".mysql_error()."<br/><br/>";
-				$query="INSERT INTO tasks VALUES". "(DEFAULT,NULL,'$macid','$s','$start','$stop', '0','0')"; //changed here for switches, last zero is for manual task identification
+				$query="INSERT INTO tasks VALUES". "(DEFAULT,NULL,'$macid','$s','$start','$stop', '0','0',2 ,NULL)"; //changed here for switches, last zero is for manual task identification
 				if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))
 					echo "INSERT failed: $query<br/>".mysql_error()."<br/><br/>";
 				
@@ -90,7 +90,7 @@ $results=mysql_query($query);
 		{
 
 		echo "Switch OFF";
-		$query="INSERT INTO tasks VALUES". "(DEFAULT,'$name',NULL,'$start','$stop', '0','0',2 ,NULL)";
+		$query="INSERT INTO tasks VALUES". "(DEFAULT,'$name',NULL,NULL,'$start','$stop', '0','0',2 ,NULL)";
 			if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))
 				echo "INSERT failed: $query<br/>".mysql_error()."<br/><br/>";
 		}
