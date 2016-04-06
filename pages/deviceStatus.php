@@ -96,7 +96,7 @@ error_reporting(-1); //for suppressing errors and notices
                                   <div class="col-md-2">
                                        <h4 class="text-danger" ><small ng-if="device.newDevice"><a href="devManagement.php" data-toggle='tooltip' title='New Device {{device.created}}' class='text-info fa fa-circle-o-notch fa-spin fa-2x'></a> <br></small>{{device.deviceName}}</h4>
                                        <p><strong class='text-danger'>Type:</strong> {{device.type}}</p>
-                                        <span ng-if="device.devType">
+                                        <span ng-if="device.switchCount>=1">
                                           <p><button class="btn btn-info badge" ng-click="selectDevice(device.deviceId,$index)">Switches:</button> {{device.switchCount}}</p>
                                         </span>
                                         
@@ -115,8 +115,8 @@ error_reporting(-1); //for suppressing errors and notices
                                           <blockquote>
                                             <span ng-if="device.typeId==1" class='text-success'>Primary: <strong>{{device.PbatValue/1024 | number : 3}} Volts </strong></span>
                                             <span ng-if="device.typeId==2" class='text-success'>Primary: <strong>{{device.PbatValue/4096*4 | number : 3}} Volts </strong><!-- for the sensor --></span>
-                                            <span class='text-danger' ng-if="device.devType"><br>Secondary:<strong>{{device.SbatValue/137.1428571428571 | number : 3}} Volts </strong></span><br>
-                                            <cite class="text-warning">Last updated {{device.batTime}}</cite>
+                                            <span class='text-danger' ng-if="device.switchCount==1"><br>Secondary:<strong>{{device.SbatValue/137.1428571428571 | number : 3}} Volts </strong></span><br>
+                                            <small class="text-muted">Last updated {{device.batTime}}</small>
                                           </blockquote>
                                         </p>
                                     </blockquote>
@@ -143,7 +143,9 @@ error_reporting(-1); //for suppressing errors and notices
                             </div>
                           </div><!-- ending dev div -->
                           <div class='row' id="chart" style="display:none;">
-                            <div class="col-md-12" id="deviceActivity"  style="height:170px;font-size:11px; ">
+                            <div class="col-md-1" id="spacer"  >
+                            </div>
+                            <div class="col-md-11" id="deviceActivity"  style="height:170px;font-size:11px; ">
                             </div>
                           </div>
                         </div><!-- ending panel body -->

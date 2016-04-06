@@ -154,18 +154,18 @@ function display($grp)
 			$switches=$row['switches'];
 			$newDevice=$row['status'];
 			$created=$row['created_at'];
-			$batquery="SELECT device_type, battery_value, temp_value, created_at FROM feeds WHERE feeds.device_id='$macid' order by feeds.id desc limit 1";
+			$batquery="SELECT field2, field3, created_at FROM feeds WHERE feeds.device_id='$macid' order by feeds.id desc limit 1";
 			$batresult=mysql_query($batquery);
 			$batfetch=mysql_fetch_assoc($batresult);
-			$Pbatvalue=$batfetch['battery_value'];
-			$Sbatvalue=$batfetch['temp_value'];
-			$devType=$batfetch['device_type'];
+			$Pbatvalue=$batfetch['field2'];
+			$Sbatvalue=$batfetch['field3'];
+			//$devType=$batfetch['device_type'];
 			$batTime=$batfetch['created_at'];
-			$query="SELECT name FROM groups WHERE id='$grp'";
+			$query="SELECT name FROM groups WHERE id='$grp'";//getting group name
 			$grps=mysql_query($query);
 			$rows=mysql_fetch_assoc($grps);
 			$name=$rows['name'];
-			$query="SELECT name FROM sensors WHERE id='$sense'";
+			$query="SELECT name FROM sensors WHERE id='$sense'";//getting sensor name
 			$grps=mysql_query($query);
 			$rows=mysql_fetch_assoc($grps);
 			$sensor=$rows['name'];
@@ -193,9 +193,9 @@ function display($grp)
 			$jsonArrayItem['type'] = $sensor;
 			$jsonArrayItem['typeId'] = $sense;//for getting the id of the devicetype
 			$jsonArrayItem['PbatValue'] = $Pbatvalue;
-			if($devType==1 && $Sbatvalue!=null){
+			if($switches==1 && $Sbatvalue!=null){//if switch ==1 then it has secondary battery
 				$jsonArrayItem['SbatValue'] = $Sbatvalue;
-				$jsonArrayItem['devType'] = true;
+				//$jsonArrayItem['devType'] = true;
 			}
 			else
 				$jsonArrayItem['devType'] = false;
