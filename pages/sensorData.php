@@ -147,6 +147,10 @@ include_once 'settings/iotdb.php';
                                         <li name='battery' role="presentation">
                                         <a class="text text-danger" id="batval" href="javascript:showgraphBattery('<?php echo $_SESSION['devId'];?>')">Battery</a></li>
                                         <li name="temperature" role="presentation">
+                                        <?php 
+                                          if($_SESSION['deviceType']==1)
+                                          echo "Secondary Battery";
+                                        ?>
                                         <a class="text text-danger" href="javascript:showgraphTemp('temperature')">Temperature</a></li>
                                         <li name='humidity' role="presentation">
                                         <a  class="text text-danger"href="javascript:showgraphHumid('humidity')">Humidity</a></li>

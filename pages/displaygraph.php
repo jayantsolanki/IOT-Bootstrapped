@@ -16,13 +16,24 @@ $type=$_GET["type"];
 if(isset($_GET['q']))
 {
 	//echo $macid;
+	$query="SELECT switches, type FROM devices WHERE deviceId='$macid'"; //Fetching extra details about the device
+	$devDetails=mysql_query($query);
+	$devRow=mysql_fetch_assoc($devDetails);
+	
 	$_SESSION["devId"] = $macid;
 	$_SESSION["type"] = 'temperature';
+	$_SESSION["deviceType"] = $devRow['type'];
+	$_SESSION["switches"] = $devRow['switches'];
+	if($_SESSION["switches"]==1)
+		$_SESSION["type"] = 'Sbattery';
 	$jsonArray = array();
-	if($type=='temperature'){//temperature
+	if($type=='temperature' or $type=='Sbattery'){//temperature or secondary battery
 
 		mysql_select_db($dbname) or die(mysql_error());
-		$query="(SELECT DATE_FORMAT(created_at, '%Y-%m-%d-%H-%i') as created_at , temp_value FROM feeds WHERE feeds.device_id= '$macid' )"; //device id similar to macid
+		if($type=='temperature')
+			$query="(SELECT DATE_FORMAT(created_at, '%Y-%m-%d-%H-%i') as created_at , field4 as value FROM feeds WHERE feeds.device_id= '$macid' )"; //device id similar to macid
+		if($type=='Sbattery')
+			$query="(SELECT DATE_FORMAT(created_at, '%Y-%m-%d-%H-%i') as created_at , field3 as value FROM feeds WHERE feeds.device_id= '$macid' )"; //device id similar to macid
 		$feeds=mysql_query($query);
 		//echo mysql_num_rows($feeds);
 		//initialize the array to store the processed data
@@ -38,7 +49,7 @@ if(isset($_GET['q']))
 		   	$mdhms = explode('-',$datetime->format('H'));*/
 		    $jsonArrayItem['label'] = $row['created_at'];
 		    
-		    $jsonArrayItem['value'] = $row['temp_value'];
+		    $jsonArrayItem['value'] = $row['value'];
 		    if($i==mysql_num_rows($feeds)-1)
 		    	$jsonArrayItem['bulletClass'] = 'lastBullet';
 		    //append the above created object into the main array.
@@ -108,7 +119,10 @@ if(isset($_GET['q']))
 
 		$_SESSION["type"] = 'battery';
 		mysql_select_db($dbname) or die(mysql_error());
-		$query="(SELECT DATE_FORMAT(created_at, '%Y-%m-%d-%H-%i') as created_at ,battery_value FROM feeds WHERE feeds.device_id= '$macid' )"; //device id similar to macid
+		if($_SESSION["switches"]==0)
+			$query="(SELECT DATE_FORMAT(created_at, '%Y-%m-%d-%H-%i') as created_at ,field3 as value FROM feeds WHERE feeds.device_id= '$macid' )"; //device id similar to macid
+		if($_SESSION["switches"]==1)
+			$query="(SELECT DATE_FORMAT(created_at, '%Y-%m-%d-%H-%i') as created_at ,field2 as value FROM feeds WHERE feeds.device_id= '$macid' )"; //device id similar to macid
 		$feeds=mysql_query($query);
 		//initialize the array to store the processed data
 		
@@ -123,7 +137,7 @@ if(isset($_GET['q']))
 		   	$mdhms = explode('-',$datetime->format('H'));*/
 		    $jsonArrayItem['label'] = $row['created_at'];
 		    
-		    $jsonArrayItem['value'] = $row['battery_value'];
+		    $jsonArrayItem['value'] = $row['value'];
 		    //append the above created object into the main array.
 		    if($i==mysql_num_rows($feeds)-1)
 		    	$jsonArrayItem['bulletClass'] = 'lastBullet';
