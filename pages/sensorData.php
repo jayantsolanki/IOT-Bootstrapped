@@ -33,6 +33,7 @@ include_once 'settings/iotdb.php';
 
     <!-- Custom Fonts -->
     <link href="../bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="../bower_components/angularjs-datetime-picker/angularjs-datetime-picker.css" />
     <link rel="stylesheet" type="text/css" href="../dist/css/bootstrap-fullscreen-select.css" />
     <style>
     /* .modal-fullscreen */
@@ -109,7 +110,7 @@ include_once 'settings/iotdb.php';
                     <div class=" col-md-12 content">
                         <label class="text text-info">Select group</label>
                         <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                             <select class='mobileSelect form-control' id='chartselect' name='chartselect' >
                                <!--  <option selected="true" disabled='disabled'>Choose</option> -->
                               <?php 
@@ -127,6 +128,31 @@ include_once 'settings/iotdb.php';
                                     }
                                 ?>
                             </select><span class="pull-right"><button id="back" class="btn btn-primary" ng-click="showDevice()" style="display:none;">Back</button></span></br></br>
+                            <div class="row">
+                              <div class="col-md-6">
+                                <fieldset class='form-group'>
+                                  <label for='results'>Results</label>
+                                  <input type='text' class='form-control' id='results' ng-model=count placeholder='Total Reading' value='{{count}}'>
+                                </fieldset>
+                                <fieldset class='form-group'>
+                                  <label for='color'>Chart Color</label>
+                                  <input type='text' class='form-control' id='color' ng-model=background_color placeholder='Color of the Chart' value='{{background_color}}'>
+                                </fieldset>
+                              </div>
+                              <div class="col-md-6">
+                                <fieldset class='form-group'>
+                                  <label for='results'>Results</label><br>
+                                  <select ng-model=theme class='form-control' name='chartselect' >
+                                    <option value="dark">Dark</option>
+                                    <option value="light">Light</option>
+                                  </select>
+                                </fieldset>
+                                <fieldset class='form-group'>
+                                  <label for='color'>Starting Date</label>
+                                  <input type="text" datetime-picker datetime-picker date-format="yyyy-MM-dd HH:mm" year="2016" month="4" day="1" hour="23" minute="59" ng-model=startDate class="form-control floating-label" placeholder="Start Date" value="{{startDate}}">
+                                </fieldset>
+                              </div>
+                            </div>
                             <strong>Group Selected <big class ="label label-primary">{{devices[0].groupName}}</big></strong><hr/>
                           </div>
                          </div>
@@ -199,7 +225,7 @@ include_once 'settings/iotdb.php';
                                   </div>
                             </div><!-- loop ends here -->
                               <div class='row' id="chartDisplay" style="display:none;">
-                                  <div class="col-md-10 col-md-offset-1" id="chart"  style="height:500px;">
+                                  <div class="col-md-10 col-md-offset-1 app-font family-light size-biggerer" id="chart"  style="height:500px;">
                                     Chart will be displayed here
                                   </div>
                               </div>
@@ -227,10 +253,9 @@ include_once 'settings/iotdb.php';
     <script src="../bower_components/angular/angular.min.js"></script>
     <!-- jQuery -->
     <script src="../bower_components/jquery/dist/jquery.min.js"></script>
-
     <!-- Bootstrap Core JavaScript -->
     <script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-
+    <script src="../bower_components/angularjs-datetime-picker/angularjs-datetime-picker.min.js"></script>
     <!-- Metis Menu Plugin JavaScript -->
     <script src="../bower_components/metisMenu/dist/metisMenu.min.js"></script>
      <script type="text/javascript" src="../dist/js/bootstrap-fullscreen-select.js"></script>
@@ -272,7 +297,7 @@ include_once 'settings/iotdb.php';
       });
     </script>
     <script>
-       var app = angular.module('IOT-App',[]);
+       var app = angular.module('IOT-App',['angularjs-datetime-picker']);
        app.controller('devicesChart', function($scope, $http) {
             var devices=null;
             var deviceId=null;
@@ -280,6 +305,10 @@ include_once 'settings/iotdb.php';
             var groupId=null;
             var custom=null;
             var tab=null;
+            var count='';
+            var theme="dark";
+            var startDate='';
+            var background_color="#525263";
            /* $http.get("dd.php")
             .then(function(response) {
                 $scope.devices = response.data;                
@@ -287,11 +316,14 @@ include_once 'settings/iotdb.php';
             $scope.devices = devices;
             $scope.deviceId = deviceId;
             $scope.tab=tab;
+            $scope.count=count;
+            $scope.startDate=startDate;
             $scope.dataPoints=dataPoints;
             $scope.custom=custom;
+            $scope.theme=theme;
             $scope.groupId = groupId;
+            $scope.background_color=background_color;
             $scope.groupId = 1;//default
-
 
             $scope.selectGroup = function() {
                 $http.get("sensors.php?grp="+$scope.groupId)//calling dd.php for retrieving the data
@@ -313,6 +345,7 @@ include_once 'settings/iotdb.php';
 
                   }
             $scope.showChart=function(deviceId) {
+                    alert($('#datetimepicker3').val());
                     //alert(deviceId)
                     $scope.deviceId = deviceId;
                     $(".navigationIOT").fadeOut(100);
@@ -332,7 +365,7 @@ include_once 'settings/iotdb.php';
             }
             $scope.showGraph = function(deviceType, deviceId, feed) {//getting graph ofr a particular field
               //alert(deviceType+' '+feed+' '+deviceId);
-               $http.get("displaygraph.php?deviceType="+deviceType+"&deviceId="+deviceId+"&feed="+feed)//calling dd.php for retrieving the data
+               $http.get("displaygraph.php?deviceType="+deviceType+"&deviceId="+deviceId+"&feed="+feed+"&count="+ $scope.count+"&startDate="+$scope.startDate)//calling dd.php for retrieving the data
                 .then(function(response) {
                     $scope.dataPoints = response.data;
                     if(deviceType!=1 && deviceType!=2){//for sensors
@@ -416,11 +449,13 @@ include_once 'settings/iotdb.php';
             $scope.makechart=function(deviceId, dataPoints, chartCustom){
             //alert(JSON.stringify($scope.deviceActivities));
               AmCharts.addInitHandler( function( chart ) {
-           
+            if(chart.dataProvider.length!=0){
+
              var dataPoint = chart.dataProvider[ chart.dataProvider.length - 1 ];
              var graph = chart.graphs[0];
              graph.bulletField = "bullet";
              dataPoint.bullet = "round";
+           }
 
                },[ "serial" ]);
                //var chartData = JSON.parse(data); //return json object, converts json string into json objects
@@ -429,11 +464,13 @@ include_once 'settings/iotdb.php';
                     "type": "serial",
                     "addClassNames": true,
                     //"classNamePrefix": "amcharts", // Default value
-                    "theme": "dark",
+                    "theme": $scope.theme,
                     "marginTop": 86,
                     "marginRight": 40,
                     "marginLeft": 86,
-                    "backgroundColor": "#525263",
+                    "fontFamily": "Helvetica",
+                    "fontSize": 12,
+                    "backgroundColor": $scope.background_color,
                     //"dataDateFormat":"YYYY-MM-DD JJ:NN:SS",
                     "backgroundAlpha": 5,
                     "autoMarginOffset": 20,
@@ -525,6 +562,7 @@ include_once 'settings/iotdb.php';
   
            }
             $scope.selectGroup();//calling first group initially
+
         });
     </script>
     <script>
@@ -674,211 +712,6 @@ include_once 'settings/iotdb.php';
         }
       }
     </style>
-    <script type='text/javascript'>
-        /*
-         *
-         * Function Name: showgraphBattery(str)
-         * Input: macid, or the device id
-         * Output: return graph for battery
-         * Logic: It is a AJAX call
-         * Example Call: showgraph(12-14-AA-54-76-BB)
-         *
-         */
-        function showgraphBattery(str)
-        {
-          //alert(str);
-        //alert(duration);
-
-        if (window.XMLHttpRequest)
-          {
-          xmlhttp=new XMLHttpRequest();
-          }
-        else
-          {
-          xmlhttp=new ActiveXObject('Microsoft.XMLHTTP');
-          }
-        xmlhttp.onreadystatechange=function()
-          {
-            if (xmlhttp.readyState==3 && xmlhttp.status==200)
-              {
-              document.getElementById('dumps').innerHTML="<span><img src='images/ajax.gif'/></span>";
-              }
-          if (xmlhttp.readyState==4 && xmlhttp.status==200)
-            {
-                $('ul.nav-tabs li.active').removeClass('active');
-                document.getElementsByName("battery")[0].setAttribute("class","active");
-                document.getElementById('devId').innerHTML=str;
-                document.getElementById("batval").setAttribute("href","javascript:showgraphBattery('"+str+"')");
-                var custom = {
-                    "title": "Battery Values in last 24 hours",
-                    "id": "Battery Chart",
-                    "yAxisName": "Battery in mV ",
-                    "unit":" mV"
-                  };
-                  renderChartBattery(xmlhttp.responseText, custom, 'battery',str);
-                  jQuery("#modal-fullscreen").modal('show');
-                
-                //alert(xmlhttp.responseText);
-                //document.getElementById("dump").innerHTML=xmlhttp.responseText;
-
-            
-            }
-          }
-        xmlhttp.open('GET','displaygraph.php?q='+str,true);
-        xmlhttp.send();
-        }
-    </script>
-    <script type='text/javascript'>
-        /*
-         *
-         * Function Name: showgraphTemp(str)
-         * Input: battery
-         * Output: return graph temperature
-         * Logic: It is a AJAX call
-         * Example Call: showgraphTemp('temperature')
-         *
-         */
-        function showgraphTemp(str)
-        {
-          //alert(str);
-        //alert(duration);
-        var devid=document.getElementById("devId").innerHTML;
-        //alert(devid);
-        if (window.XMLHttpRequest)
-          {
-          xmlhttp=new XMLHttpRequest();
-          }
-        else
-          {
-          xmlhttp=new ActiveXObject('Microsoft.XMLHTTP');
-          }
-        xmlhttp.onreadystatechange=function()
-          {
-            if (xmlhttp.readyState==3 && xmlhttp.status==200)
-              {
-              document.getElementById('dumps').innerHTML="<span><img src='images/ajax.gif'/></span>";
-              }
-          if (xmlhttp.readyState==4 && xmlhttp.status==200)
-            {
-                $('ul.nav-tabs li.active').removeClass('active');
-            document.getElementsByName("temperature")[0].setAttribute("class","active");
-            var custom = {
-                    "title": "Temperature Value",
-                    "id": "Temperature Chart",
-                    "yAxisName": "Temperature in °C ",
-                    "unit":" °C"
-                  };   
-             
-            renderChartBattery(xmlhttp.responseText,custom, 'temperature', devid);
-            jQuery("#modal-fullscreen").modal('show');
-            //document.getElementById("dump").innerHTML=xmlhttp.responseText;
-            }
-          }
-            xmlhttp.open('GET','displaygraph.php?type='+str+'&q='+devid,true);
-            xmlhttp.send();
-            }
-    </script>
-
-     <script type='text/javascript'>
-        /*
-         *
-         * Function Name: showgrapHumid(str)
-         * Input: humidity
-         * Output: return graph humidity
-         * Logic: It is a AJAX call
-         * Example Call: showgrapHumid('humidity')
-         *
-         */
-        function showgraphHumid(str)
-        {
-          //alert(str);
-        //alert(duration);
-        var devid=document.getElementById("devId").innerHTML;
-        //alert(devid);
-        if (window.XMLHttpRequest)
-          {
-          xmlhttp=new XMLHttpRequest();
-          }
-        else
-          {
-          xmlhttp=new ActiveXObject('Microsoft.XMLHTTP');
-          }
-        xmlhttp.onreadystatechange=function()
-          {
-            if (xmlhttp.readyState==3 && xmlhttp.status==200)
-              {
-              document.getElementById('dumps').innerHTML="<span><img src='images/ajax.gif'/></span>";
-              }
-          if (xmlhttp.readyState==4 && xmlhttp.status==200)
-            {
-                $('ul.nav-tabs li.active').removeClass('active');
-                document.getElementsByName("humidity")[0].setAttribute("class","active");
-                var custom = {
-                    "title": "Humidity Values in last 24 hours",
-                    "id": "Humidity Chart",
-                    "yAxisName": "Humidity in % ",
-                    "unit":" %"
-                  };
-                renderChartBattery(xmlhttp.responseText,custom, 'humidity',devid);
-                jQuery("#modal-fullscreen").modal('show');
-                //document.getElementById("dump").innerHTML=xmlhttp.responseText;
-            }
-          }
-            xmlhttp.open('GET','displaygraph.php?type='+str+'&q='+devid,true);
-            xmlhttp.send();
-            }
-    </script>
-
-    <script type='text/javascript'>
-        /*
-         *
-         * Function Name: showgraphMoist(str)
-         * Input: moisture
-         * Output: return graph moisture
-         * Logic: It is a AJAX call
-         * Example Call: showgraphMoist('moisture')
-         *
-         */
-        function showgraphMoist(str)
-        {
-          //alert(str);
-        //alert(duration);
-        var devid=document.getElementById("devId").innerHTML;
-        //alert(devid);
-        if (window.XMLHttpRequest)
-          {
-          xmlhttp=new XMLHttpRequest();
-          }
-        else
-          {
-          xmlhttp=new ActiveXObject('Microsoft.XMLHTTP');
-          }
-        xmlhttp.onreadystatechange=function()
-          {
-            if (xmlhttp.readyState==3 && xmlhttp.status==200)
-              {
-              document.getElementById('dumps').innerHTML="<span><img src='images/ajax.gif'/></span>";
-              }
-          if (xmlhttp.readyState==4 && xmlhttp.status==200)
-            {
-                $('ul.nav-tabs li.active').removeClass('active');
-                document.getElementsByName("moisture")[0].setAttribute("class","active");
-                var custom = {
-                    "title": "Moisture Values in last 24 hours",
-                    "id": "Moisture Chart",
-                    "yAxisName": "Moisture in %",
-                    "unit":" %"
-                  };   
-                 
-                renderChartBattery(xmlhttp.responseText, custom, 'moisture',devid);
-                jQuery("#modal-fullscreen").modal('show');
-                //document.getElementById("dump").innerHTML=xmlhttp.responseText;
-            }
-          }
-            xmlhttp.open('GET','displaygraph.php?type='+str+'&q='+devid,true);
-            xmlhttp.send();
-            }
-    </script>
 
 
 
