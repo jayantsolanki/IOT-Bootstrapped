@@ -345,7 +345,6 @@ include_once 'settings/iotdb.php';
 
                   }
             $scope.showChart=function(deviceId) {
-                    alert($('#datetimepicker3').val());
                     //alert(deviceId)
                     $scope.deviceId = deviceId;
                     $(".navigationIOT").fadeOut(100);
