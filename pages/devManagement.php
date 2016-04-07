@@ -57,7 +57,7 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-12">
-                        <h1 class="page-header text-info">Device Management</h1>
+                        <span class='pull-right'><button id="back" class="btn btn-primary glyphicon glyphicon-arrow-left" onclick="showMenu()" style="display:none;"></button><button id="fullscreen" class="btn btn-primary glyphicon glyphicon-resize-full" onclick="showDevice()" style="display:none;"></button></span><h1 class="page-header text-info">Device Management</h1>
                     </div>
                     <!-- /.col-lg-12 -->
                 </div>
@@ -293,7 +293,29 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
               function togglemap() {
                 $("#map").toggle(500);
               }
-          </script>
+              function showMenu(){
+                    //$("#chart").fadeOut(100);
+                    $("#back").fadeOut(100);
+                    $('#demo').attr('id','page-wrapper');
+                    //$("#dev").fadeIn(500);
+                    $("#fullscreen").fadeIn(500);
+                    $(".navigationIOT").fadeIn(500);
+
+                  }
+            function showDevice(){
+                    $(".navigationIOT").fadeOut(100);
+                   // $('#wrapper').addClass('col-md-12');
+                    $('#page-wrapper').attr('id','demo');
+                    //$('#page-wrapper').addClass('col-md-12');
+                    $("#fullscreen").fadeOut(100);
+                    //$("#dev").fadeOut(100); 
+                    //$("#chart").fadeIn(500);
+                    $("#back").fadeIn(500);
+                  }
+            $(function(){
+                showDevice();
+            });
+    </script>
     <script type='text/javascript'>
         /*
          *

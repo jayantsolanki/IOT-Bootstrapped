@@ -111,7 +111,7 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
                                     <?php
                                     echo "Hrs:<select class='form-control' id='starth' name='starth'>";
                                     $i=0; 
-                                    while($i<=24)
+                                    while($i<24)
                                     {
                                     echo "<option value='$i'>$i</option>";
                                     $i++;
@@ -119,7 +119,7 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
                                     echo "</select>";
                                     echo " Mins:<select class='form-control' id='startm' name='startm'>";
                                     $j=0; 
-                                    while($j<=60)
+                                    while($j<60)
                                     {
                                     echo "<option value='$j'>$j</option>";
                                     $j=$j+5;
@@ -131,7 +131,7 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
                                     <?php
                                     echo "Hrs:<select class='form-control' id='stoph' name='stoph'>";
                                     $i=0; 
-                                    while($i<=24)
+                                    while($i<24)
                                     {
                                     echo "<option value='$i'>$i</option>";
                                     $i++;
@@ -139,7 +139,7 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
                                     echo "</select>";
                                     echo " Mins:<select class='form-control' id='stopm' name='stopm'>";
                                     $j=0; 
-                                    while($j<=60)
+                                    while($j<60)
                                     {
                                     echo "<option value='$j'>$j</option>";
                                     $j=$j+5;
@@ -158,7 +158,7 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
                                     <?php
                                     echo "Hrs:<select class='form-control' id='dstarth' name='starth'>";
                                     $i=0; 
-                                    while($i<=24)
+                                    while($i<24)
                                     {
                                     echo "<option value='$i'>$i</option>";
                                     $i++;
@@ -166,7 +166,7 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
                                     echo "</select>";
                                     echo " Mins:<select class='form-control' id='dstartm' name='startm'>";
                                     $j=0; 
-                                    while($j<=60)
+                                    while($j<60)
                                     {
                                     echo "<option value='$j'>$j</option>";
                                     $j=$j+5;
@@ -179,7 +179,7 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
 
                                     echo "Mins:<select class='form-control' id='dduration' name='duration'>";
                                     $j=5; 
-                                    while($j<=60)
+                                    while($j<60)
                                     {
                                     echo "<option value='$j'>$j</option>";
                                     $j=$j+5;
@@ -196,7 +196,7 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
                                     <?php
                                     echo "Hrs:<select class='form-control' id='fstarth' name='starth'>";
                                     $i=0; 
-                                    while($i<=24)
+                                    while($i<24)
                                     {
                                     echo "<option value='$i'>$i</option>";
                                     $i++;
@@ -205,7 +205,7 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
                                     echo "<hr/><label class='text-warning'>Duration:&nbsp;</label>";
                                     echo "Mins:<select class='form-control' id='fduration' name='duration'>";
                                     $j=5; 
-                                    while($j<=60)
+                                    while($j<60)
                                     {
                                     echo "<option value='$j'>$j</option>";
                                     $j=$j+5;

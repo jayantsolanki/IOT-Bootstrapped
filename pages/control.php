@@ -29,9 +29,9 @@ if(isset($_GET['grp']))
 	//echo " <button id='0' type='button' onclick='updateall(this.value)' value='0'>Switch all OFF</button>";
 	echo "<label class=''>Duration:(mm)</label></br>";
 	echo "<div class='row'>";
-	echo "<div class='col-xs-5'>";
+	echo "<div class='col-md-6'>";
 	echo "Mins:<select class='form-control' id='duration' name='duration'>";
-	$j=1; 
+	$j=10; 
 	while($j<=60)
 	{
 	echo "<option value='$j'>$j</option>";
@@ -85,26 +85,26 @@ if(isset($_GET['grp']))
 			<tr>
 			<td>
 				<table class='table table-striped'>
-					<tr><td>#$i</td>
+					<tr><td>SwitchId#$switchId</td>
 						<td class='text-info'>$name</td>
 					</tr>
-					<tr>
+					<!--<tr>
 						<td>Type:</td>
 						<td class='text-info'>$switches switches $sname</td>
-					</tr>
+					</tr>-->
 					<tr>
 						<td>DeviceId</td>
 						<td class='text-info'>$macid</td>
 					</tr>
-					<tr>
+					<!--<tr>
 						<td>SwitchId</td>
 						<td class='text-info'>$switchId</td>
-					</tr>
+					</tr>-->
 				</table>
 			</td>";
 			
 			
-			echo "<td style='vertical-align: middle;'>
+			echo "<td >
 					<span class='".$macid."".$switchId."'>".$active."</span>
 					<button class='item btn btn-warning' id='".$macid."".$switchId."' type='button'  onclick=update('$macid','$switchId') value='$macid'>Switch ".$action."</button>
 					<br/>

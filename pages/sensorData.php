@@ -10,7 +10,7 @@ include_once 'settings/iotdb.php';
 
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="IOT-App">
 
 <head>
 
@@ -89,7 +89,7 @@ include_once 'settings/iotdb.php';
 
 </head>
 
-<body onload='showgrp(1)'>
+<body>
 
     <div id="wrapper">
 
@@ -98,14 +98,14 @@ include_once 'settings/iotdb.php';
 
         <!-- Page Content -->
         <div id="page-wrapper">
-            <div class="container-fluid">
+            <div class="container-fluid" ng-controller="devicesChart">
                 <div class="row">
                     <div class="col-lg-12">
                         <h1 class="page-header text-info">Sensors Data</h1>
                     </div>
                     <!-- /.col-lg-12 -->
                 </div>
-                <div class="row">
+                <div class="row" id="devCharts">
                     <div class=" col-md-12 content">
                         <label class="text text-info">Select group</label>
                         <div class="row">
@@ -126,49 +126,84 @@ include_once 'settings/iotdb.php';
                                         }
                                     }
                                 ?>
-                            </select>
+                            </select><span class="pull-right"><button id="back" class="btn btn-primary" ng-click="showDevice()" style="display:none;">Back</button></span></br></br>
+                            <strong>Group Selected <big class ="label label-primary">{{devices[0].groupName}}</big></strong><hr/>
                           </div>
                          </div>
                          <div class="row">
-                            <div class="col-md-4" id='controls'>
-                                    <cite>Select group and the device for the Chart</cite>
-                          </div>
+                            <div>
+                              <div class="row" ng-repeat="device in devices">
+                                  <div class="dev" class="col-md-5">
+                                     <blockquote>
+                                        <p><strong class="text text-info">Name:</strong> {{device.deviceName}}</p>
+                                        <p><strong class="text text-info">Device Id:</strong> {{device.deviceId}}</p>
+                                        <p><strong class="text text-info">Type:</strong> {{device.type}}</p>
+                                        <!-- <p><strong class="text text-info">Status:</strong> {{device.action}}</p> -->
+                                        <p>
+                                          <span ng-if="device.switchCount==1">
+                                            <button class="btn btn-default dev" ng-click="showGraph(1,device.deviceId,'battery')">Visualise</button>
+                                          </span>
+                                          <span ng-if="device.switchCount==0"><!-- for sensors data -->
+                                            <span ng-if="device.field1=='b'">
+                                              <button class="btn btn-default dev" ng-click="showGraph('b',device.deviceId,'battery')">Visualise</button>
+                                            </span>
+                                            <span ng-if="device.field1=='bm'">
+                                              <button class="btn btn-default dev" ng-click="showGraph('bm',device.deviceId,'battery')">Visualise</button>
+                                            </span>
+                                            <span ng-if="device.field1=='bthm'">
+                                              <button class="btn btn-default dev" ng-click="showGraph('bthm',device.deviceId,'battery')">Visualise</button>
+                                            </span>
+                                          </span>
+                                        </p>
+                                    </blockquote>
+                                  </div><!-- end inner div -->
+                                  <div class="chartMenu" ng-if="deviceId==device.deviceId">
 
-                            <!-- Modal fullscreen -->
-                            <div class="modal modal-fullscreen fade" id="modal-fullscreen" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                              
-                                  <div class="modal-dialog">
-                                    <div class="modal-content">
-                                      <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                                        <h4 class="modal-title text text-danger text-center" id="myModalLabel">For Device <span id="devId"><?php if($_SESSION["devId"]!=null) echo $_SESSION["devId"];?></span></h4>
-                                      </div>
-                                      <ul class="nav nav-tabs" role="tablist">
-                                        <li name='battery' role="presentation">
-                                        <a class="text text-danger" id="batval" href="javascript:showgraphBattery('<?php echo $_SESSION['devId'];?>')">Battery</a></li>
-                                        <li name="temperature" role="presentation">
-                                        <?php 
-                                          if($_SESSION['deviceType']==1)
-                                          echo "Secondary Battery";
-                                        ?>
-                                        <a class="text text-danger" href="javascript:showgraphTemp('temperature')">Temperature</a></li>
-                                        <li name='humidity' role="presentation">
-                                        <a  class="text text-danger"href="javascript:showgraphHumid('humidity')">Humidity</a></li>
-                                        <li  name='moisture' role="presentation">
-                                        <a  class="text text-danger"href="javascript:showgraphMoist('moisture')">Moisture</a></li>
-                                    </ul>
-                                      <div class="modal-body" id="dumps" style="height: 500px;  background-color: #222222;">
-                                       
-                                        ...
-                                      </div>
-                                      <div class="modal-footer">
-                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                      </div>
-                                    </div>
+                                          <span ng-if="device.switchCount==0"><!-- for sensors data -->
+                                            <span ng-if="device.field1=='b'">
+                                              <ul class="nav nav-tabs" role="tablist">
+                                                  <li name='battery' role="presentation"  ng-class="{active:isSelected(1)}">
+                                                  <a class="text text-danger" ng-click="showGraph('b',device.deviceId,'battery')">Battery</a></li>
+                                              </ul>
+                                            </span>
+                                            <span ng-if="device.field1=='bm'">
+                                               <ul class="nav nav-tabs" role="tablist">
+                                                  <li name='battery' role="presentation" ng-class="{active:isSelected(2)}">
+                                                  <a class="text text-danger" ng-click="showGraph('bm',device.deviceId,'battery')">Battery</a></li>
+                                                  <li name="Moisture" role="presentation" ng-class="{active:isSelected(3)}">
+                                                  <a class="text text-danger" ng-click="showGraph('bm',device.deviceId,'moist')">Moisture</a></li>
+                                              </ul>
+                                            </span>
+                                            <span ng-if="device.field1=='bthm'">
+                                               <ul class="nav nav-tabs" role="tablist">
+                                                  <li name='battery' role="presentation" ng-class="{active:isSelected(4)}">
+                                                  <a class="text text-danger" ng-click="showGraph('bthm',device.deviceId,'battery')">Battery</a></li>
+                                                  <li name="temperature" role="presentation" ng-class="{active:isSelected(5)}">
+                                                  <a class="text text-danger" ng-click="showGraph('bthm',device.deviceId,'temp')">Temperature</a></li>
+                                                  <li name='humidity' role="presentation" ng-class="{active:isSelected(6)}">
+                                                  <a class="text text-danger" ng-click="showGraph('bthm',device.deviceId,'humid')">Humidity</a></li>
+                                                  <li  name='moisture' role="presentation" ng-class="{active:isSelected(7)}">
+                                                  <a class="text text-danger" ng-click="showGraph('bthm',device.deviceId,'moist')">Moisture</a></li>
+                                              </ul>
+                                            </span>
+                                          </span>
+                                          <span ng-if="device.switchCount==1"><!-- for ESP data , single switch-->
+                                              <ul class="nav nav-tabs" role="tablist">
+                                                  <li name='Pbattery' role="presentation" ng-class="{active:isSelected(8)}">
+                                                  <a class="text text-danger" ng-click="showGraph('1',device.deviceId,'battery')">Primary Battery</a></li>
+                                                  <li name="Sbattery" role="presentation" ng-class="{active:isSelected(9)}">
+                                                  <a class="text text-danger" ng-click="showGraph('2',device.deviceId,'battery')">Secondary Battery</a></li>
+                                              </ul>
+                                          </span> 
+                                          <div class="pagination-center">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<big><span ng-if="device.deviceName!=''"><span class="text-info">Device Name:</span>{{device.deviceName}}</span> <span class="text-info">Device Id:</span>{{device.deviceId}}</big></div>
                                   </div>
-                                
-                            </div>
-                            
+                            </div><!-- loop ends here -->
+                              <div class='row' id="chartDisplay" style="display:none;">
+                                  <div class="col-md-10 col-md-offset-1" id="chart"  style="height:500px;">
+                                    Chart will be displayed here
+                                  </div>
+                              </div>
+                            </div>                           
                         </div>
 
                          </div>
@@ -188,6 +223,8 @@ include_once 'settings/iotdb.php';
         include_once "app.php";
         ?>
     </footer>
+    <!-- AngularJs -->
+    <script src="../bower_components/angular/angular.min.js"></script>
     <!-- jQuery -->
     <script src="../bower_components/jquery/dist/jquery.min.js"></script>
 
@@ -235,6 +272,262 @@ include_once 'settings/iotdb.php';
       });
     </script>
     <script>
+       var app = angular.module('IOT-App',[]);
+       app.controller('devicesChart', function($scope, $http) {
+            var devices=null;
+            var deviceId=null;
+            var dataPoints=null;
+            var groupId=null;
+            var custom=null;
+            var tab=null;
+           /* $http.get("dd.php")
+            .then(function(response) {
+                $scope.devices = response.data;                
+            });*/
+            $scope.devices = devices;
+            $scope.deviceId = deviceId;
+            $scope.tab=tab;
+            $scope.dataPoints=dataPoints;
+            $scope.custom=custom;
+            $scope.groupId = groupId;
+            $scope.groupId = 1;//default
+
+
+            $scope.selectGroup = function() {
+                $http.get("sensors.php?grp="+$scope.groupId)//calling dd.php for retrieving the data
+                .then(function(response) {
+                    $scope.devices = response.data;
+                    $("#chartDisplay").fadeOut(100);
+                    //alert(JSON.stringify($scope.devices));
+                });
+                
+            }
+            $scope.showDevice=function() {
+                    $($scope.device).fadeOut(100);
+                    $("#chartDisplay").fadeOut(100);
+                    $(".chartMenu").fadeOut(100);
+                    $("#back").fadeOut(100);
+                    $('#demo').attr('id','page-wrapper');
+                    $(".dev").fadeIn(500);
+                    $(".navigationIOT").fadeIn(500);
+
+                  }
+            $scope.showChart=function(deviceId) {
+                    //alert(deviceId)
+                    $scope.deviceId = deviceId;
+                    $(".navigationIOT").fadeOut(100);
+                    $(".dev").fadeOut(100);
+                    //$(".chartmenu").fadeOut(100);
+                   // $('#wrapper').addClass('col-md-12');
+                    $('#page-wrapper').attr('id','demo');
+                    //$('#page-wrapper').addClass('col-md-12');
+                    $(deviceId).fadeIn(500); 
+                    //$("#chart").fadeIn(500);
+                    $("#back").fadeIn(500);
+                    $(".chartMenu").fadeIn(500);
+                    $("#chartDisplay").slideDown("slow");
+                  }
+            $scope.isSelected = function (checkTab) {
+               return ($scope.tab === checkTab);
+            }
+            $scope.showGraph = function(deviceType, deviceId, feed) {//getting graph ofr a particular field
+              //alert(deviceType+' '+feed+' '+deviceId);
+               $http.get("displaygraph.php?deviceType="+deviceType+"&deviceId="+deviceId+"&feed="+feed)//calling dd.php for retrieving the data
+                .then(function(response) {
+                    $scope.dataPoints = response.data;
+                    if(deviceType!=1 && deviceType!=2){//for sensors
+                      if(feed=='moist'){
+                          if(deviceType=='bm')
+                            $scope.tab=3;
+                          if(deviceType=='bthm')
+                            $scope.tab=7;
+                          $scope.custom = {
+                            "title": "Moisture Values",
+                            "id": "Moisture Chart",
+                            "yAxisName": "Moisture in adc Value",
+                            "unit":"  "
+                          };
+                      }
+                      if(feed=='battery'){
+                          if(deviceType=='b')
+                            $scope.tab=1;
+                          if(deviceType=='bm')
+                            $scope.tab=2;
+                          if(deviceType=='bthm')
+                            $scope.tab=4;
+                          $scope.custom = {
+                            "title": "Battery Values",
+                            "id": "Battery Chart",
+                            "yAxisName": "Battery in adc Value",
+                            "unit":"  "
+                          };
+                      }
+                      if(feed=='temp'){
+                          if(deviceType=='bthm')
+                            $scope.tab=5;
+                          $scope.custom = {
+                            "title": "Temperature Values",
+                            "id": "Temperature Chart",
+                            "yAxisName": "Temperature in adc Value",
+                            "unit":" "
+                          };
+                      }
+                      if(feed=='humid'){
+                          if(deviceType=='bthm')
+                            $scope.tab=6;
+                          $scope.custom = {
+                            "title": "Humidity Values",
+                            "id": "Humidity Chart",
+                            "yAxisName": "Humidity in adc Value",
+                            "unit":" "
+                          };
+                      }
+                    }
+                    else{
+                      if(deviceType==1)
+                      {
+                        $scope.tab=8;
+                        $scope.custom = {
+                          "title": "Primary Battery Values",
+                          "id": "Primary Battery Chart",
+                          "yAxisName": "battery Values in adc",
+                          "unit":" "
+                        };
+                      }
+                      if(deviceType==2)
+                      {
+                        $scope.tab=9;
+                        $scope.custom = {
+                          "title": "Secondary Battery Values",
+                          "id": "Secondary Battery Chart",
+                          "yAxisName": "battery Values in adc",
+                          "unit":" "
+                        };
+                      }
+                    }
+
+
+                    $scope.makechart(deviceId, $scope.dataPoints, $scope.custom);
+                    $scope.showChart(deviceId);
+                    //alert(JSON.stringify($scope.dataPoints));
+                });
+                
+            }
+            $scope.makechart=function(deviceId, dataPoints, chartCustom){
+            //alert(JSON.stringify($scope.deviceActivities));
+              AmCharts.addInitHandler( function( chart ) {
+           
+             var dataPoint = chart.dataProvider[ chart.dataProvider.length - 1 ];
+             var graph = chart.graphs[0];
+             graph.bulletField = "bullet";
+             dataPoint.bullet = "round";
+
+               },[ "serial" ]);
+               //var chartData = JSON.parse(data); //return json object, converts json string into json objects
+                var chart = AmCharts.makeChart("chart",
+                  {
+                    "type": "serial",
+                    "addClassNames": true,
+                    //"classNamePrefix": "amcharts", // Default value
+                    "theme": "dark",
+                    "marginTop": 86,
+                    "marginRight": 40,
+                    "marginLeft": 86,
+                    "backgroundColor": "#525263",
+                    //"dataDateFormat":"YYYY-MM-DD JJ:NN:SS",
+                    "backgroundAlpha": 5,
+                    "autoMarginOffset": 20,
+                    "dataDateFormat": "YYYY-MM-DD-JJ-NN",
+                    "precision":0,
+                    "mouseWheelZoomEnabled": true,
+                    "valueAxes": [{
+                        "title":chartCustom.yAxisName,
+                        "unit": chartCustom.unit,
+                        "id": "v1",
+                        "axisAlpha": 0,
+                        "position": "left",
+                        "ignoreAxisWidth":true
+                    }],
+                    "balloon": {
+                        "borderThickness": 1,
+                        "shadowAlpha": 0
+                    },
+                    "graphs": [{
+                        "id": "g2",
+                        "title": chartCustom.title,
+                        //"type": "smoothedLine",
+                        "classNameField": "bulletClass",
+                        "balloon":{
+                          "drop":true,
+                          "adjustBorderColor":false,
+                          "color":"#ffffff"
+                        },
+                        //"bullet": "round",
+                        "bulletBorderColor": "#786c56",
+                        "bulletBorderAlpha": 1,
+                        "bulletBorderThickness": 2,
+                        "bulletColor": "#ff0000",
+                        "showBalloon": true,
+                        "animationPlayed": true,
+                        "lineThickness": 2,
+                        "title": "red line",
+                        "useLineColorForBulletBorder": true,
+                        "valueField": "value",
+                        "valueAxis": "v1",
+                        "balloonText": "<span style='font-size:18px;'>[[value]]"+chartCustom.unit+"</span>"
+                    }],
+                    "chartScrollbar": {
+                        "graph": "g2",
+                        "title": chartCustom.title,
+                        "oppositeAxis":false,
+                        "offset":30,
+                        "scrollbarHeight": 80,
+                        "backgroundAlpha": 0,
+                        "selectedBackgroundAlpha": 0.1,
+                        "selectedBackgroundColor": "#888888",
+                        "graphFillAlpha": 0,
+                        "graphLineAlpha": 0.5,
+                        "selectedGraphFillAlpha": 0,
+                        "selectedGraphLineAlpha": 1,
+                        "autoGridCount":true,
+                        "color":"#AAAAAA"
+                    },
+                    "chartCursor": {
+                        "pan": true,
+                        "valueLineEnabled": true,
+                        "valueLineBalloonEnabled": true,
+                        "cursorAlpha":1,
+                        "cursorColor":"#258cbb",
+                        "categoryBalloonDateFormat":"JJ:NN, DD MMM",
+                        "limitToGraph":"g1",
+                        "valueLineAlpha":0.2
+                    },
+                    "valueScrollbar":{
+                      "oppositeAxis":true,
+                      "scrollbarHeight":10
+                    },
+                    "categoryField": "label",
+                    "categoryAxis": {
+                        "title":chartCustom.id,
+                        "parseDates": true,
+                        "equalSpacing" : true,
+                        "minPeriod":"mm",
+                        "periodValue": "Average",
+                        "dashLength": 1,
+                        "minorGridEnabled": true
+                    },
+                    "export": {
+                        "enabled": true
+                    },
+                    "dataProvider": dataPoints
+                  }
+                );//var chart ends here
+  
+           }
+            $scope.selectGroup();//calling first group initially
+        });
+    </script>
+    <script>
         $('.mobileSelect').mobileSelect({
         title: 'Select a Group',
             buttonSave: 'Done',
@@ -252,8 +545,11 @@ include_once 'settings/iotdb.php';
             onOpen: function () {
             },
             onClose: function () {
-                if($('.mobileSelect').val()!=null)
-                     showgrp($('.mobileSelect').val());
+                if($('.mobileSelect').val()!=null){
+                     //showgrp($('.mobileSelect').val());
+                      angular.element(document.getElementById('devCharts')).scope().groupId=$('.mobileSelect').val();
+                      angular.element(document.getElementById('devCharts')).scope().selectGroup();
+                   }
             },
             style: 'btn-info'
         });
@@ -269,112 +565,10 @@ include_once 'settings/iotdb.php';
          * Example Call: showgrp(34)
          *
          */
-        function renderChartBattery(data, custom, type, devId)
+        function renderChartBattery(id, data, custom, type, devId)
         {         
          //alert(data);
-         AmCharts.addInitHandler( function( chart ) {
-           
-             var dataPoint = chart.dataProvider[ chart.dataProvider.length - 1 ];
-             var graph = chart.graphs[0];
-              graph.bulletField = "bullet";
-              dataPoint.bullet = "round";
-
-         },[ "serial" ]);
-         var chartData = JSON.parse(data); //return json object, converts json string into json objects
-          var chart = AmCharts.makeChart("dumps",
-        {
-          "type": "serial",
-          "addClassNames": true,
-          //"classNamePrefix": "amcharts", // Default value
-          "theme": "dark",
-          "marginTop": 86,
-          "marginRight": 40,
-          "marginLeft": 86,
-          "autoMarginOffset": 20,
-          "dataDateFormat": "YYYY-MM-DD-JJ-NN",
-          "precision":0,
-          "mouseWheelZoomEnabled": true,
-          "valueAxes": [{
-              "title":custom.yAxisName,
-              "unit": custom.unit,
-              "id": "v1",
-              "axisAlpha": 0,
-              "position": "left",
-              "ignoreAxisWidth":true
-          }],
-          "balloon": {
-              "borderThickness": 1,
-              "shadowAlpha": 0
-          },
-          "graphs": [{
-              "id": "g2",
-              "title": custom.title,
-              //"type": "smoothedLine",
-              "classNameField": "bulletClass",
-              "balloon":{
-                "drop":true,
-                "adjustBorderColor":false,
-                "color":"#ffffff"
-              },
-              //"bullet": "round",
-              "bulletBorderColor": "#786c56",
-              "bulletBorderAlpha": 1,
-              "bulletBorderThickness": 2,
-              "bulletColor": "#ff0000",
-              "showBalloon": true,
-              "animationPlayed": true,
-              "lineThickness": 2,
-              "title": "red line",
-              "useLineColorForBulletBorder": true,
-              "valueField": "value",
-              "valueAxis": "v1",
-              "balloonText": "<span style='font-size:18px;'>[[value]]"+custom.unit+"</span>"
-          }],
-          "chartScrollbar": {
-              "graph": "g2",
-              "oppositeAxis":false,
-              "offset":30,
-              "scrollbarHeight": 80,
-              "backgroundAlpha": 0,
-              "selectedBackgroundAlpha": 0.1,
-              "selectedBackgroundColor": "#888888",
-              "graphFillAlpha": 0,
-              "graphLineAlpha": 0.5,
-              "selectedGraphFillAlpha": 0,
-              "selectedGraphLineAlpha": 1,
-              "autoGridCount":true,
-              "color":"#AAAAAA"
-          },
-          "chartCursor": {
-              "pan": true,
-              "valueLineEnabled": true,
-              "valueLineBalloonEnabled": true,
-              "cursorAlpha":1,
-              "cursorColor":"#258cbb",
-              "categoryBalloonDateFormat":"JJ:NN, DD MMM",
-              "limitToGraph":"g1",
-              "valueLineAlpha":0.2
-          },
-          "valueScrollbar":{
-            "oppositeAxis":true,
-            "scrollbarHeight":10
-          },
-          "categoryField": "label",
-          "categoryAxis": {
-              "title":custom.id,
-              "parseDates": true,
-              "equalSpacing" : true,
-              "minPeriod":"mm",
-              "periodValue": "Average",
-              "dashLength": 1,
-              "minorGridEnabled": true
-          },
-          "export": {
-              "enabled": true
-          },
-          "dataProvider": chartData
-        }
-      );
+         
       chart.addListener("rendered", zoomChart);
       zoomChart();
       function zoomChart() {
@@ -455,8 +649,6 @@ include_once 'settings/iotdb.php';
     }
     </script>
     <style type="text/css">
-       
-
       .lastBullet{
         -webkit-animation: am-pulsating 1s ease-out infinite;
         animation: am-pulsating 1s ease-out infinite;
@@ -482,75 +674,6 @@ include_once 'settings/iotdb.php';
         }
       }
     </style>
-    <script type='text/javascript'>
-        /*
-         *
-         * Function Name: showgrp(grp)
-         * Input: grp, stores group id
-         * Output: returns the sensors under the group id
-         * Logic: It is a AJAX call
-         * Example Call: showgrp(34)
-         *
-         */
-        function showgrp(grp)
-        {
-            
-        if (grp=='')
-          {
-          document.getElementById('controls').innerHTML='';
-          return;
-          } 
-        if (window.XMLHttpRequest)
-          {
-          xmlhttp=new XMLHttpRequest();
-          }
-        else
-          {
-          xmlhttp=new ActiveXObject('Microsoft.XMLHTTP');
-          }
-        xmlhttp.onreadystatechange=function()
-          {
-            if (xmlhttp.readyState==3 && xmlhttp.status==200)
-              {
-              document.getElementById('controls').innerHTML="<span><img src='images/ajax.gif'/></span>";
-              }
-          if (xmlhttp.readyState==4 && xmlhttp.status==200)
-            {
-            document.getElementById('controls').innerHTML=xmlhttp.responseText;
-            //code for select ui
-                $('.mobileSelect-2').mobileSelect({
-                    title: 'Select a Feed',
-                        buttonSave: 'Done',
-                        buttonClear: 'Clear',
-                        buttonCancel: 'Cancel',
-                        padding: {
-                            'top': '20%',
-                            'left': '20%',
-                            'right': '20%',
-                            'bottom': '20%'
-                        },
-                        animation: 'scale',
-                        animationSpeed: 400,
-                        theme: 'white',
-                        onOpen: function () {
-                        },
-                        onClose: function () {
-                            //alert($('.mobileSelect-2').val())
-                            //showgrp($('.mobileSelect').val());
-                        },
-                        style: 'btn-primary'
-                    });
-                $('.mobileSelect-2').mobileSelect();
-                
-                
-                  
-            }
-          }
-        xmlhttp.open('GET','sensors.php?grp='+grp,true);
-        //alert(grp);
-        xmlhttp.send();
-        }
-    </script>
     <script type='text/javascript'>
         /*
          *

@@ -68,11 +68,11 @@ if(isset($_GET['grp']))
 		if($repeath==NULL) // for setting period
 			if($start==$stop) //start time cannot be equal to stop time
 			{
-				echo"<span class='alert alert-danger'>Start time and stop time cannot be same</span><br/>";	
+				echo"</br></br><span class='alert alert-danger'>Start time and stop time cannot be same</span><br/>";	
 			}
 			elseif($start>=$stop) //start cannot be greater than stop time
 			{
-				echo"<span class='alert alert-danger'>Start time cannot be greater than stop time </span><br/>";	
+				echo"</br></br><span class='alert alert-danger'>Start time cannot be greater than stop time </span><br/>";	
 			}
 			else
 			{

@@ -570,7 +570,7 @@ if($deviceSetting!=null){
                               </div>";
 }
 
-if($deviceData!=null){
+if($deviceData!=null){//for device updating
 	$deviceId=$_POST['deviceId'];
 	$name=$_POST['name'];
 	$regionId=$_POST['regionId'];
