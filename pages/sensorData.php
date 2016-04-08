@@ -156,10 +156,10 @@ include_once 'settings/iotdb.php';
                             <strong>Group Selected <big class ="label label-primary">{{devices[0].groupName}}</big></strong><hr/>
                           </div>
                          </div>
-                         <div class="row">
+                         <div class="col-md-12">
                             <div>
-                              <div class="row" ng-repeat="device in devices">
-                                  <div class="dev" class="col-md-5">
+                              <div class="row" ng-repeat="device in devices" style="display:inline-block;">
+                                  <div class="dev col-md-12" >
                                      <blockquote>
                                         <p><strong class="text text-info">Name:</strong> {{device.deviceName}}</p>
                                         <p><strong class="text text-info">Device Id:</strong> {{device.deviceId}}</p>
@@ -221,7 +221,7 @@ include_once 'settings/iotdb.php';
                                                   <a class="text text-danger" ng-click="showGraph('2',device.deviceId,'battery')">Secondary Battery</a></li>
                                               </ul>
                                           </span> 
-                                          <div class="pagination-center">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<big><span ng-if="device.deviceName!=''"><span class="text-info">Device Name:</span>{{device.deviceName}}</span> <span class="text-info">Device Id:</span>{{device.deviceId}}</big></div>
+                                          <div class="pagination-center"><big><span ng-if="device.deviceName!=''"><span class="text-info">Device Name:</span>{{device.deviceName}}</span> <span class="text-info">Device Id:</span>{{device.deviceId}}</big></div>
                                   </div>
                             </div><!-- loop ends here -->
                               <div class='row' id="chartDisplay" style="display:none;">
