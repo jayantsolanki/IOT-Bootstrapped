@@ -7,16 +7,26 @@
   $rows=mysql_fetch_assoc($grps);
   $gname=$rows['name'];
   //echo "<h4>Valves grouped under <label class='badge'>".$gname."</label></h4>";
-  $query="SELECT * FROM devices WHERE devices.status=2";
+  $query="SELECT * FROM devices WHERE devices.status=1";//new dev
   $results=mysql_query($query);
   $newdev=0;
   if(mysql_num_rows($results)>0)
     $newdev=mysql_num_rows($results);
+$query="SELECT * FROM switches WHERE switches.newSwitch=1";//new switches
+  $results=mysql_query($query);
+  $newSwitch=0;
+  if(mysql_num_rows($results)>0)
+    $newSwitch=mysql_num_rows($results);
   $query="SELECT * FROM tasks ";    
   $results=mysql_query($query);
   $task=0;
   if(mysql_num_rows($results)>0)
     $task=mysql_num_rows($results);
+ $query="SELECT * FROM tasks where active=2 ";    
+  $results=mysql_query($query);
+  $newtask=0;
+  if(mysql_num_rows($results)>0)
+    $newtask=mysql_num_rows($newtask);
 
     $query="SELECT * FROM tasks where type=0";    
       $results=mysql_query($query);
@@ -24,12 +34,23 @@
       if(mysql_num_rows($results)>0)
         $mantask=mysql_num_rows($results);
 
-     $query="SELECT * FROM devices where status=1";    
+    $query="SELECT * FROM tasks where active=1";    
       $results=mysql_query($query);
-      $online=0;//manually started
+      $runtask=0;//manually started
+      if(mysql_num_rows($results)>0)
+        $runtask=mysql_num_rows($results);
+     $query="SELECT * FROM tasks where active=2";    
+      $results=mysql_query($query);
+      $newtask=0;//manually started
+      if(mysql_num_rows($results)>0)
+        $newtask=mysql_num_rows($results);
+
+     $query="SELECT deviceStatus.status from deviceStatus where id in (Select MAX(id) as cid from deviceStatus where deviceId in (Select deviceId from devices) group by deviceId) and deviceStatus.status=1";    
+      $results=mysql_query($query);
+      $online=0;//
       if(mysql_num_rows($results)>0)
         $online=mysql_num_rows($results);
-    $query="SELECT * FROM devices where status=0";    
+    $query="SELECT deviceStatus.status from deviceStatus where id in (Select MAX(id) as cid from deviceStatus where deviceId in (Select deviceId from devices) group by deviceId) and deviceStatus.status=0";    
       $results=mysql_query($query);
       $offline=0;//manually started
       if(mysql_num_rows($results)>0)
@@ -93,7 +114,7 @@
             </div>
             <!-- /.row -->
             <div class="row">
-                <div class="col-lg-4 col-md-6">
+                <div class="col-lg-4 col-md-4">
                     <div class="panel panel-primary">
                         <div class="panel-heading">
                             <div class="row">
@@ -108,14 +129,15 @@
                         </div>
                         <a href="deviceStatus.php">
                             <div class="panel-footer">
-                                <span class="pull-left">View Details</span>
-                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                <span class="pull-left"><?php echo ($online+$offline)?> Devices</span>
+                                <span class="pull-right">View Details <i class="fa fa-arrow-circle-right"></i></span>
+                                <span class="pull-right"></span>
                                 <div class="clearfix"></div>
                             </div>
                         </a>
                     </div>
                 </div>
-                <div class="col-lg-4 col-md-6">
+                <div class="col-lg-4 col-md-4">
                     <div class="panel panel-green">
                         <div class="panel-heading">
                             <div class="row">
@@ -130,14 +152,14 @@
                         </div>
                         <a href="schedule.php">
                             <div class="panel-footer">
-                                <span class="pull-left">View Details</span>
-                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                <span class="pull-right">View Details <i class="fa fa-arrow-circle-right"></i></span>
+                                <span class="pull-right"></span>
                                 <div class="clearfix"></div>
                             </div>
                         </a>
                     </div>
                 </div>
-                <div class="col-lg-4 col-md-6">
+                <div class="col-lg-4 col-md-4">
                     <div class="panel panel-red">
                         <div class="panel-heading">
                             <div class="row">
@@ -152,8 +174,8 @@
                         </div>
                         <a href="#">
                             <div class="panel-footer">
-                                <span class="pull-left">View Details</span>
-                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                <span class="pull-right">View Details <i class="fa fa-arrow-circle-right"></i></span>
+                                <span class="pull-right"></span>
                                 <div class="clearfix"></div>
                             </div>
                         </a>
@@ -171,7 +193,8 @@
                     <!-- /.panel -->
                 </div>
                 <!-- /.col-lg-8 -->
-                <div class="col-lg-4">
+                <!-- <div class="col-lg-4"> -->
+                <div class="col-lg-4 col-md-4 col-md-offset-8">
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <i class="fa fa-bell fa-fw"></i> Notifications Panel
@@ -189,6 +212,20 @@
                                     <span class="pull-right text-muted small"><em></em>
                                     </span>
                                 </a>
+                                <?php if($runtask!=0) {?>
+                                <a href="schedule.php" class="list-group-item">
+                                    <i class="fa fa-refresh fa-spin"></i>&nbsp;&nbsp;&nbsp;<?php echo $runtask;?> <span class="text text-info"></span>tasks running
+                                    <span class="pull-right text-muted small"><em></em>
+                                    </span>
+                                </a>
+                                <?php }?>
+                                <?php if($newtask!=0) {?>
+                                <a href="schedule.php" class="list-group-item">
+                                    <i class="fa fa-envelope fa-fw"></i> <?php echo $newtask;?> <span class="text text-info"> new </span>Scheduled task
+                                    <span class="pull-right text-muted small"><em></em>
+                                    </span>
+                                </a>
+                                <?php }?>
                                 <a href="schedule.php" class="list-group-item">
                                     <i class="fa fa-envelope fa-fw"></i> <?php echo $mantask;?> manually started tasks
                                     <span class="pull-right text-muted small"><em></em>
