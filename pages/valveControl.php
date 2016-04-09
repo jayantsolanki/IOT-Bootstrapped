@@ -139,7 +139,7 @@ include_once 'settings/iotdb.php';
       var ws=null;
       $(function() { //websocket
           //var wscon=null;
-          ws = new WebSocket("ws://10.129.28.118:8180");//changer later for production release
+          ws = new WebSocket("ws://10.129.28.181:8180");//changer later for production release
           ws.onopen = function(e) {
             console.log('Connection to server opened');
           }
@@ -159,9 +159,9 @@ include_once 'settings/iotdb.php';
               document.getElementById(response.deviceId+response.switchId).innerHTML='Switch ON';
             }
             if(response.status==0)
-              document.getElementsByClassName(response.deviceId)[0].innerHTML="<span class='label label-danger'>OFFLINE</span>";
+              $("."+response.deviceId).val("<span class='label label-danger'>OFFLINE</span>");
             else if(response.status==1)
-              document.getElementsByClassName(response.deviceId)[0].innerHTML="<span class='label label-success'>ONLINE</span>";
+              $("."+response.deviceId).val("<span class='label label-success'>ONLINE</span>");
             
                    
           }

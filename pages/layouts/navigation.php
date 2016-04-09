@@ -7,6 +7,7 @@
                     <span class='icon-bar'></span>
                 </button>
                 <a class='navbar-brand' href='index.php'>Greenhouse-IOT</a>
+
             </div>
             <!-- /.navbar-header -->
 
@@ -188,6 +189,10 @@
                             </span>
                             </div>
                         </li> -->
+
+                        <li>
+                            <a href='index.php'><img src='images/kyantralogo.png' style="width:200px;height:100px"/></a>
+                        </li>
                         <li>
                             <a href='index.php'><i class='fa fa-dashboard fa-fw'></i> Dashboard</a>
                         </li>
@@ -208,6 +213,9 @@
                         </li>
                         <li>
                             <a href='config.php'><i class='fa fa-wrench fa-fw'></i> Configuration</a>
+                        </li>
+                        <li>
+                            <a href='http://www.iitb.ac.in/'><img src='images/iitlogo.png' style="width:150px;height:150px"/></a>
                         </li>
                     </ul>
                 </div>

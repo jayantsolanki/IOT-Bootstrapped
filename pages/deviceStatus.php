@@ -111,9 +111,9 @@ error_reporting(-1); //for suppressing errors and notices
                                         <p><strong class="text text-info">Device Id:</strong> {{device.deviceId}}</p>
                                         <!-- <p><strong class="text text-info">Status:</strong> {{device.action}}</p> -->
                                         <p>
-                                          <strong class="text text-info">Battery Level:</strong>
-                                          <blockquote>
-                                            <span ng-if="device.typeId==1" class='text-success'>Primary: <strong>{{device.PbatValue/1024 | number : 3}} Volts </strong></span>
+                                          <strong ng-if="device.switchCount<2" class="text text-info">Battery Level:</strong>
+                                          <blockquote ng-if="device.switchCount<2" >
+                                            <span ng-if="device.switchCount==1" class='text-success'>Primary: <strong>{{device.PbatValue/1024 | number : 3}} Volts </strong></span>
                                             <span ng-if="device.typeId==2" class='text-success'>Primary: <strong>{{device.PbatValue/4096*4 | number : 3}} Volts </strong><!-- for the sensor --></span>
                                             <span class='text-danger' ng-if="device.switchCount==1"><br>Secondary:<strong>{{device.SbatValue/137.1428571428571 | number : 3}} Volts </strong></span><br>
                                             <small class="text-muted">Last updated {{device.batTime}}</small>

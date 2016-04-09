@@ -178,7 +178,7 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
                                     <?php
 
                                     echo "Mins:<select class='form-control' id='dduration' name='duration'>";
-                                    $j=5; 
+                                    $j=10; 
                                     while($j<60)
                                     {
                                     echo "<option value='$j'>$j</option>";
