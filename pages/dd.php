@@ -158,6 +158,8 @@ function display($grp)
 			$batresult=mysql_query($batquery);
 			$batfetch=mysql_fetch_assoc($batresult);
 			$Pbatvalue=$batfetch['field2'];
+			if($sense==2)
+				$Pbatvalue=$batfetch['field3'];
 			$Sbatvalue=$batfetch['field3'];
 			//$devType=$batfetch['device_type'];
 			$batTime=$batfetch['created_at'];
