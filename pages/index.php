@@ -108,7 +108,7 @@ $query="SELECT * FROM switches WHERE switches.newSwitch=1";//new switches
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">Dashboard--Greenhouse-IOT</h1>
+                    <h1 class="page-header">Dashboard</h1>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
@@ -221,7 +221,7 @@ $query="SELECT * FROM switches WHERE switches.newSwitch=1";//new switches
                                 <?php }?>
                                 <?php if($newtask!=0) {?>
                                 <a href="schedule.php" class="list-group-item">
-                                    <i class="fa fa-envelope fa-fw"></i> <?php echo $newtask;?> <span class="text text-info"> new </span>Scheduled task
+                                    <i class="fa fa-envelope fa-fw"></i> <?php echo $newtask;?> <span class="text text-info"> new </span>Scheduled tasks
                                     <span class="pull-right text-muted small"><em></em>
                                     </span>
                                 </a>
