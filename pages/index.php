@@ -39,6 +39,16 @@ $query="SELECT * FROM switches WHERE switches.newSwitch=1";//new switches
       if(mysql_num_rows($results)>0)
         $newtask=mysql_num_rows($results);
 
+     /*$statusquery="SELECT deviceStatus.status from deviceStatus where id in (Select MAX(id) as cid from deviceStatus where deviceId in (Select deviceId from devices) group by deviceId) and deviceStatus.status=1";    
+      $results=mysql_query($statusquery);
+      $online=0;//
+      if(mysql_num_rows($results)>0)
+        $online=mysql_num_rows($results);
+    $statusquery="SELECT deviceStatus.status from deviceStatus where id in (Select MAX(id) as cid from deviceStatus where deviceId in (Select deviceId from devices) group by deviceId) and deviceStatus.status=0";    
+      $results=mysql_query($statusquery);
+      $offline=0;//manually started
+      if(mysql_num_rows($results)>0)
+        $offline=mysql_num_rows($results);*/
 
 
     ?>
