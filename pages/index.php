@@ -1,4 +1,63 @@
+<?php
+    include_once 'settings/iotdb.php';
+/*
+    mysql_select_db($dbname) or die(mysql_error());
+  $query="SELECT name FROM groups WHERE id='$grp'";
+  $grps=mysql_query($query);
+  $rows=mysql_fetch_assoc($grps);
+  $gname=$rows['name'];*/
+  //echo "<h4>Valves grouped under <label class='badge'>".$gname."</label></h4>";
+  $query="SELECT * FROM devices WHERE devices.status=1";//new dev
+  $results=mysql_query($query);
+  $newdev=0;
+  if(mysql_num_rows($results)>0)
+    $newdev=mysql_num_rows($results);
+$query="SELECT * FROM switches WHERE switches.newSwitch=1";//new switches
+  $results=mysql_query($query);
+  $newSwitch=0;
+  if(mysql_num_rows($results)>0)
+    $newSwitch=mysql_num_rows($results);
+  $query="SELECT * FROM tasks ";    
+  $results=mysql_query($query);
+  $task=0;
+  if(mysql_num_rows($results)>0)
+    $task=mysql_num_rows($results);
+ $query="SELECT * FROM tasks where active=2 ";    
+  $results=mysql_query($query);
+  $newtask=0;
+  if(mysql_num_rows($results)>0)
+    $newtask=mysql_num_rows($newtask);
 
+    $query="SELECT * FROM tasks where type=0";    
+      $results=mysql_query($query);
+      $mantask=0;//manually started
+      if(mysql_num_rows($results)>0)
+        $mantask=mysql_num_rows($results);
+
+    $query="SELECT * FROM tasks where active=1";    
+      $results=mysql_query($query);
+      $runtask=0;//manually started
+      if(mysql_num_rows($results)>0)
+        $runtask=mysql_num_rows($results);
+     $query="SELECT * FROM tasks where active=2";    
+      $results=mysql_query($query);
+      $newtask=0;//manually started
+      if(mysql_num_rows($results)>0)
+        $newtask=mysql_num_rows($results);
+
+     $query="SELECT deviceStatus.status from deviceStatus where id in (Select MAX(id) as cid from deviceStatus where deviceId in (Select deviceId from devices) group by deviceId) and deviceStatus.status=1";    
+      $results=mysql_query($query);
+      $online=0;//
+      if(mysql_num_rows($results)>0)
+        $online=mysql_num_rows($results);
+    $query="SELECT deviceStatus.status from deviceStatus where id in (Select MAX(id) as cid from deviceStatus where deviceId in (Select deviceId from devices) group by deviceId) and deviceStatus.status=0";    
+      $results=mysql_query($query);
+      $offline=0;//manually started
+      if(mysql_num_rows($results)>0)
+        $offline=mysql_num_rows($results);
+
+
+    ?>
 <!DOCTYPE html>
 <html lang="en">
 
