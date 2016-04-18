@@ -188,7 +188,7 @@ error_reporting(-1); //for suppressing errors and notices
       //var ws=null;
       function checkbattery() { //websocket
           //var wscon=null;
-            var ws = new WebSocket("ws://10.129.28.118:8180");//changer later for production release;
+            var ws = new WebSocket("ws://10.129.139.139:8180");//changer later for production release;
             
           
           ws.onopen = function(e) {
