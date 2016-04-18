@@ -1,11 +1,5 @@
 <?php
     include_once 'settings/iotdb.php';
-/*
-    mysql_select_db($dbname) or die(mysql_error());
-  $query="SELECT name FROM groups WHERE id='$grp'";
-  $grps=mysql_query($query);
-  $rows=mysql_fetch_assoc($grps);
-  $gname=$rows['name'];*/
   //echo "<h4>Valves grouped under <label class='badge'>".$gname."</label></h4>";
   $query="SELECT * FROM devices WHERE devices.status=1";//new dev
   $results=mysql_query($query);
