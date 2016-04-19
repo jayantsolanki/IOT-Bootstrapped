@@ -89,7 +89,7 @@ error_reporting(-1); //for suppressing errors and notices
                                   }
                               }
                           ?>
-                          </select>&nbsp; &nbsp; <span id='battery'><button id='batterycheck' class='btn btn-success' onclick="checkbattery()">Check Battery</button></span><span class="pull-right"><button id="activity" class="btn btn-primary" ng-click="showChart()">Connection Activity</button>&nbsp;<button id="back" class="btn btn-primary" ng-click="showDevice()" style="display:none;">Back</button></span></br></br>
+                          </select>&nbsp; &nbsp; <span id='battery'><button id='batterycheck' class='btn btn-success' ng-click="checkbattery()">{{batbtn}}</button></span><span class="pull-right"><button id="activity" class="btn btn-primary" ng-click="showChart()">Connection Activity</button>&nbsp;<button id="back" class="btn btn-primary" ng-click="showDevice()" style="display:none;">Back</button></span></br></br>
                           <strong>Group Selected <big class ="label label-primary">{{devices[0].groupName}}</big></strong><hr/>
                           <div id='dev'>
                               <div class="row" ng-repeat="device in devices">
@@ -167,6 +167,7 @@ error_reporting(-1); //for suppressing errors and notices
     </footer>
     <!-- AngularJs -->
     <script src="../bower_components/angular/angular.min.js"></script>
+    <script src="../bower_components/ng-websocket/ng-websocket.js"></script>
     <!-- jQuery -->
     <script src="../bower_components/jquery/dist/jquery.min.js"></script>
 
@@ -183,54 +184,17 @@ error_reporting(-1); //for suppressing errors and notices
      <script src="../bower_components/amcharts3/amcharts/serial.js"></script>
      <script src="../bower_components/amcharts3/amcharts/themes/dark.js"></script>
      <script src="../bower_components/amcharts3/amcharts/gantt.js"></script>
-    
+ 
      <script>
-      //var ws=null;
-      function checkbattery() { //websocket
-          //var wscon=null;
-            var ws = new WebSocket("ws://10.129.139.139:8180");//changer later for production release;
-            
-          
-          ws.onopen = function(e) {
-            console.log('Connection to server opened');
-            if(ws!=null){//sending data via websocket
-          //if(ws.readyState == 1) {
-              var jsonS={
-                   "check":'battery',
-                   "device":0,//0 for all device
-                   "payload":2
-                   };
-                ws.send(JSON.stringify(jsonS));
-                console.log('Battery request sent');
-                document.getElementById('battery').innerHTML="<big><span class='label label-info'>Battery Status requested</span></big>";
-               // var valElem = $('#sss');
-                //valElem.html(JSON.stringify(jsonS));
-
-           // }
-          }
-          }
-              //var valElem = $('#sss');
-          
-          ws.onclose = function(e) {
-            console.log("Connection closed");
-          }
-          ws.onerror = function(e) {
-            console.log("Connection error");
-            document.getElementById('battery').innerHTML="<big><span class='label label-danger'> Mosca Server Offline</span></big>";
-          }
-          function disconnect() {
-            ws.close();
-          }
-      }
-    </script>
-     <script>
-        var app = angular.module('IOT-App',[]);
-       app.controller('devicesStatus', function($scope, $http) {
+        var app = angular.module('IOT-App',['ngWebsocket']);
+       app.controller('devicesStatus', function($scope, $http, $websocket) {
             var devices=null;
             var switches=null;
             var groupId=null;
             var columnWidth=0.5;
             var deviceActivities=null;
+            var ws=null;
+            var batbtn="Check Battery";
            /* $http.get("dd.php")
             .then(function(response) {
                 $scope.devices = response.data;                
@@ -240,6 +204,42 @@ error_reporting(-1); //for suppressing errors and notices
             $scope.deviceActivities = deviceActivities;
             $scope.groupId = groupId;
             $scope.groupId = 1;//default
+            $scope.batbtn=batbtn;
+            $scope.ws=ws;
+            $scope.wsConnect = function() {//establishing the websocket connection with the server
+                $scope.ws=$websocket.$new('ws://10.129.139.139:8180');
+                $scope.ws.$on('$open', function () {
+                 console.log('Connection to server opened');
+                });
+                $scope.ws.$on('$close', function () {
+                 console.log('Connection to server closed');
+                });
+                $scope.ws.$on('$error', function () {
+                 console.log('Error connecting to the server');
+                });
+                /*$scope.ws.$on('$pong', function () {
+                 console.log('Battery request sent');
+                 document.getElementById('battery').innerHTML="<big><span class='label label-info'>Battery Status requested</span></big>";  
+                });*/
+
+            }
+
+            $scope.checkbattery = function() { //checking battrey status for the devices
+              //alert(3);
+                if($scope.ws.$ready()){
+                  var jsonS={
+                   "check":'battery',
+                   "device":0,//0 for all device
+                   "payload":2
+                   };
+                  //$scope.ws.send(JSON.stringify(jsonS));
+                  //var data=JSON.stringify(jsonS);
+                  //alert(jsonS);
+                  $scope.ws.$emit('battery',jsonS);//custom event
+                  document.getElementById('battery').innerHTML="<big><span class='label label-info'>Battery Status requested</span></big>";
+                  
+                }      
+            }
 
             $scope.selectGroup = function() {
                 $http.get("dd.php?grp="+$scope.groupId)//calling dd.php for retrieving the data
@@ -369,6 +369,7 @@ error_reporting(-1); //for suppressing errors and notices
             } );
   
            }
+            $scope.wsConnect();//initialzing the websocket connection
             $scope.selectGroup();//calling first group initially
         });
     </script>
