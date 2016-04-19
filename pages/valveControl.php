@@ -158,10 +158,22 @@ include_once 'settings/iotdb.php';
               document.getElementsByClassName(response.deviceId+response.switchId)[0].innerHTML="<span data-toggle='tooltip' title='Switch currently stopped' class='text text-danger glyphicon glyphicon-ban-circle'></span>";
               document.getElementById(response.deviceId+response.switchId).innerHTML='Switch ON';
             }
-            if(response.status==0)
-              $("."+response.deviceId).val("<span class='label label-danger'>OFFLINE</span>");
-            else if(response.status==1)
-              $("."+response.deviceId).val("<span class='label label-success'>ONLINE</span>");
+            if(response.status==0){
+              var resp=document.getElementsByClassName(response.deviceId);
+              var i=0;
+              while (resp.length) {
+                resp[i].innerHTML = "<span class='label label-danger'>OFFLINE</span>";
+                i++;
+              }
+            }
+            else if(response.status==1){
+              var resp=document.getElementsByClassName(response.deviceId);
+              var i=0;
+              while (resp.length) {
+                resp[i].innerHTML = "<span class='label label-success'>ONLINE</span>";
+                i++;
+              }
+            }
             
                    
           }
@@ -172,7 +184,16 @@ include_once 'settings/iotdb.php';
           ws.onclose = function(e) {
             console.log("Connection closed");
           }
-
+          setInterval(function () {
+            console.log('checking connection');
+              if (ws.readyState != 1) {
+                  document.getElementById('server').innerHTML="<span class='label label-warning'>No connection to MQTT server, retrying to connect, if problem persists, contact Jay</span>";
+                  ws = new WebSocket("ws://10.129.139.139:8180");
+              }
+              if (ws.readyState == 1) {
+                document.getElementById('server').innerHTML="";
+              }
+          }, 3000);
           function disconnect() {
             ws.close();
           }
@@ -266,52 +287,52 @@ function update(deviceId, switchId)
   var payload;
   //alert(action);
   //alert(action);
-  if(ws!=null){//sending data via websocket
-          //if(ws.readyState == 1) {
-              if(action=='Switch OFF'){
-                payload=0;                
-              }
-              if(action=='Switch ON'){
-                payload=1;
-              }
-              var jsonS={
-                   "deviceId":deviceId,
-                   "switchId":switchId,
-                   "payload":payload
-                   };
-                ws.send(JSON.stringify(jsonS));
-               // var valElem = $('#sss');
-                //valElem.html(JSON.stringify(jsonS));
-
-           // }
-        }
-var duration=document.getElementById('duration').value;//mysql and mqtt are going separately, one via ajax and other via websocket
-//alert(duration);
-if (window.XMLHttpRequest)
-  {
-  xmlhttp=new XMLHttpRequest();
-  }
-else
-  {
-  xmlhttp=new ActiveXObject('Microsoft.XMLHTTP');
-  }
-xmlhttp.onreadystatechange=function()
-  {
-    if (xmlhttp.readyState==3 && xmlhttp.status==200)
-      {
-      document.getElementById(deviceId+switchId).innerHTML="Switching ....";
+  if(ws.readyState == 1){//sending data via websocket
+      //if(ws.readyState == 1) {
+      if(action=='Switch OFF'){
+        payload=0;                
       }
-  if (xmlhttp.readyState==4 && xmlhttp.status==200)
-    {
-      if(payload==0)
-        document.getElementById(deviceId+switchId).innerHTML='Switch ON';
-      else if(payload==1)
-        document.getElementById(deviceId+switchId).innerHTML='Switch OFF';
-        document.getElementsByClassName(deviceId+switchId)[0].innerHTML=xmlhttp.response;
-    }
+      if(action=='Switch ON'){
+        payload=1;
+      }
+      var jsonS={
+           "deviceId":deviceId,
+           "switchId":switchId,
+           "payload":payload
+           };
+      ws.send(JSON.stringify(jsonS));
+      var duration=document.getElementById('duration').value;//mysql and mqtt are going separately, one via ajax and other via websocket
+      //alert(duration);
+      if (window.XMLHttpRequest)
+        {
+        xmlhttp=new XMLHttpRequest();
+        }
+      else
+        {
+        xmlhttp=new ActiveXObject('Microsoft.XMLHTTP');
+        }
+      xmlhttp.onreadystatechange=function()
+        {
+          if (xmlhttp.readyState==3 && xmlhttp.status==200)
+            {
+            document.getElementById(deviceId+switchId).innerHTML="Switching ....";
+            }
+        if (xmlhttp.readyState==4 && xmlhttp.status==200)
+          {
+            if(payload==0)
+              document.getElementById(deviceId+switchId).innerHTML='Switch ON';
+            else if(payload==1)
+              document.getElementById(deviceId+switchId).innerHTML='Switch OFF';
+              document.getElementsByClassName(deviceId+switchId)[0].innerHTML=xmlhttp.response;
+          }
+        }
+      xmlhttp.open('GET','com.php?devId='+deviceId+'&switchId='+switchId+'&duration='+duration,true);//modified for the switch ids
+      xmlhttp.send();
+  }//end of outer if
+  else
+  {
+    document.getElementById(deviceId+switchId).innerHTML="Connection Error";
   }
-xmlhttp.open('GET','com.php?devId='+deviceId+'&switchId='+switchId+'&duration='+duration,true);//modified for the switch ids
-xmlhttp.send();
 }
 </script>
 <script type='text/javascript'>
