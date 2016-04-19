@@ -185,7 +185,6 @@ include_once 'settings/iotdb.php';
             console.log("Connection closed");
           }
           setInterval(function () {
-            console.log('checking connection');
               if (ws.readyState != 1) {
                   document.getElementById('server').innerHTML="<span class='label label-warning'>No connection to MQTT server, retrying to connect, if problem persists, contact Jay</span>";
                   ws = new WebSocket("ws://10.129.139.139:8180");
@@ -193,7 +192,7 @@ include_once 'settings/iotdb.php';
               if (ws.readyState == 1) {
                 document.getElementById('server').innerHTML="";
               }
-          }, 3000);
+          }, 1000);
           function disconnect() {
             ws.close();
           }
