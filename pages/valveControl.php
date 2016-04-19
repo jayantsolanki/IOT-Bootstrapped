@@ -316,6 +316,7 @@ function update(deviceId, switchId)
           if (xmlhttp.readyState==3 && xmlhttp.status==200)
             {
             document.getElementById(deviceId+switchId).innerHTML="Switching ....";
+            document.getElementById(deviceId+switchId).disabled = true;
             }
         if (xmlhttp.readyState==4 && xmlhttp.status==200)
           {
@@ -323,7 +324,8 @@ function update(deviceId, switchId)
               document.getElementById(deviceId+switchId).innerHTML='Switch ON';
             else if(payload==1)
               document.getElementById(deviceId+switchId).innerHTML='Switch OFF';
-              document.getElementsByClassName(deviceId+switchId)[0].innerHTML=xmlhttp.response;
+              document.getElementsByClassName(deviceId+switchId)[0].innerHTML=xmlhttp.response;//setting action status
+              document.getElementById(deviceId+switchId).disabled = false;
           }
         }
       xmlhttp.open('GET','com.php?devId='+deviceId+'&switchId='+switchId+'&duration='+duration,true);//modified for the switch ids
