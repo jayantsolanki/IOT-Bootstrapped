@@ -187,7 +187,7 @@ error_reporting(-1); //for suppressing errors and notices
  
      <script>
         var app = angular.module('IOT-App',['ngWebsocket']);
-       app.controller('devicesStatus', function($scope, $http, $websocket) {
+       app.controller('devicesStatus', function($scope, $http, $websocket, $filter) {
             var devices=null;
             var switches=null;
             var groupId=null;
@@ -217,10 +217,39 @@ error_reporting(-1); //for suppressing errors and notices
                 $scope.ws.$on('$error', function () {
                  console.log('Error connecting to the server');
                 });
-                /*$scope.ws.$on('$pong', function () {
-                 console.log('Battery request sent');
-                 document.getElementById('battery').innerHTML="<big><span class='label label-info'>Battery Status requested</span></big>";  
-                });*/
+                $scope.ws.$on('$message', function(data) {//receving the message
+                  //alert(3);
+                  //alert(data.deviceId);
+                  //alert(JSON.stringify($scope.devices))
+                  var id=$scope.devices.findIndex(i=>i.deviceId===data.deviceId)//match the device index
+                  if(data.status==1){
+                    $scope.$apply(function() {//used to inject th new value in the angularjs framework
+                       $scope.devices[id].status=true;
+                       $scope.devices[id].seen=$filter('date')(new Date(), 'HH:mm:ss, MMM dd ');
+                    });
+                  }
+                  else
+                   $scope.$apply(function() {
+                       $scope.devices[id].status=false;
+                       $scope.devices[id].seen=$filter('date')(new Date(), 'HH:mm:ss, MMM dd');
+                   });
+                  if(data.action=='battery'){//update battery status
+                    document.getElementById('battery').innerHTML="<big><span class='label label-info'>Battery status updated for "+data.deviceId+"</span></big>";
+                    if(data.type==1){
+                       $scope.$apply(function() {//used to inject th new value in the angularjs framework
+                           $scope.devices[id].PbatValue=data.batP;
+                           $scope.devices[id].SbatValue=data.batS;
+                           $scope.devices[id].batTime=$filter('date')(new Date(), 'HH:mm:ss, MMM dd ');
+                        });
+                    }
+                    if(data.type==2){
+                       $scope.$apply(function() {//used to inject th new value in the angularjs framework
+                           $scope.devices[id].PbatValue=data.batP;
+                           $scope.devices[id].batTime=$filter('date')(new Date(), 'HH:mm:ss, MMM dd ');
+                        });
+                    }
+                  }
+                });
 
             }
 
@@ -232,9 +261,6 @@ error_reporting(-1); //for suppressing errors and notices
                    "device":0,//0 for all device
                    "payload":2
                    };
-                  //$scope.ws.send(JSON.stringify(jsonS));
-                  //var data=JSON.stringify(jsonS);
-                  //alert(jsonS);
                   $scope.ws.$emit('battery',jsonS);//custom event
                   document.getElementById('battery').innerHTML="<big><span class='label label-info'>Battery Status requested</span></big>";
                   
