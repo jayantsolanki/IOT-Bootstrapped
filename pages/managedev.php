@@ -23,6 +23,12 @@ $dname=$_GET['dname'];
 $sensor=$_GET['sensor'];
 $deviceSetting=$_GET['deviceSetting'];
 $deviceData=$_POST['deviceData'];
+$editgrp=$_GET['editGrp'];
+$updategrpName=$_GET['updategrpName'];
+$updategrpId=$_GET['updategrpId'];
+$editSensor=$_GET['editSensor'];
+$updatesensorName=$_GET['updatesensorName'];
+$updatesensorId=$_GET['updatesensorId'];
 //$sentyp=$_GET['sentyp'];
 if($q!=null)
 {
@@ -114,6 +120,82 @@ if($sensor!=null)
 	
 
 }
+if($editgrp!=null or $editSensor!=null)//editing the groupname or sensor name
+{
+	mysql_select_db($dbname) or die(mysql_error());
+	if($editgrp!=null){
+		$query="SELECT name FROM groups WHERE id='$editgrp'";
+		$groupname=mysql_query($query);
+		$gname=mysql_fetch_assoc($groupname);
+		$name=$gname['name'];	
+		echo "<label>&nbsp;Group Name</label>&nbsp;<input type='text' id='gname' name='gname' placeholder='name the group' value='$name' required/> <button class='btn btn-danger' type='button' onclick='updateName($editgrp, 1)'>Update</button>";
+	}
+	if($editSensor!=null){
+		$query="SELECT name FROM sensors WHERE id='$editSensor'";
+		$sensorname=mysql_query($query);
+		$sname=mysql_fetch_assoc($sensorname);
+		$name=$sname['name'];	
+		echo "<label>&nbsp;Device type</label>&nbsp;<input type='text' id='sname' name='sname' placeholder='name the device type' value='$name' required/> <button class='btn btn-danger' type='button' onclick='updateName($editSensor, 0)'>Update</button>";
+	}
+}
+if($updategrpName!=null or $updatesensorName!=null)//editing the groupname
+{
+	mysql_select_db($dbname) or die(mysql_error());
+	if($updategrpName!=null){//updating group
+		$query = "UPDATE groups SET groups.name = '$updategrpName' WHERE groups.id = '$updategrpId'"; //updating group name
+		if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))
+			echo "UPDATE failed: $query<br/>".mysql_error()."<br/><br/>";
+		$query="SELECT * FROM groups"; //displaying groups
+		$results=mysql_query($query);
+		if (mysql_num_rows($results) > 0) 
+			{   $i=1;
+			  echo "</br></br><big>Groups available</big><hr/>";     
+			  while($row=mysql_fetch_assoc($results)) 
+			  {   //$id=$row['id'];
+			      $id=$row['id'];
+			      $group=$row['name'];
+			      
+			      
+			      echo "<span id='grp".$id."'><strong class='text-info'>".$i.".</strong>&nbsp; &nbsp; <big class=''>$group </big>&nbsp; &nbsp;<a class='text-muted glyphicon glyphicon-pencil' data-toggle='tooltip' title='Edit group name' href='javascript:editName($id, 1)'></a>&nbsp; &nbsp;<a class='text-danger glyphicon glyphicon-remove-circle' data-toggle='tooltip' title='Delete' href="."javascript:del('$group')"."></a></span><hr>";
+			      $i++;
+			      
+			      
+			  }
+			}
+		else
+			{
+			  echo "</br><div class='notice'><b>No groups created yet.</b></div>";
+			}
+	}
+	if($updatesensorName!=null){//updating group
+		$query = "UPDATE sensors SET sensors.name = '$updatesensorName' WHERE sensors.id = '$updatesensorId'"; //updating group name
+		if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))
+			echo "UPDATE failed: $query<br/>".mysql_error()."<br/><br/>";
+		$query="SELECT * FROM sensors"; //displaying groups
+        $results=mysql_query($query);
+        if (mysql_num_rows($results) > 0) 
+	        {   $i=1;
+	            echo "</br></br><big>Device Types available</big><hr/>";        
+	            while($row=mysql_fetch_assoc($results)) 
+	            {   //$id=$row['id'];
+	                $id=$row['id'];
+	                $sensor=$row['name'];
+	                echo "<span id='sens".$id."'><strong class='text-info'>".$i.".</strong>&nbsp; &nbsp; <big class=''>$sensor </big>&nbsp; &nbsp;<a class='text-muted glyphicon glyphicon-pencil' data-toggle='tooltip' title='Edit Switch' href='javascript:editName($id, 0)'></a>&nbsp; &nbsp;<a class='text-danger glyphicon glyphicon-remove-circle' data-toggle='tooltip' title='Delete' href="."javascript:dels('$sensor')"."></a></span><hr>";
+	                $i++;
+	                
+	                
+	            }
+	        }
+	    else
+	        {
+	            echo "</br><div class='notice'><b>No Sensors added yet.</b></div>";
+	        }
+
+	}
+
+}
+
+
 if($deviceId!=null and $switchId!=null)//show update fields for selected swtich
 {
 	mysql_select_db($dbname) or die(mysql_error());

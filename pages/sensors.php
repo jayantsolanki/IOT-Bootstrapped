@@ -69,6 +69,37 @@ if(isset($_GET['grp']))
 				$jsonArrayItem['field2'] = 'Pbattery';
 				$jsonArrayItem['field3'] = 'Sbattery';
 			}
+			$feedfetch="SELECT field1, field2, field3, field4, field5, field6, created_at FROM feeds WHERE feeds.device_id='$macid' order by feeds.id desc limit 1";
+			$feedres=mysql_query($feedfetch);
+			$feed=mysql_fetch_assoc($feedres);
+			$jsonArrayItem['Pbatvalue']=$feed['field2'];
+			if($switches==1)//esp with 1 valve as secondary battery too
+				$jsonArrayItem['Sbatvalue']=$feed['field3'];
+			if($sense==2){//device type is sensor
+				$jsonArrayItem['Pbatvalue']=$feed['field3'];
+				if($feed['field1']=='bm')
+					$jsonArrayItem['moistValue']=$feed['field4'];
+				else if($feed['field1']=='bthm'){
+					$jsonArrayItem['tempValue']=$feed['field4'];
+					$jsonArrayItem['humidValue']=$feed['field5'];
+					$jsonArrayItem['moistValue']=$feed['field6'];
+				}
+
+			}
+			$phpdate=strtotime($feed['created_at']);
+			$feedTime=date( 'h:i A jS M ', $phpdate );
+			$jsonArrayItem['feedTime']=$feedTime;
+
+			$seenquery="Select status, created_At from deviceStatus where deviceStatus.deviceId='$macid' order by deviceStatus.id desc limit 1";//getting last seen status
+			$seenresult=mysql_query($seenquery);
+			$seenfetch=mysql_fetch_assoc($seenresult);
+			$seen=$seenfetch['created_At'];
+			$phpdate=strtotime($seen);
+			$seen=date( 'h:i A jS M ', $phpdate );
+			$jsonArrayItem['seen']=$seen;
+			$jsonArrayItem['status']=$seenfetch['status'];
+			//$devType=$batfetch['device_type'];
+			
 			array_push($jsonArray, $jsonArrayItem);
 		}
 		header('Content-type: application/json');

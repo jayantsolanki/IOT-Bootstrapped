@@ -88,10 +88,9 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
                                     echo "</br></br><big>Device Types available</big><hr/>";        
                                     while($row=mysql_fetch_assoc($results)) 
                                     {   //$id=$row['id'];
+                                        $id=$row['id'];
                                         $sensor=$row['name'];
-                                        
-                                        
-                                        echo "<strong class='text-info'>".$i.".</strong>&nbsp; &nbsp; <big class=''>$sensor </big>&nbsp; &nbsp;<a class='text-danger glyphicon glyphicon-remove-circle' data-toggle='tooltip' title='Delete' href="."javascript:dels('$sensor')"."></a><hr>";
+                                        echo "<span id='sens".$id."'><strong class='text-info'>".$i.".</strong>&nbsp; &nbsp; <big class=''>$sensor </big>&nbsp; &nbsp;<a class='text-muted glyphicon glyphicon-pencil' data-toggle='tooltip' title='Edit Switch' href='javascript:editName($id, 0)'></a>&nbsp; &nbsp;<a class='text-danger glyphicon glyphicon-remove-circle' data-toggle='tooltip' title='Delete' href="."javascript:dels('$sensor')"."></a></span><hr>";
                                         $i++;
                                         
                                         
@@ -124,10 +123,9 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
                                       echo "</br></br><big>Groups available</big><hr/>";     
                                       while($row=mysql_fetch_assoc($results)) 
                                       {   //$id=$row['id'];
+                                          $id=$row['id'];
                                           $group=$row['name'];
-                                          
-                                          
-                                          echo "<strong class='text-info'>".$i.".</strong>&nbsp; &nbsp; <big class=''>$group </big>&nbsp; &nbsp;<a class='text-danger glyphicon glyphicon-remove-circle' data-toggle='tooltip' title='Delete' href="."javascript:del('$group')"."></a><hr>";
+                                          echo "<span id='grp".$id."'><strong class='text-info'>".$i.".</strong>&nbsp; &nbsp; <big class=''>$group </big>&nbsp; &nbsp;<a class='text-muted glyphicon glyphicon-pencil' data-toggle='tooltip' title='Edit group name' href='javascript:editName($id, 1)'></a>&nbsp; &nbsp;<a class='text-danger glyphicon glyphicon-remove-circle' data-toggle='tooltip' title='Delete' href="."javascript:del('$group')"."></a></span><hr>";
                                           $i++;
                                           
                                           
@@ -402,6 +400,51 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
         <script type='text/javascript'>
         /*
          *
+         * Function Name: editName(Id, type)
+         * Input: -groupId, for editing the name, type is for identifying the sensor or group to be updated
+         * Output: updates group table, changes the group name
+         * Logic: It is a AJAX call
+         * Example Call: editName(1, 1)
+         *
+         */
+        function editName(Id, type)
+        {
+        if (window.XMLHttpRequest)
+          {
+          xmlhttp=new XMLHttpRequest();
+          }
+        else
+          {
+          xmlhttp=new ActiveXObject('Microsoft.XMLHTTP');
+          }
+        xmlhttp.onreadystatechange=function()
+          {
+            if (xmlhttp.readyState==3 && xmlhttp.status==200)
+              {
+                if(type==1)
+                  document.getElementById("grp"+Id).innerHTML="<span><img src='images/ajax.gif'/></span>";
+                if(type==0)
+                  document.getElementById("sens"+Id).innerHTML="<span><img src='images/ajax.gif'/></span>";
+              }
+          if (xmlhttp.readyState==4 && xmlhttp.status==200)
+            {
+              if(type==1)
+                document.getElementById("grp"+Id).innerHTML=xmlhttp.responseText;
+              if(type==0)
+                document.getElementById("sens"+Id).innerHTML=xmlhttp.responseText;
+            }
+          }
+        if(type==1)
+          xmlhttp.open('GET','managedev.php?editGrp='+Id,true);
+        if(type==0)
+          xmlhttp.open('GET','managedev.php?editSensor='+Id,true);
+        //alert(macid);
+        xmlhttp.send();
+        }
+        </script>
+        <script type='text/javascript'>
+        /*
+         *
          * Function Name: edit(deviceId, switchId)
          * Input: -deviceId, for stroing device id of esp modules and switch id for storing the switch
          * Output: updates device table with group name, device name and sensor type
@@ -606,6 +649,67 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
           //alert(macid);
           xmlhttp.send();
         }
+        }
+        </script>
+        <script type='text/javascript'>
+        /*
+         *
+         * Function Name: updateName(Id, type)
+         * Input: -Id, and type
+         * Output: updates group table / sensor table
+         * Logic: It is a AJAX call
+         * Example Call: updategrp(2)
+         *
+         */
+        function updateName(Id, type)
+        {
+          //var sentyp=document.getElementById("sensoradd").value;
+          try{
+              if(type==1)
+                var name=document.getElementById("gname").value;
+              if(type==0)
+                var name=document.getElementById("sname").value;
+          }
+          catch(e){
+            console.log("Null values");
+            var name=0;
+          }
+
+          if (window.XMLHttpRequest)
+            {
+            xmlhttp=new XMLHttpRequest();
+            }
+          else
+            {
+            xmlhttp=new ActiveXObject('Microsoft.XMLHTTP');
+            }
+          xmlhttp.onreadystatechange=function()
+            {
+              if (xmlhttp.readyState==3 && xmlhttp.status==200)
+                {
+                  if(type==1)
+                    document.getElementById('grp'+Id).innerHTML="<span><img src='images/ajax.gif'/></span>";
+                  if(type==0)
+                    document.getElementById('sens'+Id).innerHTML="<span><img src='images/ajax.gif'/></span>";
+                }
+            if (xmlhttp.readyState==4 && xmlhttp.status==200)
+              {
+                if(type==1)
+                  document.getElementById('groups').innerHTML=xmlhttp.responseText;
+                if(type==0)
+                  document.getElementById('sensors').innerHTML=xmlhttp.responseText;
+              }
+            }
+          if(name=='')
+            alert('Name field is blank');
+          else{
+            if(type==1)
+              xmlhttp.open('GET','managedev.php?updategrpName='+name+'&updategrpId='+Id,true);
+            if(type==0)
+              xmlhttp.open('GET','managedev.php?updatesensorName='+name+'&updatesensorId='+Id,true);
+            //alert(macid);
+            xmlhttp.send();
+          }
         }
         </script>
         <script type='text/javascript'>
