@@ -180,7 +180,7 @@ if($updategrpName!=null or $updatesensorName!=null)//editing the groupname
 	            {   //$id=$row['id'];
 	                $id=$row['id'];
 	                $sensor=$row['name'];
-	                echo "<span id='sens".$id."'><strong class='text-info'>".$i.".</strong>&nbsp; &nbsp; <big class=''>$sensor </big>&nbsp; &nbsp;<a class='text-muted glyphicon glyphicon-pencil' data-toggle='tooltip' title='Edit Switch' href='javascript:editName($id, 0)'></a>&nbsp; &nbsp;<a class='text-danger glyphicon glyphicon-remove-circle' data-toggle='tooltip' title='Delete' href="."javascript:dels('$sensor')"."></a></span><hr>";
+	                echo "<span id='sens".$id."'><strong class='text-info'>".$i.".</strong>&nbsp; &nbsp; <big class=''>$sensor </big>&nbsp; &nbsp;<a class='text-muted glyphicon glyphicon-pencil' data-toggle='tooltip' title='Edit device type' href='javascript:editName($id, 0)'></a>&nbsp; &nbsp;<a class='text-danger glyphicon glyphicon-remove-circle' data-toggle='tooltip' title='Delete' href="."javascript:dels('$sensor')"."></a></span><hr>";
 	                $i++;
 	                
 	                
