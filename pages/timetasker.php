@@ -36,9 +36,9 @@ if(isset($_GET['grp']))
 		if($stop>2400)
 			$stop=$stop-2400;
 	}
-
 	if($repeath!=NULL) //for setting time with repetitions, 4/8/12 hrs
 	{	$i=$start;
+		//$duration=$duration+$startm;
 		
 		while($i<=2400) //time should be greater than 2400, military format
 		{	
@@ -47,7 +47,7 @@ if(isset($_GET['grp']))
 			$grp=mysql_fetch_assoc($grps);
 			$name=$grp['name'];*/
 			$start=$i;
-			$stop=$start+$duration;
+			$stop=$start + normalize($startm,$duration)-$startm;
 			if($stop>2400)
 				break;
 			if($stop==2400) //marks stop time as 0000

@@ -122,7 +122,7 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
                                     while($j<60)
                                     {
                                     echo "<option value='$j'>$j</option>";
-                                    $j=$j+5;
+                                    $j=$j+1;
                                     } 
                                     echo "</select>";
                                     ?>
@@ -142,7 +142,7 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
                                     while($j<60)
                                     {
                                     echo "<option value='$j'>$j</option>";
-                                    $j=$j+5;
+                                    $j=$j+1;
                                     } 
                                     echo "</select>";
                                     ?>
@@ -169,7 +169,7 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
                                     while($j<60)
                                     {
                                     echo "<option value='$j'>$j</option>";
-                                    $j=$j+5;
+                                    $j=$j+1;
                                     } 
                                     echo "</select>";
                                     ?>
@@ -182,7 +182,7 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
                                     while($j<60)
                                     {
                                     echo "<option value='$j'>$j</option>";
-                                    $j=$j+5;
+                                    $j=$j+1;
                                     } 
                                     echo "</select>";
                                     ?>
@@ -192,7 +192,7 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
                                 <div id='frequency' class="time col-md-12">
                                     <hr/>
                                     <fieldset  class="form-group form-inline">
-                                        <label class='text-danger'>Start:(hh)&nbsp;&nbsp;</label>
+                                        <label class='text-danger'>Start:(hhmm)</label>
                                     <?php
                                     echo "Hrs:<select class='form-control' id='fstarth' name='starth'>";
                                     $i=0; 
@@ -202,13 +202,21 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
                                     $i++;
                                     } 
                                     echo "</select>";
-                                    echo "<hr/><label class='text-warning'>Duration:&nbsp;</label>";
+                                    echo " Mins:<select class='form-control' id='fstartm' name='startm'>";
+                                    $j=0; 
+                                    while($j<60)
+                                    {
+                                    echo "<option value='$j'>$j</option>";
+                                    $j=$j+1;
+                                    } 
+                                    echo "</select>";
+                                    echo "<hr/><label class='text-warning'>Duration:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>";
                                     echo "Mins:<select class='form-control' id='fduration' name='duration'>";
                                     $j=5; 
                                     while($j<60)
                                     {
                                     echo "<option value='$j'>$j</option>";
-                                    $j=$j+5;
+                                    $j=$j+1;
                                     } 
                                     echo "</select>";
 
@@ -505,6 +513,7 @@ function frequency()
 {
 var grp=document.getElementById("grps").value;
 var starth=document.getElementById("fstarth").value;
+var startm=document.getElementById("fstartm").value;
 var duration=document.getElementById("fduration").value;
 var repeath=document.getElementById("repeath").value;
 
@@ -527,7 +536,7 @@ xmlhttp.onreadystatechange=function()
     document.getElementById("display").innerHTML=xmlhttp.responseText;
     }
   }
-xmlhttp.open('GET','timetasker.php?grp='+grp+'&starth='+starth+'&repeath='+repeath+'&duration='+duration,true);
+xmlhttp.open('GET','timetasker.php?grp='+grp+'&starth='+starth+'&startm='+startm+'&repeath='+repeath+'&duration='+duration,true);
 xmlhttp.send();
 }
 </script>
