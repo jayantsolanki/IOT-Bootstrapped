@@ -164,29 +164,34 @@ include_once 'settings/iotdb.php';
                                       <strong class="text text-info glyphicon glyphicon-list-alt"></strong> {{device.deviceName}}: <strong class="text text-info">{{device.deviceId}}</strong>
                                       <span class="glyphicon glyphicon-chevron-down pull-right"></span>
                                       <span ng-if="device.status==1" class="label label-success pull-right">Online</span>
-                                      <span ng-if="!device.status==0" class="label label-danger pull-right">Offline</span>
+                                      <span ng-if="device.status==0" class="label label-danger pull-right">Offline</span>
                                       
                                       <div id="deV{{$index}}" class="collapse">
                                          <blockquote>
-                                            <p><strong class="text text-info">Type:</strong> {{device.type}}</p>
-                                            <!-- <p><strong class="text text-info">Status:</strong> {{device.action}}</p> -->
                                             <p>
-                                              <span ng-if="device.switchCount==1">
-                                                <p><strong class="text text-info">Primary Battery:</strong> <strong>{{device.PbatValue/1024 | number : 3}} Volts </strong></p>
+                                              <div class="text-info" ng-if="device.switchCount==1">
+                                                <p><strong class="text text-info">Type:</strong> {{device.switchCount}} {{device.type}}</p>
+                                                <p><strong class="text text-success">Primary Battery:</strong> <strong>{{device.Pbatvalue/1024 | number : 3}} Volts </strong></p>
+                                                <p><strong class="text text-warning">Secondary Battery:</strong> <strong>{{device.Sbatvalue/137.1428571428571 | number : 3}} Volts </strong></p>
                                                 <button class="btn btn-default dev" ng-click="showGraph(1,device.deviceId,'battery')">Visualise</button>
-                                              </span>
-                                              <span ng-if="device.switchCount==0"><!-- for sensors data -->
-                                                <span ng-if="device.field1=='b'">
+                                              </div>
+                                              <div class="text-info" ng-if="device.switchCount>=2">{{device.switchCount}} {{device.type}}s</div>
+                                              <div ng-if="device.switchCount==0"><!-- for sensors data -->
+                                                <div class="text-info"  ng-if="device.field1=='b'">
+                                                  <p><strong class="text text-info">Type:</strong> Hub Device</p>
                                                   <button class="btn btn-default dev" ng-click="showGraph('b',device.deviceId,'battery')">Visualise</button>
-                                                </span>
-                                                <span ng-if="device.field1=='bm'">
+                                                </div>
+                                                <div class="text-info"  ng-if="device.field1=='bm'">
+                                                  <p><strong class="text text-info">Type:</strong> Moisture only Sensor</p>
                                                   <button class="btn btn-default dev" ng-click="showGraph('bm',device.deviceId,'battery')">Visualise</button>
-                                                </span>
-                                                <span ng-if="device.field1=='bthm'">
+                                                </div>
+                                                <div class="text-info"  ng-if="device.field1=='bthm'">
+                                                  <p><strong class="text text-info">Type:</strong> Temp, Humidity and Moisture Sensor</p>
                                                   <button class="btn btn-default dev" ng-click="showGraph('bthm',device.deviceId,'battery')">Visualise</button>
-                                                </span>
-                                              </span>
+                                                </div>
+                                              </div>
                                             </p>
+                                            <!-- <p><strong class="text text-info">Status:</strong> {{device.action}}</p> -->
                                         </blockquote>
                                       </div>
                                     </div>
@@ -337,7 +342,7 @@ include_once 'settings/iotdb.php';
                 $http.get("sensors.php?grp="+$scope.groupId)//calling dd.php for retrieving the data
                 .then(function(response) {
                     $scope.devices = response.data;
-                    alert(JSON.stringify(response.data))
+                    //alert(JSON.stringify(response.data))
                     $("#chartDisplay").fadeOut(100);
                     //alert(JSON.stringify($scope.devices));
                 });
