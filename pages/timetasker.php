@@ -157,7 +157,7 @@ function display()
         <span data-toggle='tooltip' title='Newly created Task' class='text text-info glyphicon glyphicon-info-sign'></span>
         <span data-toggle='tooltip' title='Task is disabled by the user' class='text text-warning glyphicon glyphicon-exclamation-sign'></span>
         <span class='text text-muted glyphicon glyphicon-warning-sign' data-toggle='tooltip' title='Should not water plants during night'></span></small></h2>";
-        echo "<table class='table table-striped'><tbody>";      
+        echo "<table class='table table-striped small'><tbody>";      
         while($row=mysql_fetch_assoc($results)) 
         {   $id=$row['id'];
             $start=$row['start'];
