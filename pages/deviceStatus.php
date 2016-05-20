@@ -222,13 +222,13 @@ error_reporting(-1); //for suppressing errors and notices
                   //alert(data.deviceId);
                   //alert(JSON.stringify($scope.devices))
                   var id=$scope.devices.findIndex(i=>i.deviceId===data.deviceId)//match the device index
-                  if(data.status==1){
+                  if(data.status==1){//online
                     $scope.$apply(function() {//used to inject th new value in the angularjs framework
                        $scope.devices[id].status=true;
                        $scope.devices[id].seen=$filter('date')(new Date(), 'HH:mm:ss, MMM dd ');
                     });
                   }
-                  else
+                  if(data.status==0)//offline
                    $scope.$apply(function() {
                        $scope.devices[id].status=false;
                        $scope.devices[id].seen=$filter('date')(new Date(), 'HH:mm:ss, MMM dd');
@@ -248,6 +248,13 @@ error_reporting(-1); //for suppressing errors and notices
                            $scope.devices[id].batTime=$filter('date')(new Date(), 'HH:mm:ss, MMM dd ');
                         });
                     }
+                  }
+                  if(data.action=='data'){//update battery status for the sensors
+                    //document.getElementById('battery').innerHTML="<big><span class='label label-info'>Battery status updated for Sensor "+data.deviceId+"</span></big>";
+                   $scope.$apply(function() {//used to inject th new value in the angularjs framework
+                       $scope.devices[id].PbatValue=data.batValue;
+                       $scope.devices[id].batTime=$filter('date')(new Date(), 'HH:mm:ss, MMM dd ');
+                    });
                   }
                 });
 
