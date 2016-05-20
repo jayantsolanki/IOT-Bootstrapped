@@ -289,7 +289,7 @@ include_once 'settings/iotdb.php';
       var ws=null;
       $(function() { //websocket
           //var wscon=null;
-          ws = new WebSocket("ws://10.129.28.118:8181");
+          ws = new WebSocket("ws://10.129.139.139:8180");
           ws.onopen = function(e) {
             console.log('Connection to server opened');
           }
@@ -337,7 +337,7 @@ include_once 'settings/iotdb.php';
                 $http.get("sensors.php?grp="+$scope.groupId)//calling dd.php for retrieving the data
                 .then(function(response) {
                     $scope.devices = response.data;
-                    //alert(JSON.stringify(response.data))
+                    alert(JSON.stringify(response.data))
                     $("#chartDisplay").fadeOut(100);
                     //alert(JSON.stringify($scope.devices));
                 });
