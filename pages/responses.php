@@ -158,7 +158,7 @@ error_reporting(-1); //for suppressing errors and notices
 
         });
       app.config(['growlProvider', function (growlProvider) {
-        growlProvider.globalTimeToLive(30000);
+        growlProvider.globalTimeToLive(120000);
         growlProvider.onlyUniqueMessages(false);
         growlProvider.globalReversedOrder(true);
         growlProvider.globalInlineMessages(true);
