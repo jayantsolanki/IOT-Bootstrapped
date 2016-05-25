@@ -60,19 +60,14 @@ error_reporting(-1); //for suppressing errors and notices
             <div id="devIds" class="container-fluid" ng-controller="devicesStatus">
                 <div class="row">
                     <div class="col-lg-12">
-                        <h1 class="page-header text-info">Websocket Feeds</h1>
+                        <h1 class="page-header text-info">Console Logger</h1>
                     </div>
                     <!-- /.col-lg-12 -->
                 </div>
-                <div class="row">
-                  <div class="panel panel-info">
-                    <div class="panel panel-heading">
-                          <h4 class='text text-center'>Console logger</h4>
-                    </div>
-                        <div class="panel panel-body">
-                          <div class="pre-scrollable" growl inline="true"></div>
+                <div class="row" style="overflow: hidden;">
+                        <div class="well" style="height:750px; overflow-x:scroll ; overflow-y: scroll;">
+                          <div growl inline="true"></div>
                         </div><!-- ending panel body -->
-                      </div><!-- ending panel -->
                       
                 </div>
                 <!-- /.row -->
@@ -152,13 +147,13 @@ error_reporting(-1); //for suppressing errors and notices
                 growl.error(data);
             }
             $scope.showData = function(data){
-                growl.success(data);
+                growl.success("<p style='word-wrap: break-word;'>"+JSON.stringify(data)+"</p>");
             }
             $scope.wsConnect();//initialzing the websocket connection
 
         });
       app.config(['growlProvider', function (growlProvider) {
-        growlProvider.globalTimeToLive(120000);
+        growlProvider.globalTimeToLive(60000);
         growlProvider.onlyUniqueMessages(false);
         growlProvider.globalReversedOrder(true);
         growlProvider.globalInlineMessages(true);
