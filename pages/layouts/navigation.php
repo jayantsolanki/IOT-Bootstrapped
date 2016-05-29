@@ -203,6 +203,9 @@
                             <a href='schedule.php'><i class='glyphicon glyphicon-time fa-fw'></i> Tasks</a>
                         </li>
                         <li>
+                            <a href='automat.php'><i class='fa fa-refresh fa-spin'></i>&nbsp;&nbsp; <span class="badge">new</span>Automat</a>
+                        </li>
+                        <li>
                             <a href='sensorData.php'><i class='fa fa-bar-chart-o fa-fw'></i> Sensors Data</a>
                         </li>
                         <li>

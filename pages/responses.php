@@ -98,10 +98,6 @@ error_reporting(-1); //for suppressing errors and notices
     <!-- Custom Theme JavaScript -->
     <script src="../dist/js/sb-admin-2.js"></script>
      <script type="text/javascript" src="../dist/js/bootstrap-fullscreen-select.js"></script>
-     <script src="../bower_components/amcharts3/amcharts/amcharts.js"></script>
-     <script src="../bower_components/amcharts3/amcharts/serial.js"></script>
-     <script src="../bower_components/amcharts3/amcharts/themes/dark.js"></script>
-     <script src="../bower_components/amcharts3/amcharts/gantt.js"></script>
      <script src="../bower_components/angular-growl-v2/build/angular-growl.min.js"></script>
      <script src="../bower_components/angular-animate/angular-animate.min.js"></script>
  
