@@ -214,4 +214,61 @@ if(isset($_GET['del'])) //deleting the entry
 	echo json_encode($jsonArray);
 
 }
+if(isset($_GET['notif'])) //deleting the entry
+{
+
+	$jsonArray=array();
+	$query="SELECT * FROM deviceNotif";
+	$results=mysql_query($query);
+	if (mysql_num_rows($results) > 0) 
+	{	
+		while($row=mysql_fetch_assoc($results)) 
+		{	
+			$id=$row['id'];
+			$deviceId=$row['deviceId'];
+			$field1=$row['field1'];
+			$field2=$row['field2'];
+			$field3=$row['field3'];
+			$field4=$row['field4'];
+			$field5=$row['field5'];
+			$field6=$row['field6'];
+			$field1changeDate=$row['field1changeDate'];
+			$field2changeDate=$row['field2changeDate'];
+			$field3changeDate=$row['field3changeDate'];
+			$field4changeDate=$row['field4changeDate'];
+			$field5changeDate=$row['field5changeDate'];
+			$field6changeDate=$row['field6changeDate'];
+			$createdAt=$row['created_at'];
+
+			$deviceq="SELECT type, switches FROM devices where deviceId='$deviceId'"; //getting group name
+            $deviceRes=mysql_query($deviceq);
+            $deviceRow=mysql_fetch_assoc($deviceRes);
+            $deviceType=$deviceRow['type'];
+            $switchCount=$deviceRow['switches'];
+
+            $jsonArrayItem['deviceId'] = $deviceId;
+			$jsonArrayItem['field1'] = $field1;
+			$jsonArrayItem['field2'] = $field2;
+			$jsonArrayItem['field3'] = $field3;
+			$jsonArrayItem['field4'] = $field4;
+			$jsonArrayItem['field5'] = $field5;
+			$jsonArrayItem['field6'] = $field6;
+			$jsonArrayItem['field1changeDate'] = $field1changeDate;
+			$jsonArrayItem['field2changeDate'] = $field2changeDate;
+			$jsonArrayItem['field3changeDate'] = $field3changeDate;
+			$jsonArrayItem['field4changeDate'] = $field4changeDate;
+			$jsonArrayItem['field5changeDate'] = $field5changeDate;
+			$jsonArrayItem['field6changeDate'] = $field6changeDate;
+			$jsonArrayItem['switchCount'] = $switchCount;
+			$jsonArrayItem['deviceType'] = $deviceType;
+			$jsonArrayItem['createdAt'] = $createdAt;
+			array_push($jsonArray, $jsonArrayItem);
+		}
+		header('Content-type: application/json');
+		//output the return value of json encode using the echo function. 
+		echo json_encode($jsonArray);
+		
+	}
+
+}
 ?>

@@ -66,7 +66,7 @@ error_reporting(-1); //for suppressing errors and notices
                     <!-- /.col-lg-12 -->
                 </div>
                 <div class="row">
-                        <div class="well">
+                        <div class="well col-md-4">
                             <span ng-show="errors!=null" class="row" ng-repeat="error in errors">
                                 <li class='text-danger'><strong>{{error.type}}:</strong> {{error.value}}</li>
                             </span>
@@ -102,7 +102,39 @@ error_reporting(-1); //for suppressing errors and notices
                                 <span ng-if="group.text!=null" class='alert alert-warning pull-right'>If <strong class="text-info">{{field.text}} {{conditionCase.text}} {{conditionVal}}</strong> in Group <strong class="text-info">{{group.text}}</strong> then do  <strong class="text-info">{{actionSelect.text}}</strong></span></br>
                                 <button class="btn btn-success" id="button" type="submit" value="add">Add</button>
                             </form>
-                        </div><!-- ending panel body -->
+                        </div><!-- ending well-->
+                        <div class=" small well col-md-7 col-md-offset-1" style="height:490px; overflow-y: scroll;">
+                            <table class='table table-striped'>                                       
+                                <caption class="text-info text-center">Device Health (Valves)</caption>
+                                <thead>
+                                  <th>DeviceId</th><th>PBat</th><th>SBat</th><th>Connection</th>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="deviceNotif in deviceNotifs | filter:{deviceType:'1'}">
+                                        <td>{{deviceNotif.deviceId}}</td>
+                                        <td>{{deviceNotif.Field1}}</td>
+                                        <td>{{deviceNotif.Field2}}</td>
+                                        <td align="center">{{deviceNotif.Field6}}</td>   
+                                    </tr><!-- loop ends here -->
+                                <tbody>
+                            </table>
+                            <table class='table table-striped'>                                       
+                                <caption class="text-info text-center">Device Health (Sensors)</caption>
+                                <thead>
+                                  <th>DeviceId</th><th>Bat</th><th>Temp</th><th>Moisture</th><th>Humidity</th><th>Connection</th>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="deviceNotif in deviceNotifs | filter:{deviceType:'2'}">
+                                        <td align="center">{{deviceNotif.deviceId}}</td>
+                                        <td>{{deviceNotif.Field1}}</td>
+                                        <td>{{deviceNotif.Field2}}</td>
+                                        <td>{{deviceNotif.Field3}}</td>
+                                        <td align="center">{{deviceNotif.Field4}}</td> 
+                                        <td align="center">{{deviceNotif.Field6}}</td>   
+                                    </tr><!-- loop ends here -->
+                                <tbody>
+                            </table>
+                        </div>
                       
                 </div>
                 <div class="row">
@@ -158,12 +190,13 @@ error_reporting(-1); //for suppressing errors and notices
  
      <script>
         var app = angular.module('IOT-App',['ngWebsocket', 'ngDropdowns']);
-       app.controller('automat', function($scope, $http, $websocket, $window) {
+       app.controller('automat', function($scope, $http, $websocket, $window, $interval) {
             var name=null;
             var groups=null;
             var group=null;
             var actions=null;
-            var tasks=null
+            var tasks=null;
+            var deviceNotifs=null;
             var fields=null;
             var conditionVal=null;
             var conditionCase=null;
@@ -177,6 +210,7 @@ error_reporting(-1); //for suppressing errors and notices
             $scope.group=group;
             $scope.actions=actions;
             $scope.tasks=tasks;
+            $scope.deviceNotifs=deviceNotifs;
             var url=null;
             $scope.fetchGroups = function() {
                 $http.get("autotasks.php?groups=1")//calling dd.php for retrieving the data
@@ -201,12 +235,24 @@ error_reporting(-1); //for suppressing errors and notices
                 });
                 
             }
+            $scope.fetchDeviceNotif = function() {
+                $http.get("autotasks.php?notif=1")//calling dd.php for retrieving the data
+                .then(function(response) {
+                    $scope.deviceNotifs= response.data;
+                    console.log(JSON.stringify($scope.deviceNotifs));
+                });
+                
+            }
+             $scope.fetchDeviceNotif();
+            /*$interval(function(){//for updating the deviceNotif ajax call 
+                $scope.fetchDeviceNotif();
+            }, 10000);*/
             $scope.del = function(id) {
                 if($window.confirm('Confirm Delete')){
                     $http.get("autotasks.php?del="+id)//calling dd.php for retrieving the data
                     .then(function(response) {
                         $scope.errors = response.data;
-                        console.log(JSON.stringify($scope.errors));
+                        //console.log(JSON.stringify($scope.errors));
                         $scope.fetchTasks();
                     });
                 }
