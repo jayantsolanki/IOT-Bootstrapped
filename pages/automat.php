@@ -112,9 +112,24 @@ error_reporting(-1); //for suppressing errors and notices
                                 <tbody>
                                     <tr ng-repeat="deviceNotif in deviceNotifs | filter:{deviceType:'1'}">
                                         <td>{{deviceNotif.deviceId}}</td>
-                                        <td>{{deviceNotif.Field1}}</td>
-                                        <td>{{deviceNotif.Field2}}</td>
-                                        <td align="center">{{deviceNotif.Field6}}</td>   
+                                        <td>
+                                            <span ng-if='deviceNotif.field1==0' class='glyphicon glyphicon-ok label label-success' data-toggle="tooltip" title="Primary Battery level Healthy">
+                                            </span>
+                                            <span ng-if='deviceNotif.field1==1' class='glyphicon glyphicon-remove label label-danger' data-toggle="tooltip" title="Primary Battery level Critical">
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span ng-if='deviceNotif.field2==0' class='glyphicon glyphicon-ok label label-success' data-toggle="tooltip" title="Secondary Battery level Healthy">
+                                            </span>
+                                            <span ng-if='deviceNotif.field2==1' class='glyphicon glyphicon-remove label label-danger' data-toggle="tooltip" title="Secondary Battery level Critical">
+                                            </span>
+                                        </td>
+                                        <td align="center">
+                                            <span ng-if='deviceNotif.field6==0' class='glyphicon glyphicon-ok label label-success' data-toggle="tooltip" title="Connection Normal">
+                                            </span>
+                                            <span ng-if='deviceNotif.field6==1' class='glyphicon glyphicon-remove label label-danger' data-toggle="tooltip" title="Device Unavailable">
+                                            </span>
+                                        </td>   
                                     </tr><!-- loop ends here -->
                                 <tbody>
                             </table>
@@ -126,11 +141,45 @@ error_reporting(-1); //for suppressing errors and notices
                                 <tbody>
                                     <tr ng-repeat="deviceNotif in deviceNotifs | filter:{deviceType:'2'}">
                                         <td align="center">{{deviceNotif.deviceId}}</td>
-                                        <td>{{deviceNotif.Field1}}</td>
-                                        <td>{{deviceNotif.Field2}}</td>
-                                        <td>{{deviceNotif.Field3}}</td>
-                                        <td align="center">{{deviceNotif.Field4}}</td> 
-                                        <td align="center">{{deviceNotif.Field6}}</td>   
+                                        <td>
+                                            <span ng-if='deviceNotif.field1==0' class='glyphicon glyphicon-ok label label-success' data-toggle="tooltip" title="Primary Battery level Healthy">
+                                            </span>
+                                            <span ng-if='deviceNotif.field1==1' class='glyphicon glyphicon-remove label label-danger' data-toggle="tooltip" title="Primary Battery level Critical">
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span ng-if='deviceNotif.field2==0' class='glyphicon glyphicon-ok label label-success' data-toggle="tooltip" title="Temperature Normal">
+                                            </span>
+                                            <span ng-if='deviceNotif.field2==1' class='glyphicon glyphicon-remove label label-danger' data-toggle="tooltip" title="Temperature High">
+                                            </span>
+                                            <span ng-if='deviceNotif.field2!=1 && deviceNotif.field2!=0 '>
+                                                Null
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span ng-if='deviceNotif.field3==0' class='glyphicon glyphicon-ok label label-success' data-toggle="tooltip" title="Soil Moisture Normal">
+                                            </span>
+                                            <span ng-if='deviceNotif.field3==1' class='glyphicon glyphicon-remove label label-danger' data-toggle="tooltip" title="Soil Moisture Low">
+                                            </span>
+                                            <span ng-if='deviceNotif.field3!=1 && deviceNotif.field3!=0 '>
+                                                Null
+                                            </span>
+                                        </td>
+                                        <td align="center">
+                                            <span ng-if='deviceNotif.field4==0' class='glyphicon glyphicon-ok label label-success' data-toggle="tooltip" title="Humidity Normal">
+                                            </span>
+                                            <span ng-if='deviceNotif.field4==1' class='glyphicon glyphicon-remove label label-danger' data-toggle="tooltip" title="Humidity Low">
+                                            </span>
+                                            <span ng-if='deviceNotif.field4!=1 && deviceNotif.field4!=0 '>
+                                                Null
+                                            </span>
+                                        </td> 
+                                        <td align="center">
+                                            <span ng-if='deviceNotif.field6==0' class='glyphicon glyphicon-ok label label-success' data-toggle="tooltip" title="Connection Normal">
+                                            </span>
+                                            <span ng-if='deviceNotif.field6==1' class='glyphicon glyphicon-remove label label-danger' data-toggle="tooltip" title="Device Unavailable">
+                                            </span>
+                                        </td>   
                                     </tr><!-- loop ends here -->
                                 <tbody>
                             </table>
