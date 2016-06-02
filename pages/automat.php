@@ -294,14 +294,14 @@ error_reporting(-1); //for suppressing errors and notices
                 $http.get("autotasks.php?notif=1")//calling dd.php for retrieving the data
                 .then(function(response) {
                     $scope.deviceNotifs= response.data;
-                    console.log(JSON.stringify($scope.deviceNotifs));
+                    //console.log(JSON.stringify($scope.deviceNotifs));
                 });
                 
             }
-             $scope.fetchDeviceNotif();
-            /*$interval(function(){//for updating the deviceNotif ajax call 
+             
+            $interval(function(){//for updating the deviceNotif ajax call 
                 $scope.fetchDeviceNotif();
-            }, 10000);*/
+            }, 5000);
             $scope.del = function(id) {
                 if($window.confirm('Confirm Delete')){
                     $http.get("autotasks.php?del="+id)//calling dd.php for retrieving the data
@@ -375,6 +375,7 @@ error_reporting(-1); //for suppressing errors and notices
             $scope.conditionCase = {};
             $scope.fetchGroups();
             $scope.fetchTasks();
+            $scope.fetchDeviceNotif();
 
         });
     </script>       
