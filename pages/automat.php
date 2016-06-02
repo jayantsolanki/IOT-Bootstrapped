@@ -117,11 +117,17 @@ error_reporting(-1); //for suppressing errors and notices
                                             </span>
                                             <span ng-if='deviceNotif.field1==1' class='glyphicon glyphicon-remove label label-danger' data-toggle="tooltip" title="Primary Battery level Critical">
                                             </span>
+                                            <span ng-if='deviceNotif.field1!=1 && deviceNotif.field1!=0 '>
+                                                Null
+                                            </span>
                                         </td>
                                         <td>
                                             <span ng-if='deviceNotif.field2==0' class='glyphicon glyphicon-ok label label-success' data-toggle="tooltip" title="Secondary Battery level Healthy">
                                             </span>
                                             <span ng-if='deviceNotif.field2==1' class='glyphicon glyphicon-remove label label-danger' data-toggle="tooltip" title="Secondary Battery level Critical">
+                                            </span>
+                                            <span ng-if='deviceNotif.field2!=1 && deviceNotif.field2!=0 '>
+                                                Null
                                             </span>
                                         </td>
                                         <td align="center">
