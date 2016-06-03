@@ -96,10 +96,11 @@ error_reporting(-1); //for suppressing errors and notices
                                   </div>
                                 </fieldset>
                                 <fieldset ng-show="field.text!='Online/Offline'" class='form-group'>
-                                  <label for='conditionVal'>Select Condition value</label>
+                                  <label ng-if="actionSelect.value!=5" for='conditionVal'>Enter Threshold value </label>
+                                  <label ng-if="actionSelect.value==5" for='conditionVal'>Enter Time (hh:mm)</label>
                                   <input type='text' class='form-control' id='conditionVal' ng-model=conditionVal placeholder='Condition Value' value='{{conditionVal}}'>
                                 </fieldset>
-                                <span ng-if="group.text!=null" class='alert alert-warning pull-right'>If <strong class="text-info">{{field.text}} {{conditionCase.text}} {{conditionVal}}</strong> in Group <strong class="text-info">{{group.text}}</strong> then do  <strong class="text-info">{{actionSelect.text}}</strong></span></br>
+                                <span ng-if="group.text!=null" class='alert alert-warning pull-right'>If <strong class="text-info"><span ng-if="actionSelect.value!=5">{{field.text}}</span><span ng-if="actionSelect.value==5">Time</span> {{conditionCase.text}} {{conditionVal}}</strong> in Group <strong class="text-info">{{group.text}}</strong> then do  <strong class="text-info">{{actionSelect.text}}</strong></span></br>
                                 <button class="btn btn-success" id="button" type="submit" value="add">Add</button>
                             </form>
                         </div><!-- ending well-->
