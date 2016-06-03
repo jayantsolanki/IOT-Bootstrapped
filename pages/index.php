@@ -188,6 +188,7 @@ $query="SELECT * FROM switches WHERE switches.newSwitch=1";//new switches
                 </div>
                 <!-- /.col-lg-8 -->
                 <!-- <div class="col-lg-4"> -->
+                
                 <div class="col-lg-8 col-md-8">
                     <iframe id="forecast_embed" type="text/html" frameborder="0" height="245" width="100%" src="http://forecast.io/embed/#lat=19.130297&lon=72.915901&color=#113355&units=uk&name=KReSIT Building, IIT Powai"> 
                     </iframe>
@@ -241,6 +242,17 @@ $query="SELECT * FROM switches WHERE switches.newSwitch=1";//new switches
                         </div>
                         <!-- /.panel-body -->
                     </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <i class="fa fa-bell fa-fw"></i> KyantraIITB
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <a class="twitter-timeline" href="https://twitter.com/kyantraIITB" data-widget-id="738695381995769857">Tweets by @kyantraIITB</a>
+                             
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
                     <!-- /.panel -->
                     
                     <!-- /.panel -->
@@ -276,6 +288,9 @@ $query="SELECT * FROM switches WHERE switches.newSwitch=1";//new switches
 
     <!-- Custom Theme JavaScript -->
     <script src="../dist/js/sb-admin-2.js"></script>
+    <script>
+        !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
+    </script>
 
 </body>
 
