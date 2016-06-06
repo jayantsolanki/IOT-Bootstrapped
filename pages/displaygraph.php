@@ -29,7 +29,7 @@ if(isset($_GET['feed']))
 	else
 		$startDate="and created_at >= '$startDate'";
 	if($yAxisLimit==null)
-		$yAxisLimit=4095;
+		$yAxisLimit='';
 	else
 		$yAxisLimit=$yAxisLimit;
 	$jsonArray = array();
