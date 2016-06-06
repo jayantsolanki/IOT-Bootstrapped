@@ -325,7 +325,7 @@ include_once 'settings/iotdb.php';
             var count='';
             var theme="dark";
             var startDate='';
-            var yAxisLimit=null;
+            var yAxisLimit=4095;
             var background_color="#525263";
            /* $http.get("dd.php")
             .then(function(response) {
