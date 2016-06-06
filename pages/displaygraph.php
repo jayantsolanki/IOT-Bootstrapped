@@ -29,9 +29,9 @@ if(isset($_GET['feed']))
 	else
 		$startDate="and created_at >= '$startDate'";
 	if($yAxisLimit==null)
-		$yAxisLimit='';
+		$yAxisLimit=4095;
 	else
-		$yAxisLimit="'$yAxisLimit'";
+		$yAxisLimit=$yAxisLimit;
 	$jsonArray = array();
 	if($feed=='temp'){//temperature or secondary battery
 		$query="(SELECT DATE_FORMAT(created_at, '%Y-%m-%d-%H-%i') as created_at , field4 as value FROM feeds WHERE feeds.device_id= '$deviceId' and feeds.field4<$yAxisLimit $startDate $count)"; //device id similar to macid
