@@ -16,6 +16,7 @@ $feed=$_GET["feed"];
 $deviceType=$_GET["deviceType"];
 $count=$_GET["count"];
 $startDate=$_GET["startDate"];
+$yAxisLimit=$_GET["yAxisLimit"];
 if(isset($_GET['feed']))
 {
 	//echo $macid;
@@ -27,9 +28,13 @@ if(isset($_GET['feed']))
 		$startDate='';
 	else
 		$startDate="and created_at >= '$startDate'";
+	if($yAxisLimit==null)
+		$yAxisLimit='';
+	else
+		$yAxisLimit="'$yAxisLimit'";
 	$jsonArray = array();
 	if($feed=='temp'){//temperature or secondary battery
-		$query="(SELECT DATE_FORMAT(created_at, '%Y-%m-%d-%H-%i') as created_at , field4 as value FROM feeds WHERE feeds.device_id= '$deviceId' and feeds.field4<4096 $startDate $count)"; //device id similar to macid
+		$query="(SELECT DATE_FORMAT(created_at, '%Y-%m-%d-%H-%i') as created_at , field4 as value FROM feeds WHERE feeds.device_id= '$deviceId' and feeds.field4<$yAxisLimit $startDate $count)"; //device id similar to macid
 
 		$feeds=mysql_query($query);
 		//echo mysql_num_rows($feeds);
@@ -60,7 +65,7 @@ if(isset($_GET['feed']))
 
 		mysql_select_db($dbname) or die(mysql_error());
 		if($deviceType=='bthm')//humidity bthm
-			$query="(SELECT DATE_FORMAT(created_at, '%Y-%m-%d-%H-%i') as created_at ,field5 FROM feeds WHERE feeds.device_id= '$deviceId' and feeds.field5<4096 $startDate $count)"; //device id similar to macid
+			$query="(SELECT DATE_FORMAT(created_at, '%Y-%m-%d-%H-%i') as created_at ,field5 FROM feeds WHERE feeds.device_id= '$deviceId' and feeds.field5<$yAxisLimit $startDate $count)"; //device id similar to macid
 		//if($deviceType=='bthm')//hub battery
 		$feeds=mysql_query($query);
 		//initialize the array to store the processed data
@@ -89,9 +94,9 @@ if(isset($_GET['feed']))
 		
 		mysql_select_db($dbname) or die(mysql_error());
 		if($deviceType=='bm')//moisture bm
-			$query="(SELECT DATE_FORMAT(created_at, '%Y-%m-%d-%H-%i') as created_at ,field4 as value FROM feeds WHERE feeds.device_id= '$deviceId' and feeds.field4<4096 $startDate $count)"; //device id similar to macid
+			$query="(SELECT DATE_FORMAT(created_at, '%Y-%m-%d-%H-%i') as created_at ,field4 as value FROM feeds WHERE feeds.device_id= '$deviceId' and feeds.field4<$yAxisLimit $startDate $count)"; //device id similar to macid
 		if($deviceType=='bthm')//moisture bthm
-			$query="(SELECT DATE_FORMAT(created_at, '%Y-%m-%d-%H-%i') as created_at ,field6 as value FROM feeds WHERE feeds.device_id= '$deviceId' and feeds.field6<4096 $startDate $count)"; //device id similar to macid
+			$query="(SELECT DATE_FORMAT(created_at, '%Y-%m-%d-%H-%i') as created_at ,field6 as value FROM feeds WHERE feeds.device_id= '$deviceId' and feeds.field6<$yAxisLimit $startDate $count)"; //device id similar to macid
 		$feeds=mysql_query($query);
 		//initialize the array to store the processed data
 		
@@ -118,13 +123,13 @@ if(isset($_GET['feed']))
 	else if($feed=='battery'){//battery
 		mysql_select_db($dbname) or die(mysql_error());
 		if($deviceType==1)//primary
-			$query="(SELECT DATE_FORMAT(created_at, '%Y-%m-%d-%H-%i') as created_at ,field2 as value FROM feeds WHERE feeds.device_id= '$deviceId' and feeds.field2<4096 $startDate $count)"; //device id similar to macid
+			$query="(SELECT DATE_FORMAT(created_at, '%Y-%m-%d-%H-%i') as created_at ,field2 as value FROM feeds WHERE feeds.device_id= '$deviceId' and feeds.field2<$yAxisLimit $startDate $count)"; //device id similar to macid
 		if($deviceType==2)//secondary
-			$query="(SELECT DATE_FORMAT(created_at, '%Y-%m-%d-%H-%i') as created_at ,field3 as value FROM feeds WHERE feeds.device_id= '$deviceId' and feeds.field3<4096 $startDate $count)"; //device id similar to macid
+			$query="(SELECT DATE_FORMAT(created_at, '%Y-%m-%d-%H-%i') as created_at ,field3 as value FROM feeds WHERE feeds.device_id= '$deviceId' and feeds.field3<$yAxisLimit $startDate $count)"; //device id similar to macid
 		if($deviceType=='b')//hub battery
-			$query="(SELECT DATE_FORMAT(created_at, '%Y-%m-%d-%H-%i') as created_at ,field3 as value FROM feeds WHERE feeds.device_id= '$deviceId' and feeds.field3<4096 $startDate $count)"; //device id similar to macid
+			$query="(SELECT DATE_FORMAT(created_at, '%Y-%m-%d-%H-%i') as created_at ,field3 as value FROM feeds WHERE feeds.device_id= '$deviceId' and feeds.field3<$yAxisLimit $startDate $count)"; //device id similar to macid
 		if($deviceType=='bm' or $deviceType=='bthm')//bm, bthm
-			$query="(SELECT DATE_FORMAT(created_at, '%Y-%m-%d-%H-%i') as created_at ,field3 as value FROM feeds WHERE feeds.device_id= '$deviceId' and feeds.field3<4096 $startDate $count)"; //device id similar to macid
+			$query="(SELECT DATE_FORMAT(created_at, '%Y-%m-%d-%H-%i') as created_at ,field3 as value FROM feeds WHERE feeds.device_id= '$deviceId' and feeds.field3<$yAxisLimit $startDate $count)"; //device id similar to macid
 		$feeds=mysql_query($query);
 		//initialize the array to store the processed data
 		

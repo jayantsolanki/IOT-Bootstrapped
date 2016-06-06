@@ -108,7 +108,7 @@ include_once 'settings/iotdb.php';
                 </div>
                 <div class="row" id="devCharts">
                     <div class=" col-md-12 content">
-                        <label class="text text-info">Select group</label>
+                        <label class="text text-info">Select group</label><span class="pull-right"><button id="back" class="btn btn-primary" ng-click="showDevice()" style="display:none;">Back</button></span>
                         <div class="row">
                             <div class="col-md-6">
                             <select class='mobileSelect form-control' id='chartselect' name='chartselect' >
@@ -127,7 +127,7 @@ include_once 'settings/iotdb.php';
                                         }
                                     }
                                 ?>
-                            </select><span class="pull-right"><button id="back" class="btn btn-primary" ng-click="showDevice()" style="display:none;">Back</button></span></br></br>
+                            </select></br></br>
                             <div class="row">
                               <div class="col-md-6">
                                 <fieldset class='form-group'>
@@ -138,10 +138,14 @@ include_once 'settings/iotdb.php';
                                   <label for='color'>Chart Color</label>
                                   <input type='text' class='form-control' id='color' ng-model=background_color placeholder='Color of the Chart' value='{{background_color}}'>
                                 </fieldset>
+                                <fieldset class='form-group'>
+                                  <label for='yAxisLimit'>y-Axis Limit</label>
+                                  <input type='text' class='form-control' id='color' ng-model=yAxisLimit placeholder='yAxisLimit' value='{{yAxisLimit}}'>
+                                </fieldset>
                               </div>
                               <div class="col-md-6">
                                 <fieldset class='form-group'>
-                                  <label for='results'>Results</label><br>
+                                  <label for='results'>Chart Theme</label><br>
                                   <select ng-model=theme class='form-control' name='chartselect' >
                                     <option value="dark">Dark</option>
                                     <option value="light">Light</option>
@@ -321,6 +325,7 @@ include_once 'settings/iotdb.php';
             var count='';
             var theme="dark";
             var startDate='';
+            var yAxisLimit=null;
             var background_color="#525263";
            /* $http.get("dd.php")
             .then(function(response) {
@@ -330,6 +335,7 @@ include_once 'settings/iotdb.php';
             $scope.deviceId = deviceId;
             $scope.tab=tab;
             $scope.count=count;
+            $scope.yAxisLimit=yAxisLimit;
             $scope.startDate=startDate;
             $scope.dataPoints=dataPoints;
             $scope.custom=custom;
@@ -378,7 +384,7 @@ include_once 'settings/iotdb.php';
             }
             $scope.showGraph = function(deviceType, deviceId, feed) {//getting graph ofr a particular field
               //alert(deviceType+' '+feed+' '+deviceId);
-               $http.get("displaygraph.php?deviceType="+deviceType+"&deviceId="+deviceId+"&feed="+feed+"&count="+ $scope.count+"&startDate="+$scope.startDate)//calling dd.php for retrieving the data
+               $http.get("displaygraph.php?deviceType="+deviceType+"&deviceId="+deviceId+"&feed="+feed+"&count="+ $scope.count+"&startDate="+$scope.startDate+"&yAxisLimit="+$scope.yAxisLimit)//calling dd.php for retrieving the data
                 .then(function(response) {
                     $scope.dataPoints = response.data;
                     if(deviceType!=1 && deviceType!=2){//for sensors
