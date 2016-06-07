@@ -193,24 +193,26 @@ error_reporting(-1); //for suppressing errors and notices
                         </div>
                       
                 </div>
-                <div class="row alert alert-info">
-                    <hr/>
-                    <table class='table table-striped well col-md-12 col-xs-6'>                                       
-                        <caption class="text-info text-center">Monitoring List</caption>
-                      
-                          <th>Name</th><th>Group</th><th>Field</th><th>Action</th><th>Condition</th><th>Threshold</th><th></th>
-                       
-                            <tr ng-repeat="task in tasks">
-                                <td align="center">{{task.name}}</td>
-                                <td>{{task.groupName}}</td>
-                                <td>{{task.field}}</td>
-                                <td>{{task.actionName}}</td>
-                                <td align="center">{{task.conditionCase}}</td> 
-                                <td align="center">{{task.conditionValue}}</td>
-                                <td><a class='text-danger glyphicon glyphicon-trash' data-toggle='tooltip' title='Delete' ng-click='del(task.id)'></a></td>    
-                            </tr><!-- loop ends here -->
-                       
-                    </table>
+                <div class="row">
+                    <div class="well" style="overflow-y: scroll;">
+                        <table class='table table-striped well'>                                       
+                            <caption class="text-info text-center">Monitoring List</caption>
+                            <thead>
+                              <th>Name</th><th>Group</th><th>Field</th><th>Action</th><th>Condition</th><th>Threshold</th><th></th>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="task in tasks">
+                                    <td align="center">{{task.name}}</td>
+                                    <td>{{task.groupName}}</td>
+                                    <td>{{task.field}}</td>
+                                    <td>{{task.actionName}}</td>
+                                    <td align="center">{{task.conditionCase}}</td> 
+                                    <td align="center">{{task.conditionValue}}</td>
+                                    <td><a class='text-danger glyphicon glyphicon-trash' data-toggle='tooltip' title='Delete' ng-click='del(task.id)'></a></td>    
+                                </tr><!-- loop ends here -->
+                            <tbody>
+                        </table>
+                    </div>
                 </div>
                 <!-- /.row -->
             </div>
