@@ -194,7 +194,7 @@ error_reporting(-1); //for suppressing errors and notices
                       
                 </div>
                 <div class="row">
-                    <div class="alert alert-info">
+                    <div class="alert alert-info" style="overflow-y: scroll;">
                         <table class='table table-striped well'>                                       
                             <caption class="text-info text-center">Monitoring List</caption>
                             <thead>
