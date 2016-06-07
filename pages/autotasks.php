@@ -224,6 +224,7 @@ if(isset($_GET['notif'])) //deleting the entry
 	{	
 		while($row=mysql_fetch_assoc($results)) 
 		{	
+			$jsonArrayItem = array();
 			$id=$row['id'];
 			$deviceId=$row['deviceId'];
 			$field1=$row['field1'];
@@ -240,12 +241,40 @@ if(isset($_GET['notif'])) //deleting the entry
 			$field6changeDate=$row['field6changeDate'];
 			$createdAt=$row['created_at'];
 
-			$deviceq="SELECT type, switches FROM devices where deviceId='$deviceId'"; //getting group name
+			$deviceq="SELECT type, switches, field1 FROM devices where deviceId='$deviceId'"; //getting group name
             $deviceRes=mysql_query($deviceq);
             $deviceRow=mysql_fetch_assoc($deviceRes);
             $deviceType=$deviceRow['type'];
             $switchCount=$deviceRow['switches'];
-
+            if($switchCount==0){
+				if($deviceRow['field1']=='b'){
+					$jsonArrayItem['sensorType'] = 'b';
+				}
+				if($deviceRow['field1']=='bm'){
+					$jsonArrayItem['sensorType'] = 'bm';
+				}
+				if($row['field1']=='bthm'){
+					$deviceRow['sensorType'] = 'bthm';
+				}
+			}
+			$feedfetch="SELECT field1, field2, field3, field4, field5, field6, created_at FROM feeds WHERE feeds.device_id='$deviceId' order by feeds.id desc limit 1";
+			$feedres=mysql_query($feedfetch);
+			$feed=mysql_fetch_assoc($feedres);
+			
+			if($deviceType==1 and $switchCount==1){//esp with 1 valve as secondary battery too
+				$jsonArrayItem['Sbatvalue']=$feed['field3'];
+				$jsonArrayItem['Pbatvalue']=$feed['field2'];
+			}
+			if($deviceType==2 and $switchCount==0){//device type is sensor
+				$jsonArrayItem['Pbatvalue']=$feed['field3'];
+				if($feed['field1']=='bm')
+					$jsonArrayItem['moistValue']=$feed['field4'];
+				else if($feed['field1']=='bthm'){
+					$jsonArrayItem['tempValue']=$feed['field4'];
+					$jsonArrayItem['humidValue']=$feed['field5'];
+					$jsonArrayItem['moistValue']=$feed['field6'];
+				}
+			}
             $jsonArrayItem['deviceId'] = $deviceId;
 			$jsonArrayItem['field1'] = $field1;
 			$jsonArrayItem['field2'] = $field2;
