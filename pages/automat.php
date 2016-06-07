@@ -200,7 +200,7 @@ error_reporting(-1); //for suppressing errors and notices
                         <thead>
                           <th>Name</th><th>Group</th><th>Field</th><th>Action</th><th>Condition</th><th>Threshold</th><th></th>
                         </thead>
-                        <tbody>
+                        <tbody class="col-md-12">
                             <tr ng-repeat="task in tasks">
                                 <td align="center">{{task.name}}</td>
                                 <td>{{task.groupName}}</td>
