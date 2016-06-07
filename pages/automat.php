@@ -193,7 +193,7 @@ error_reporting(-1); //for suppressing errors and notices
                         </div>
                       
                 </div>
-                <div class="row">
+                <div class="row col-md-12">
                     <hr/>
                     <table class='table table-striped well'>                                       
                         <caption class="text-info text-center">Monitoring List</caption>
