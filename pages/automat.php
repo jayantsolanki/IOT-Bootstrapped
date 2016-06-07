@@ -297,7 +297,7 @@ error_reporting(-1); //for suppressing errors and notices
                 $http.get("autotasks.php?notif=1")//calling dd.php for retrieving the data
                 .then(function(response) {
                     $scope.deviceNotifs= response.data;
-                    console.log(JSON.stringify($scope.deviceNotifs));
+                    //console.log(JSON.stringify($scope.deviceNotifs));
                 });
                 
             }
