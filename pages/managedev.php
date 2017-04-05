@@ -212,7 +212,7 @@ if($updatedev!=null and $updateswi!=null)//perform the updation task
 	if($updatedev==0 and $updateswi==0){
 		display();
 	}
-	echo $updatedev."ss".$updateswi;
+	echo $updatedev." switch ".$updateswi." groupid ".$gid." dname ".$dname;
 	if($gid!=null and $dname!=null and ($updatedev!=0 and $updateswi!=0)){//update only if both fields are not empty
 		$query="SELECT name FROM groups WHERE id='$gid'";
 		$grps=mysql_query($query);
