@@ -224,6 +224,7 @@ if($updatedev!=null and $updateswi!=null)//perform the updation task
 			echo "UPDATE failed: $query<br/>".mysql_error()."<br/><br/>";
 
 		}
+
 		else{//updating the switch and device
 
 			$query = "UPDATE switches SET switches.groupId = '$gid', switches.newSwitch=0 WHERE switches.deviceId = '$updatedev' and switches.switchId=$updateswi"; //updating switche with group Id
@@ -239,8 +240,8 @@ if($updatedev!=null and $updateswi!=null)//perform the updation task
 		display();
 	}
 	else{
+		echo $updatedev." switch ".$updateswi." groupid ".$gid." dname ".$dname;
 		if($updateswi==0)
-			echo $updatedev." switch ".$updateswi." groupid ".$gid." dname ".$dname;
 			$query="SELECT devices.name as dname, groups.name as name FROM groups inner join devices on devices.groupid=groups.id WHERE devices.deviceId='$deviceId'";
 		else
 			$query="SELECT devices.name as dname, groups.name as name FROM groups inner join switches on switches.groupid=groups.id inner join devices on devices.deviceId = switches.deviceId WHERE switches.deviceId='$deviceId' and switches.switchId=$switchId";
