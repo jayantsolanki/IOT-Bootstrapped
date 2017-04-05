@@ -208,11 +208,11 @@ if($deviceId!=null and $switchId!=null)//show update fields for selected swtich
 
 if($updatedev!=null and $updateswi!=null)//perform the updation task
 {
-	echo "failed";
 	mysql_select_db($dbname) or die(mysql_error());
 	if($updatedev==0 and $updateswi==0){
 		display();
 	}
+	echo $updatedev."ss".$updateswi;
 	if($gid!=null and $dname!=null and ($updatedev!=0 and $updateswi!=0)){//update only if both fields are not empty
 		$query="SELECT name FROM groups WHERE id='$gid'";
 		$grps=mysql_query($query);
@@ -233,7 +233,7 @@ if($updatedev!=null and $updateswi!=null)//perform the updation task
 			if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))
 				echo "UPDATE failed: $query<br/>".mysql_error()."<br/><br/>";		
 		}
-		
+
 		display();
 	}
 	else{
