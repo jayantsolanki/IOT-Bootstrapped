@@ -214,7 +214,7 @@ if($updatedev!=null and $updateswi!=null)//perform the updation task
 	}
 
 	if($gid!=null and $dname!=null and ($updatedev!='0' and $updateswi!='0')){//update only if both fields are not empty
-		echo $updatedev." switch ".$updateswi." groupid ".$gid." dname ".$dname;
+		// echo $updatedev." switch ".$updateswi." groupid ".$gid." dname ".$dname;
 		$query="SELECT name FROM groups WHERE id='$gid'";
 		$grps=mysql_query($query);
 		$grp=mysql_fetch_assoc($grps);
@@ -341,7 +341,7 @@ if($dels!=null) //for deleting selected sensor type
 }
 if($ddeldev!=null and $ddelswi!=null) //for deleting selected device
 {
-	if($ddeldev!=0 and $ddelswi==0){//delete the device and its related switches
+	if($ddeldev!='0' and $ddelswi=='0'){//delete the device and its related switches
 		$query = "DELETE FROM devices WHERE devices.deviceId='$ddeldev'";
 		if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))
 		echo "Deletion failed: $query<br/><div class='alert alert-danger'>".mysql_error()."</div><br/><br/>";
