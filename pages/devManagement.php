@@ -475,7 +475,7 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
             }
           }
         xmlhttp.open('GET','managedev.php?editdev='+deviceId+'&editswi='+switchId,true);
-        alert(macid);
+        alert(deviceId);
         xmlhttp.send();
         }
         </script>
