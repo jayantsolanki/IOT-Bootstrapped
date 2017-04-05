@@ -224,8 +224,9 @@ if($updatedev!=null and $updateswi!=null)//perform the updation task
 			echo "UPDATE failed: $query<br/>".mysql_error()."<br/><br/>";
 
 		}
+		echo $updatedev." switch ".$updateswi." groupid ".$gid." dname ".$dname;
 		else{//updating the switch and device
-			echo $updatedev." switch ".$updateswi." groupid ".$gid." dname ".$dname;
+
 			$query = "UPDATE switches SET switches.groupId = '$gid', switches.newSwitch=0 WHERE switches.deviceId = '$updatedev' and switches.switchId=$updateswi"; //updating switche with group Id
 			if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))
 				echo "UPDATE failed: $query<br/>".mysql_error()."<br/><br/>";
