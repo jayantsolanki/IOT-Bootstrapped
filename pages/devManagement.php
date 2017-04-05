@@ -646,7 +646,7 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
           alert('Choose a group');
         else{
           xmlhttp.open('GET','managedev.php?updatedev='+deviceId+'&updateswi='+switchId+'&gid='+gid+'&dname='+dname,true);
-          alert(deviceId+switchId+gid+dname );
+          alert(deviceId+"switchId "+switchId+" group id"+gid+" name"+dname );
           xmlhttp.send();
         }
         }
