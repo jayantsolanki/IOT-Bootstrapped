@@ -212,7 +212,7 @@ if($updatedev!=null and $updateswi!=null)//perform the updation task
 	if($updatedev==0 and $updateswi==0){
 		display();
 	}
-	echo $updatedev." switch ".$updateswi." groupid ".$gid." dname ".$dname;
+
 	if($gid!=null and $dname!=null and ($updatedev!=0 and $updateswi!=0)){//update only if both fields are not empty
 		$query="SELECT name FROM groups WHERE id='$gid'";
 		$grps=mysql_query($query);
@@ -222,6 +222,7 @@ if($updatedev!=null and $updateswi!=null)//perform the updation task
 			$query = "UPDATE devices SET devices.groupId = '$gid', devices.status=0, devices.name='$dname' WHERE devices.deviceId = '$updatedev'"; //updating item such as sensors which dont have switches
 			if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))
 			echo "UPDATE failed: $query<br/>".mysql_error()."<br/><br/>";
+			echo $updatedev." switch ".$updateswi." groupid ".$gid." dname ".$dname;
 		}
 		else{//updating the switch and device
 			$query = "UPDATE switches SET switches.groupId = '$gid', switches.newSwitch=0 WHERE switches.deviceId = '$updatedev' and switches.switchId=$updateswi"; //updating switche with group Id
