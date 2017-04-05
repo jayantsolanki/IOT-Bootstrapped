@@ -233,7 +233,7 @@ if($updatedev!=null and $updateswi!=null)//perform the updation task
 			if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))
 				echo "UPDATE failed: $query<br/>".mysql_error()."<br/><br/>";		
 		}
-
+		echo "failed";
 		display();
 	}
 	else{
