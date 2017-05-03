@@ -108,7 +108,8 @@ error_reporting(-1); //for suppressing errors and notices
             var batbtn="Check Battery";
             $scope.ws=ws;
             $scope.wsConnect = function() {//establishing the websocket connection with the server
-                $scope.ws=$websocket.$new('ws://10.129.139.139:8180');
+                // $scope.ws=$websocket.$new('ws://10.129.139.139:8180');
+                $scope.ws=$websocket.$new('ws://k-yantra.org:8086');
                 $scope.ws.$on('$open', function () {
                  console.log('Connection to server opened');
                 });
