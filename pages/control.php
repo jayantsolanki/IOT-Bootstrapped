@@ -16,14 +16,14 @@ $grp=$_GET["grp"];
 if(isset($_GET['grp']))
 {
 	
-	mysql_select_db($dbname) or die(mysql_error());
+	//mysqli_select_db($dbname) or die(mysqli_error());
 	$query="SELECT name FROM groups WHERE id='$grp'";
-	$grps=mysql_query($query);
-	$rows=mysql_fetch_assoc($grps);
+	$grps=mysqli_query($con,$query);
+	$rows=mysqli_fetch_assoc($grps);
 	$gname=$rows['name'];
 	echo "<h4>Valves grouped under <label class='badge'>".$gname."</label></h4>";
 	$query="SELECT * FROM switches WHERE switches.groupId=$grp";
-	$results=mysql_query($query);
+	$results=mysqli_query($con,$query);
 
 	//echo " <button id='1' type='button' onclick='updateall(this.value)' value='1'>Switch all ON</button>";
 	//echo " <button id='0' type='button' onclick='updateall(this.value)' value='0'>Switch all OFF</button>";
@@ -41,26 +41,26 @@ if(isset($_GET['grp']))
 	echo "</div>";
 	echo "</div>";
 
-	if (mysql_num_rows($results) > 0) 
+	if (mysqli_num_rows($results) > 0) 
 	{	$i=0;
 		
 		echo "<table class='table table-striped'><tbody>";
-		while($row=mysql_fetch_assoc($results)) 
+		while($row=mysqli_fetch_assoc($results)) 
 		{	
 			$i++;
 			$macid=$row['deviceId'];
 			$switchId=$row['switchId'];
 			$action=$row['action'];
 			$devquery="SELECT name, type, switches FROM devices WHERE deviceId='$macid'";
-			$devs=mysql_query($devquery);
-			$dev=mysql_fetch_assoc($devs);
+			$devs=mysqli_query($con,$devquery);
+			$dev=mysqli_fetch_assoc($devs);
 			$name=$dev['name'];
 			$type=$dev['type'];//valve, sensor
 			$switches=$dev['switches'];
 
 			$query="SELECT name FROM sensors WHERE id='$type'";
-			$sens=mysql_query($query);
-			$sen=mysql_fetch_assoc($sens);
+			$sens=mysqli_query($con,$query);
+			$sen=mysqli_fetch_assoc($sens);
 			$sname=$sen['name'];
 			if($action==1){ //changing into user readable form
 				$active="<span data-toggle='tooltip' title='Switch currently running' class='text text-success fa fa-refresh fa-spin'></span>";
@@ -72,8 +72,8 @@ if(isset($_GET['grp']))
 			}
 			
 			$seenquery="Select status from deviceStatus where deviceStatus.deviceId='$macid' order by deviceStatus.id desc limit 1";//getting last seen status
-			$seenresult=mysql_query($seenquery);
-			$seenfetch=mysql_fetch_assoc($seenresult);
+			$seenresult=mysqli_query($con,$seenquery);
+			$seenfetch=mysqli_fetch_assoc($seenresult);
 			$status=$seenfetch['status']; //online offline or new, 1, 0, 2
 			if($status==0) //offline
 				$status="<span class='label label-danger'>OFFLINE</span>";

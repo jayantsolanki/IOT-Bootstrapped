@@ -72,12 +72,12 @@ include_once 'settings/iotdb.php';
                                 <option selected="true" disabled='disabled'>Choose</option>
                             <ul class="dropdown-menu">
                               <?php 
-                                mysql_select_db($dbname) or die(mysql_error());
+                                //mysqli_select_db($dbname) or die(mysqli_error());
                                 $query="SELECT * FROM groups"; //displaying groups
-                                $results=mysql_query($query);
-                                if (mysql_num_rows($results) > 0) 
+                                $results=mysqli_query($con,$query);
+                                if (mysqli_num_rows($results) > 0) 
                                     {       
-                                        while($row=mysql_fetch_assoc($results)) 
+                                        while($row=mysqli_fetch_assoc($results)) 
                                         {   //$id=$row['id'];
                                             $group=$row['name'];
                                             $id=$row['id'];
@@ -139,7 +139,7 @@ include_once 'settings/iotdb.php';
       var ws=null;
       $(function() { //websocket
           //var wscon=null;
-          ws = new WebSocket("ws://10.129.139.139:8180");//changer later for production release
+          ws = new WebSocket("ws://socket.k-yantra.org");//changer later for production release
           ws.onopen = function(e) {
             console.log('Connection to server opened');
           }
