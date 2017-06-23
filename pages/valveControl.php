@@ -187,7 +187,7 @@ include_once 'settings/iotdb.php';
           setInterval(function () {
               if (ws.readyState != 1) {
                   document.getElementById('server').innerHTML="<span class='label label-warning'>No connection to MQTT server, retrying to connect, if problem persists, contact Jay</span>";
-                  ws = new WebSocket("ws://10.129.139.139:8180");
+                  ws = new WebSocket("ws://socket.k-yantra.org");
               }
               if (ws.readyState == 1) {
                 document.getElementById('server').innerHTML="";

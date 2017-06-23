@@ -21,15 +21,15 @@ if($stop>=2400)
 if($q!=0 and $q!=1 )//individual on/off
 {
 //echo "Hello World".$q;
-mysql_select_db($dbname) or die(mysql_error());//manual on/off
+//mysql_select_db($dbname) or die(mysql_error());//manual on/off
 $query="SELECT * FROM switches where"."(deviceId='$q' and switchId=$s)";
-$results=mysql_query($query);
+$results=mysqli_query($con, $query);
 
 
 
-	if (mysql_num_rows($results) > 0) 
+	if (mysqli_num_rows($results) > 0) 
 	{
-		while($row = mysql_fetch_assoc($results))
+		while($row = mysqli_fetch_assoc($results))
 		{
 			$macid=$row['deviceId'];
 			$action=$row['action'];
@@ -41,11 +41,11 @@ $results=mysql_query($query);
 				echo $active; //update button status
 				$query = "UPDATE switches SET action ='1', updated_at=now() WHERE deviceId='$macid' and switchId=$s"; //updating action status in device table
 				//echo "</br>".$query;
-				if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))
-					echo "UPDATE failed: $query<br/>".mysql_error()."<br/><br/>";
+				if(!mysqli_query($con, $query))
+					echo "UPDATE failed: $query<br/>".mysqli_error(true)."<br/><br/>";
 				$query="INSERT INTO tasks VALUES". "(DEFAULT,NULL,'$macid','$s','$start','$stop', '0','0',1 ,NULL)"; //changed here for switches, last zero is for manual task identification
-				if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))
-					echo "INSERT failed: $query<br/>".mysql_error()."<br/><br/>";
+				if(!mysqli_query($con, $query))
+					echo "INSERT failed: $query<br/>".mysqli_error(true)."<br/><br/>";
 				
 			}
 			else
@@ -55,11 +55,11 @@ $results=mysql_query($query);
 				echo $active;
 				$query = "UPDATE switches SET action ='0', updated_at=now() WHERE deviceId='$macid' and switchId=$s"; //updating action status in device table 
 				//echo "</br>".$query;
-				if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))
-					echo "UPDATE failed: $query<br/>".mysql_error()."<br/><br/>";
+				if(!mysqli_query($con, $query))
+					echo "UPDATE failed: $query<br/>".mysqli_error(true)."<br/><br/>";
 				$query= "DELETE FROM tasks where deviceId='$macid' and switchId=$s";//possible collision with sql query running in mosca server
-				if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))
-					echo "UPDATE failed: $query<br/>".mysql_error()."<br/><br/>";
+				if(!mysqli_query($con, $query))
+					echo "UPDATE failed: $query<br/>".mysqli_error(true)."<br/><br/>";
 				
 			}
            	    	
@@ -70,18 +70,18 @@ $results=mysql_query($query);
 }
 else //switching whole group on/off
 {
-mysql_select_db($dbname) or die(mysql_error());
+//mysql_select_db($dbname) or die(mysql_error());
 
 $query="SELECT name FROM groups WHERE id='$gid'";
-$grps=mysql_query($query);
-$grp=mysql_fetch_assoc($grps);
+$grps=mysqli_query($con, $query);
+$grp=mysqli_fetch_assoc($grps);
 $name=$grp['name'];
 
 $query="SELECT * FROM devices where devices.group='$gid'";
-$results=mysql_query($query);
-	if (mysql_num_rows($results) > 0) 
+$results=mysqli_query($con, $query);
+	if (mysqli_num_rows($results) > 0) 
 	{
-		while($row = mysql_fetch_assoc($results))
+		while($row = mysqli_fetch_assoc($results))
 		{
 				$macid=$row['macid'];
 				command($macid,$q);	//switch 
@@ -93,8 +93,8 @@ $results=mysql_query($query);
 
 		echo "Switch OFF";
 		$query="INSERT INTO tasks VALUES". "(DEFAULT,'$name',NULL,NULL,'$start','$stop', '0','0',2 ,NULL)";
-			if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))
-				echo "INSERT failed: $query<br/>".mysql_error()."<br/><br/>";
+			if(!mysqli_query($con, $query))
+				echo "INSERT failed: $query<br/>".mysqli_error(true)."<br/><br/>";
 		}
 	else 
 		{
@@ -104,8 +104,8 @@ $results=mysql_query($query);
 	$update="UPDATE devices SET action='$q', updated_at=now() WHERE devices.group='$gid'"; //this is for updating running status off devices
 
 	//echo "</br>".$query;
-	if(!mysql_query($update,mysql_connect($dbhost, $dbuser, $dbpass)))
-	echo "UPDATE failed: $query<br/>".mysql_error()."<br/><br/>";
+	if(!mysqli_query($con, $update))
+	echo "UPDATE failed: $query<br/>".mysqli_error(true)."<br/><br/>";
 	}
 
 }
