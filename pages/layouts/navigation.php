@@ -215,7 +215,7 @@
                             <a href='devManagement.php'><i class='fa fa-wrench fa-fw'></i> Device Management</a>
                         </li>
                         <li>
-                            <a href='responses.php'><i class='fa-info-circle fa-fw'></i> Server Log</a>
+                            <a href='responses.php'><i class='fa-terminal on fa-square'></i> Server Log</a>
                         </li>
                         <li>
                             <!-- <a href='http://www.iitb.ac.in/'><img src='images/autumn.jpg' style="width:150px;height:150px"/></a> -->
