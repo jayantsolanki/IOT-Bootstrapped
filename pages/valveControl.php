@@ -3,7 +3,7 @@
 *Project:IoT-Connected-valves-for-irrigation-of-greenhouse
 *File name: valveControl.php
 *Author: Jayant Solanki
-*This is the valve control page of the website, which will basically show the maunal control options
+*This is the Switch control page of the website, which will basically show the maunal control options
 *for different sensors
 */
 session_start();
@@ -21,7 +21,7 @@ include_once 'settings/iotdb.php';
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Valve Control</title>
+    <title>Switch Control</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="../bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -60,7 +60,7 @@ include_once 'settings/iotdb.php';
                 <div class="row">
                     <div class="row">
                         <div class="col-lg-12">
-                            <h1 class="page-header text-info">Valve Control</h1>
+                            <h1 class="page-header text-info">Switch Control</h1>
                         </div>
                         <!-- /.col-lg-12 -->
                     </div>
@@ -152,7 +152,7 @@ include_once 'settings/iotdb.php';
             //alert(status.deviceId+' '+status.status);
             if(response.action==1){
               document.getElementsByClassName(response.deviceId+response.switchId)[0].innerHTML="<span data-toggle='tooltip' title='Switch currently running' class='text text-success fa fa-refresh fa-spin'></span>";
-              document.getElementById(response.deviceId+response.switchId).innerHTML='Switch OFF';//changed to switchId for respective valves
+              document.getElementById(response.deviceId+response.switchId).innerHTML='Switch OFF';//changed to switchId for respective Switchs
             }
             else if(response.action==0){
               document.getElementsByClassName(response.deviceId+response.switchId)[0].innerHTML="<span data-toggle='tooltip' title='Switch currently stopped' class='text text-danger glyphicon glyphicon-ban-circle'></span>";

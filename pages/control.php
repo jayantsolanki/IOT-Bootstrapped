@@ -31,7 +31,7 @@ if(isset($_GET['grp']))
 	echo "<div class='row'>";
 	echo "<div class='col-md-6'>";
 	echo "Mins:<select class='form-control' id='duration' name='duration'>";
-	$j=10; 
+	$j=1; 
 	while($j<=60)
 	{
 	echo "<option value='$j'>$j</option>";
