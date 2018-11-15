@@ -80,7 +80,6 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
                             <div id='sensors'>
 
                               <?php
-                                // mysqli_select_db($dbname) or die(mysqli_error());
                                 $query="SELECT * FROM sensors"; //displaying groups
                                 $results=mysqli_query($con, $query);
                                 if (mysqli_num_rows($results) > 0) 
@@ -115,7 +114,6 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
                             <div id='groups'>
 
                               <?php
-                                  // mysqli_select_db($dbname) or die(mysqli_error());
                                   $query="SELECT * FROM groups"; //displaying groups
                                   $results=mysqli_query($con, $query);
                                   if (mysqli_num_rows($results) > 0) 
@@ -153,8 +151,6 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
                             <div id='items'>
 
                                 <?php
-
-                                // mysqli_select_db($dbname) or die(mysqli_error());
                                 display($con);
                                 function display($con){
                                   $query="SELECT devices.name as name,devices.groupId as dgroupId, devices.type as type, devices.status as status, devices.deviceId as deviceId, switches.switchId as switchId, switches.groupId as sgroupId, switches.newSwitch as newSwitch, switches.created_at as created_at FROM devices left join switches on switches.deviceId=devices.deviceId where devices.switches>=0"; //displaying groups
@@ -189,10 +185,15 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
                                           }
                                           else
                                             $groupId=$sgroupId;
-                                          $query="SELECT name FROM groups WHERE id=$groupId";
+                                        if ($groupId==NULL)
+                              						$name="Not Assigned";
+                              					else
+                              					{
+                                          $query="SELECT name FROM groups WHERE id='$groupId'";
                                           $grps=mysqli_query($con, $query);
                                           $grp=mysqli_fetch_assoc($grps);
                                           $name=$grp['name'];
+					                               }
                                           if($switchId!=0 and $sstatus==1)
                                             $status="<span data-toggle='tooltip' title='New Device' class='text-info fa fa-circle-o-notch fa-spin'></span>";
                                           if($switchId==0 and $dstatus==1)
