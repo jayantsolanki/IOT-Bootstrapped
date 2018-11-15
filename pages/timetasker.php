@@ -7,7 +7,7 @@
 *It is called in ajax mode, performing time entries for tasks scheduled.
 */
 include_once 'settings/iotdb.php';
-mysql_select_db($dbname) or die(mysql_error());
+// mysqli_select_db($dbname) or die(mysqli_error());
 //echo "Hello".$_GET['stoph'];
 if(isset($_GET['grp']))
 {
@@ -43,8 +43,8 @@ if(isset($_GET['grp']))
 		while($i<=2400) //time should be greater than 2400, military format
 		{	
 			$query="SELECT name FROM groups WHERE id='$grp'";
-			/*$grps=mysql_query($query);
-			$grp=mysql_fetch_assoc($grps);
+			/*$grps=mysqli_query($query);
+			$grp=mysqli_fetch_assoc($grps);
 			$name=$grp['name'];*/
 			$start=$i;
 			$stop=$start + normalize($startm,$duration)-$startm;
@@ -53,11 +53,11 @@ if(isset($_GET['grp']))
 			if($stop==2400) //marks stop time as 0000
 				$stop=0;
 			$query="INSERT INTO tasks VALUES". "(DEFAULT,$grp, NULL,NULL,'$start','$stop', '1','1',2, NULL)";
-			//if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))		
-			//	echo "INSERT failed: $query<br/>".mysql_error()."<br/><br/>";
+			//if(!mysqli_query($query,mysqli_connect($dbhost, $dbuser, $dbpass)))		
+			//	echo "INSERT failed: $query<br/>".mysqli_error()."<br/><br/>";
 			//echo $query;
-			if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))
-				echo "INSERT failed: $query<br/>".mysql_error()."<br/><br/>";
+			if(!mysqli_query($con, $query))
+				echo "INSERT failed: $query<br/>".mysqli_error()."<br/><br/>";
 			
 				
 			
@@ -77,15 +77,15 @@ if(isset($_GET['grp']))
 			else
 			{
 				/*$query="SELECT name FROM groups WHERE id='$grp'";
-				$grps=mysql_query($query);
-				$grp=mysql_fetch_assoc($grps);
+				$grps=mysqli_query($query);
+				$grp=mysqli_fetch_assoc($grps);
 				$name=$grp['name'];*/
 				$query="INSERT INTO tasks VALUES". "(DEFAULT,$grp,NULL,NULL,'$start','$stop', '1','1',2, NULL)";
-			//if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))		
-			//	echo "INSERT failed: $query<br/>".mysql_error()."<br/><br/>";
+			//if(!mysqli_query($query,mysqli_connect($dbhost, $dbuser, $dbpass)))		
+			//	echo "INSERT failed: $query<br/>".mysqli_error()."<br/><br/>";
 			//echo $query;
-				if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))
-					echo "INSERT failed: $query<br/>".mysql_error()."<br/><br/>";
+				if(!mysqli_query($con, $query))
+					echo "INSERT failed: $query<br/>".mysqli_error()."<br/><br/>";
 				else
 					echo "</br></br><span class='alert alert-success'><b>New Time schedule added</b></span><br/>";
 			}
@@ -100,13 +100,13 @@ if(isset($_GET['del'])) //deleting the entry
 
 	$query = "DELETE FROM tasks WHERE id='$del'";
 
-	if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))
-	echo "Deletion failed: $query<br/><div class='alert alert-danger'>".mysql_error()."</div><br/><br/>";
+	if(!mysqli_query($con, $query))
+	echo "Deletion failed: $query<br/><div class='alert alert-danger'>".mysqli_error()."</div><br/><br/>";
 
 }
 
 
-display();
+display($con);
 
  ?>  
 <?php
@@ -144,13 +144,13 @@ function normalize($startm,$duration)
  * 
  *
  */
-function display()
+function display($con)
 {
     $dbname='IOT';
-    mysql_select_db($dbname) or die(mysql_error());
+    // mysqli_select_db($dbname) or die(mysqli_error());
     $query="SELECT * FROM tasks"; //displaying scheduled tasks
-    $results=mysql_query($query);
-    if (mysql_num_rows($results) > 0) 
+    $results=mysqli_query($con, $query);
+    if (mysqli_num_rows($results) > 0) 
     {   $i=1;
         echo "</br></br><h2>Scheduled Tasks&nbsp;<small class='text-muted pull-right'><span data-toggle='tooltip' title='Task currently running' class='text text-success fa fa-refresh fa-spin'></span>
         <span data-toggle='tooltip' title='Task currently stopped' class='text text-danger glyphicon glyphicon-ban-circle'></span>
@@ -158,7 +158,7 @@ function display()
         <span data-toggle='tooltip' title='Task is disabled by the user' class='text text-warning glyphicon glyphicon-exclamation-sign'></span>
         <span class='text text-muted glyphicon glyphicon-warning-sign' data-toggle='tooltip' title='Should not water plants during night'></span></small></h2>";
         echo "<table class='table table-striped small'><tbody>";      
-        while($row=mysql_fetch_assoc($results)) 
+        while($row=mysqli_fetch_assoc($results)) 
         {   $id=$row['id'];
             $start=$row['start'];
             $stop=$row['stop']; //online offline or new, 1, 0, 2
@@ -182,8 +182,8 @@ function display()
             <td><strong class='text-muted'>".$i.".</strong> $active</td>";
             if($groupId!=null){
                 $grpq="SELECT name FROM groups where id=$groupId"; //getting group name
-                $grpres=mysql_query($grpq);
-                $grprow=mysql_fetch_assoc($grpres);
+                $grpres=mysqli_query($con, $grpq);
+                $grprow=mysqli_fetch_assoc($grpres);
                 $grpname=$grprow['name'];
                 echo"<td><b>Group:</b> $grpname</td>";
             }

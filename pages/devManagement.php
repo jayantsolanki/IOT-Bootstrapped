@@ -80,13 +80,13 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
                             <div id='sensors'>
 
                               <?php
-                                mysql_select_db($dbname) or die(mysql_error());
+                                // mysqli_select_db($dbname) or die(mysqli_error());
                                 $query="SELECT * FROM sensors"; //displaying groups
-                                $results=mysql_query($query);
-                                if (mysql_num_rows($results) > 0) 
+                                $results=mysqli_query($con, $query);
+                                if (mysqli_num_rows($results) > 0) 
                                 {   $i=1;
                                     echo "</br></br><big>Device Types available</big><hr/>";        
-                                    while($row=mysql_fetch_assoc($results)) 
+                                    while($row=mysqli_fetch_assoc($results)) 
                                     {   //$id=$row['id'];
                                         $id=$row['id'];
                                         $sensor=$row['name'];
@@ -115,13 +115,13 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
                             <div id='groups'>
 
                               <?php
-                                  mysql_select_db($dbname) or die(mysql_error());
+                                  // mysqli_select_db($dbname) or die(mysqli_error());
                                   $query="SELECT * FROM groups"; //displaying groups
-                                  $results=mysql_query($query);
-                                  if (mysql_num_rows($results) > 0) 
+                                  $results=mysqli_query($con, $query);
+                                  if (mysqli_num_rows($results) > 0) 
                                   {   $i=1;
                                       echo "</br></br><big>Groups available</big><hr/>";     
-                                      while($row=mysql_fetch_assoc($results)) 
+                                      while($row=mysqli_fetch_assoc($results)) 
                                       {   //$id=$row['id'];
                                           $id=$row['id'];
                                           $group=$row['name'];
@@ -154,14 +154,14 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
 
                                 <?php
 
-                                mysql_select_db($dbname) or die(mysql_error());
-                                display();
-                                function display(){
+                                // mysqli_select_db($dbname) or die(mysqli_error());
+                                display($con);
+                                function display($con){
                                   $query="SELECT devices.name as name,devices.groupId as dgroupId, devices.type as type, devices.status as status, devices.deviceId as deviceId, switches.switchId as switchId, switches.groupId as sgroupId, switches.newSwitch as newSwitch, switches.created_at as created_at FROM devices left join switches on switches.deviceId=devices.deviceId where devices.switches>=0"; //displaying groups
-                                  $results=mysql_query($query);
-                                  if (mysql_num_rows($results) > 0) 
+                                  $results=mysqli_query($con, $query);
+                                  if (mysqli_num_rows($results) > 0) 
                                   {   $i=1;    
-                                      while($row=mysql_fetch_assoc($results)) 
+                                      while($row=mysqli_fetch_assoc($results)) 
                                       {   
                                           $deviceId=$row['deviceId'];//for switches
                                           $switchId=$row['switchId'];//for switches
@@ -176,8 +176,8 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
                                           
 
                                           $query="SELECT name FROM sensors WHERE id=$type";
-                                          $typename=mysql_query($query);
-                                          $typerow=mysql_fetch_assoc($typename);
+                                          $typename=mysqli_query($con, $query);
+                                          $typerow=mysqli_fetch_assoc($typename);
                                           $type=$typerow['name'];
                                           $status=null;
                                           if($switchId==null){//if it is a switchless device like sensor node
@@ -190,8 +190,8 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
                                           else
                                             $groupId=$sgroupId;
                                           $query="SELECT name FROM groups WHERE id=$groupId";
-                                          $grps=mysql_query($query);
-                                          $grp=mysql_fetch_assoc($grps);
+                                          $grps=mysqli_query($con, $query);
+                                          $grp=mysqli_fetch_assoc($grps);
                                           $name=$grp['name'];
                                           if($switchId!=0 and $sstatus==1)
                                             $status="<span data-toggle='tooltip' title='New Device' class='text-info fa fa-circle-o-notch fa-spin'></span>";

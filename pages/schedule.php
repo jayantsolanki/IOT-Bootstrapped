@@ -73,12 +73,12 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
                                     <select class="form-control" id="grps">
                                         <option selected="true" disabled='disabled'>Choose</option>
                                         <?php
-                                        mysql_select_db($dbname) or die(mysql_error());
+                                        // mysqli_select_db($dbname) or die(mysqli_error());
                                         $query="SELECT * FROM groups"; //displaying groups
-                                        $results=mysql_query($query);
-                                        if (mysql_num_rows($results) > 0) 
+                                        $results=mysqli_query($con, $query);
+                                        if (mysqli_num_rows($results) > 0) 
                                             {       
-                                                while($row=mysql_fetch_assoc($results)) 
+                                                while($row=mysqli_fetch_assoc($results)) 
                                                 {   //$id=$row['id'];
                                                     $group=$row['name'];
                                                     $id=$row['id'];
@@ -239,7 +239,7 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
                         </div>
                         <div class="col-md-7">
                             <div class='' id='display'>
-                            <?php display();?>
+                            <?php display($con);?>
                             </div><!-- display -->
                         </div>
                         <div class='row'>
@@ -250,20 +250,20 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
 
                         /*
                          *
-                         * Function Name: display()
+                         * Function Name: display($con)
                          * Input: -
                          * Output: display the scheduled tasks
                          * Logic: fetches tasks from tasks table
                          * 
                          *
                          */
-                       function display()
+                       function display($con)
                         {
                             $dbname='IOT';
-                            mysql_select_db($dbname) or die(mysql_error());
+                            // mysqli_select_db($dbname) or die(mysqli_error());
                             $query="SELECT * FROM tasks"; //displaying scheduled tasks
-                            $results=mysql_query($query);
-                            if (mysql_num_rows($results) > 0) 
+                            $results=mysqli_query($con, $query);
+                            if (mysqli_num_rows($results) > 0) 
                             {   $i=1;
                                 echo "</br></br><h2>Scheduled Tasks&nbsp;<small class='text-muted pull-right'><span data-toggle='tooltip' title='Task currently running' class='text text-success fa fa-refresh fa-spin'></span>
                                 <span data-toggle='tooltip' title='Task currently stopped' class='text text-danger glyphicon glyphicon-ban-circle'></span>
@@ -271,7 +271,7 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
                                 <span data-toggle='tooltip' title='Task is disabled by the user' class='text text-warning glyphicon glyphicon-exclamation-sign'></span>
                                 <span class='text text-muted glyphicon glyphicon-warning-sign' data-toggle='tooltip' title='Should not water plants during night'></span></small></h2>";
                                 echo "<table class='table table-striped small'><tbody>";      
-                                while($row=mysql_fetch_assoc($results)) 
+                                while($row=mysqli_fetch_assoc($results)) 
                                 {   $id=$row['id'];
                                     $start=$row['start'];
                                     $stop=$row['stop']; //online offline or new, 1, 0, 2
@@ -295,8 +295,8 @@ date_default_timezone_set('Asia/Kolkata');//setting IST
                                     <td><strong class='text-muted'>".$i.".</strong> $active</td>";
                                     if($groupId!=null){
                                         $grpq="SELECT name FROM groups where id=$groupId"; //getting group name
-                                        $grpres=mysql_query($grpq);
-                                        $grprow=mysql_fetch_assoc($grpres);
+                                        $grpres=mysqli_query($con, $grpq);
+                                        $grprow=mysqli_fetch_assoc($grpres);
                                         $grpname=$grprow['name'];
                                         echo"<td><b>Group:</b> $grpname</td>";
                                     }

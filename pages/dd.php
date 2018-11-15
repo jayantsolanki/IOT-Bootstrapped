@@ -17,10 +17,10 @@ if($deviceId!=null){
 
 	$jsonArray=array();
 	$query="SELECT * FROM switches WHERE switches.deviceId='$deviceId'";
-	$results=mysql_query($query);
-	if (mysql_num_rows($results) > 0) 
+	$results=mysqli_query($con, $query);
+	if (mysqli_num_rows($results) > 0) 
 	{	
-		while($row=mysql_fetch_assoc($results)) 
+		while($row=mysqli_fetch_assoc($results)) 
 		{	
 			$deviceId=$row['deviceId'];
 			$switchId=$row['switchId'];
@@ -39,8 +39,8 @@ if($deviceId!=null){
 			//$switches=$row['switches'];
 			$newSwitch=$row['newSwitch'];
 			$query="SELECT name FROM groups WHERE id='$grp'";
-			$grps=mysql_query($query);
-			$rows=mysql_fetch_assoc($grps);
+			$grps=mysqli_query($con, $query);
+			$rows=mysqli_fetch_assoc($grps);
 			$gname=$rows['name'];
 
 			$jsonArrayItem['deviceId'] = $deviceId;
@@ -67,10 +67,10 @@ if($deviceActivity!=null){
 	$grpupId=$_GET['grpId'];
 	$jsonArray = array();
 	$query="SELECT * FROM devices WHERE groupId=$grpupId";
-	$results=mysql_query($query);
-	if (mysql_num_rows($results) > 0) 
+	$results=mysqli_query($con, $query);
+	if (mysqli_num_rows($results) > 0) 
 	{	
-		while($row=mysql_fetch_assoc($results)) 
+		while($row=mysqli_fetch_assoc($results)) 
 		{	
 			$deviceId=$row['deviceId'];
 			$deviceType=$row['type'];
@@ -78,15 +78,15 @@ if($deviceActivity!=null){
 				$devStatus="Select * FROM (SELECT * FROM deviceStatus WHERE deviceId='$deviceId' order by id desc limit 15) as temp order by id asc";
 			else
 				$devStatus="Select * FROM (SELECT * FROM deviceStatus WHERE deviceId='$deviceId' order by id desc limit 100) as temp order by id asc";
-			$Statusresults=mysql_query($devStatus);
-			$length=mysql_num_rows($Statusresults);
+			$Statusresults=mysqli_query($devStatus);
+			$length=mysqli_num_rows($Statusresults);
 			if ($length > 0) 
 			{	
 				$jsonArrayItem['category'] = $deviceId;
 				$segments = array();//array for segments
 				$timeRows[]=null;
 				$i=0;
-				while ($timeRows[$i] = mysql_fetch_assoc($Statusresults)){
+				while ($timeRows[$i] = mysqli_fetch_assoc($Statusresults)){
 					$i++;
 				}
 				for($i=0; $i<$length;$i++)
@@ -139,10 +139,10 @@ function display($grp)
 	//echo "<button id='bat' type='button' onclick='checkbat(this.value)' value='$grp'>Check Battery status</button></br></br>";
 	//$query="SELECT * FROM devices";
 	$query="SELECT * FROM devices WHERE devices.groupId=$grp";
-	$results=mysql_query($query);
-	if (mysql_num_rows($results) > 0) 
+	$results=mysqli_query($con, $query);
+	if (mysqli_num_rows($results) > 0) 
 	{	
-		while($row=mysql_fetch_assoc($results)) 
+		while($row=mysqli_fetch_assoc($results)) 
 		{	
 			$jsonArrayItem = array();
 			$macid=$row['deviceId'];
@@ -155,8 +155,8 @@ function display($grp)
 			$newDevice=$row['status'];
 			$created=$row['created_at'];
 			$batquery="SELECT field2, field3, created_at FROM feeds WHERE feeds.device_id='$macid' order by feeds.id desc limit 1";
-			$batresult=mysql_query($batquery);
-			$batfetch=mysql_fetch_assoc($batresult);
+			$batresult=mysqli_query($con, $batquery);
+			$batfetch=mysqli_fetch_assoc($batresult);
 			$Pbatvalue=$batfetch['field2'];
 			if($sense==2)
 				$Pbatvalue=$batfetch['field3'];
@@ -164,16 +164,16 @@ function display($grp)
 			//$devType=$batfetch['device_type'];
 			$batTime=$batfetch['created_at'];
 			$query="SELECT name FROM groups WHERE id='$grp'";//getting group name
-			$grps=mysql_query($query);
-			$rows=mysql_fetch_assoc($grps);
+			$grps=mysqli_query($con, $query);
+			$rows=mysqli_fetch_assoc($grps);
 			$name=$rows['name'];
 			$query="SELECT name FROM sensors WHERE id='$sense'";//getting sensor name
-			$grps=mysql_query($query);
-			$rows=mysql_fetch_assoc($grps);
+			$grps=mysqli_query($con, $query);
+			$rows=mysqli_fetch_assoc($grps);
 			$sensor=$rows['name'];
 			$seenquery="Select status, created_At from deviceStatus where deviceStatus.deviceId='$macid' order by deviceStatus.id desc limit 1";//getting last seen status
-			$seenresult=mysql_query($seenquery);
-			$seenfetch=mysql_fetch_assoc($seenresult);
+			$seenresult=mysqli_query($con, $seenquery);
+			$seenfetch=mysqli_fetch_assoc($seenresult);
 			$seen=$seenfetch['created_At'];
 			$status=$seenfetch['status']; //online offline or new, 1, 0, 2
 

@@ -73,12 +73,12 @@ error_reporting(-1); //for suppressing errors and notices
                           <b>Select group</b> <select name='groups' class='mobileSelect'>
                           <!-- <option selected="true" disabled='disabled'>Choose</option> -->
                           <?php 
-                          mysql_select_db($dbname) or die(mysql_error());
+                          // mysqli_select_db($dbname) or die(mysqli_error());
                           $query="SELECT * FROM groups"; //displaying groups
-                          $results=mysql_query($query);
-                          if (mysql_num_rows($results) > 0) 
+                          $results=mysqli_query($con, $query);
+                          if (mysqli_num_rows($results) > 0) 
                               {       
-                                  while($row=mysql_fetch_assoc($results)) 
+                                  while($row=mysqli_fetch_assoc($results)) 
                                   {   //$id=$row['id'];
                                       $group=$row['name'];
                                       $id=$row['id'];
@@ -207,7 +207,7 @@ error_reporting(-1); //for suppressing errors and notices
             $scope.batbtn=batbtn;
             $scope.ws=ws;
             $scope.wsConnect = function() {//establishing the websocket connection with the server
-                $scope.ws=$websocket.$new('ws://10.129.139.139:8180');
+                $scope.ws=$websocket.$new('ws://68.133.37.15:8180');
                 $scope.ws.$on('$open', function () {
                  console.log('Connection to server opened');
                 });

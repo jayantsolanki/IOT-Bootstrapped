@@ -14,10 +14,10 @@ if($groups!=null){
 
 	$jsonArray=array();
 	$query="SELECT * FROM groups";
-	$results=mysql_query($query);
-	if (mysql_num_rows($results) > 0) 
+	$results=mysqli_query($con, $query);
+	if (mysqli_num_rows($results) > 0) 
 	{	
-		while($row=mysql_fetch_assoc($results)) 
+		while($row=mysqli_fetch_assoc($results)) 
 		{	
 			$groupName=$row['name'];
 			$groupId=$row['id'];
@@ -35,10 +35,10 @@ if($actions!=null){
 
 	$jsonArray=array();
 	$query="SELECT * FROM actionReact";
-	$results=mysql_query($query);
-	if (mysql_num_rows($results) > 0) 
+	$results=mysqli_query($con, $query);
+	if (mysqli_num_rows($results) > 0) 
 	{	
-		while($row=mysql_fetch_assoc($results)) 
+		while($row=mysqli_fetch_assoc($results)) 
 		{	
 			$actionName=$row['actionName'];
 			$actionId=$row['id'];
@@ -125,13 +125,13 @@ if($name!=null){
 		$query="INSERT INTO reactJS (name, groupId, fieldId, conditionCase, conditionValue, actionId) VALUES ('$name',$group, '$field', '$conditionCase','$conditionVal',$actionSelect)";
 	else
 		$query="INSERT INTO reactJS (name, groupId, fieldId, actionId) VALUES ('$name',$group, '$field',$actionSelect)";
-	//if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))		
-	//	echo "INSERT failed: $query<br/>".mysql_error()."<br/><br/>";
+	//if(!mysqli_query($query,mysqli_connect($dbhost, $dbuser, $dbpass)))		
+	//	echo "INSERT failed: $query<br/>".mysqli_error()."<br/><br/>";
 	//echo $query;
 	if($flag){
-		if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass))){
+		if(!mysqli_query($con, $query)){
 			$jsonArrayItem['type'] = 'mysql Insert failed';
-			$jsonArrayItem['value'] = mysql_error();
+			$jsonArrayItem['value'] = mysqli_error();
 			array_push($jsonArray, $jsonArrayItem);
 		}
 		else{
@@ -149,10 +149,10 @@ if($reactJS!=null){
 
 	$jsonArray=array();
 	$query="SELECT * FROM reactJS";
-	$results=mysql_query($query);
-	if (mysql_num_rows($results) > 0) 
+	$results=mysqli_query($con, $query);
+	if (mysqli_num_rows($results) > 0) 
 	{	
-		while($row=mysql_fetch_assoc($results)) 
+		while($row=mysqli_fetch_assoc($results)) 
 		{	
 			$id=$row['id'];
 			$name=$row['name'];
@@ -165,13 +165,13 @@ if($reactJS!=null){
 			$createdAt=$row['created_at'];
 			//
 			$grpq="SELECT name FROM groups where id=$groupId"; //getting group name
-            $grpres=mysql_query($grpq);
-            $grprow=mysql_fetch_assoc($grpres);
+            $grpres=mysqli_query($con, $grpq);
+            $grprow=mysqli_fetch_assoc($grpres);
             $groupName=$grprow['name'];
             //
             $actionq="SELECT actionName FROM actionReact where id=$actionId"; //getting group name
-            $actionRes=mysql_query($actionq);
-            $actionRow=mysql_fetch_assoc($actionRes);
+            $actionRes=mysqli_query($con, $actionq);
+            $actionRow=mysqli_fetch_assoc($actionRes);
             $actionName=$actionRow['actionName'];
 
 			$jsonArrayItem['id'] = $id;
@@ -198,10 +198,10 @@ if(isset($_GET['del'])) //deleting the entry
 	$jsonArray=array();
 	$query = "DELETE FROM reactJS WHERE id='$del'";
 
-	if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))
+	if(!mysqli_query($con, $query))
 	{
 		$jsonArrayItem['type'] = 'mysql Insert failed';
-		$jsonArrayItem['value'] = mysql_error();
+		$jsonArrayItem['value'] = mysqli_error();
 		array_push($jsonArray, $jsonArrayItem);
 	}
 	else{
@@ -219,10 +219,10 @@ if(isset($_GET['notif'])) //deleting the entry
 
 	$jsonArray=array();
 	$query="SELECT * FROM deviceNotif";
-	$results=mysql_query($query);
-	if (mysql_num_rows($results) > 0) 
+	$results=mysqli_query($con, $query);
+	if (mysqli_num_rows($results) > 0) 
 	{	
-		while($row=mysql_fetch_assoc($results)) 
+		while($row=mysqli_fetch_assoc($results)) 
 		{	
 			$jsonArrayItem = array();
 			$id=$row['id'];
@@ -242,8 +242,8 @@ if(isset($_GET['notif'])) //deleting the entry
 			$createdAt=$row['created_at'];
 
 			$deviceq="SELECT type, switches, field1 FROM devices where deviceId='$deviceId'"; //getting group name
-            $deviceRes=mysql_query($deviceq);
-            $deviceRow=mysql_fetch_assoc($deviceRes);
+            $deviceRes=mysqli_query($con, $deviceq);
+            $deviceRow=mysqli_fetch_assoc($deviceRes);
             $deviceType=$deviceRow['type'];
             $switchCount=$deviceRow['switches'];
             if($switchCount==0){
@@ -258,8 +258,8 @@ if(isset($_GET['notif'])) //deleting the entry
 				}
 			}
 			$feedfetch="SELECT field1, field2, field3, field4, field5, field6, created_at FROM feeds WHERE feeds.device_id='$deviceId' order by feeds.id desc limit 1";
-			$feedres=mysql_query($feedfetch);
-			$feed=mysql_fetch_assoc($feedres);
+			$feedres=mysqli_query($con, $feedfetch);
+			$feed=mysqli_fetch_assoc($feedres);
 			
 			if($deviceType==1 and $switchCount==1){//esp with 1 valve as secondary battery too
 				$jsonArrayItem['Sbatvalue']=$feed['field3'];

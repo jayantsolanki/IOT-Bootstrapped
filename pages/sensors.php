@@ -20,10 +20,10 @@ if(isset($_GET['grp']))
 	//echo "<button id='bat' type='button' onclick='checkbat(this.value)' value='$grp'>Check Battery status</button></br></br>";
 	//$query="SELECT * FROM devices";
 	$query="SELECT * FROM devices WHERE devices.groupId=$grp";
-	$results=mysql_query($query);
-	if (mysql_num_rows($results) > 0) 
+	$results=mysqli_query($con, $query);
+	if (mysqli_num_rows($results) > 0) 
 	{	
-		while($row=mysql_fetch_assoc($results)) 
+		while($row=mysqli_fetch_assoc($results)) 
 		{	
 			$jsonArrayItem = array();
 			$macid=$row['deviceId'];
@@ -34,12 +34,12 @@ if(isset($_GET['grp']))
 			$sense=$row['type'];//device type id
 			$switches=$row['switches'];
 			$query="SELECT name FROM groups WHERE id='$grp'";//getting group name
-			$grps=mysql_query($query);
-			$rows=mysql_fetch_assoc($grps);
+			$grps=mysqli_query($con, $query);
+			$rows=mysqli_fetch_assoc($grps);
 			$name=$rows['name'];
 			$query="SELECT name FROM sensors WHERE id='$sense'";//getting sensor name
-			$grps=mysql_query($query);
-			$rows=mysql_fetch_assoc($grps);
+			$grps=mysqli_query($con, $query);
+			$rows=mysqli_fetch_assoc($grps);
 			$sensor=$rows['name'];
 			$jsonArrayItem['deviceName'] = $dname;
 			$jsonArrayItem['deviceId'] = $macid;
@@ -70,8 +70,8 @@ if(isset($_GET['grp']))
 				$jsonArrayItem['field3'] = 'Sbattery';
 			}
 			$feedfetch="SELECT field1, field2, field3, field4, field5, field6, created_at FROM feeds WHERE feeds.device_id='$macid' order by feeds.id desc limit 1";
-			$feedres=mysql_query($feedfetch);
-			$feed=mysql_fetch_assoc($feedres);
+			$feedres=mysqli_query($con, $feedfetch);
+			$feed=mysqli_fetch_assoc($feedres);
 			$jsonArrayItem['Pbatvalue']=$feed['field2'];
 			if($switches==1)//esp with 1 valve as secondary battery too
 				$jsonArrayItem['Sbatvalue']=$feed['field3'];
@@ -91,8 +91,8 @@ if(isset($_GET['grp']))
 			$jsonArrayItem['feedTime']=$feedTime;
 
 			$seenquery="Select status, created_At from deviceStatus where deviceStatus.deviceId='$macid' order by deviceStatus.id desc limit 1";//getting last seen status
-			$seenresult=mysql_query($seenquery);
-			$seenfetch=mysql_fetch_assoc($seenresult);
+			$seenresult=mysqli_query($con, $seenquery);
+			$seenfetch=mysqli_fetch_assoc($seenresult);
 			$seen=$seenfetch['created_At'];
 			$phpdate=strtotime($seen);
 			$seen=date( 'h:i A jS M ', $phpdate );

@@ -11,10 +11,10 @@ include_once 'settings/iotdb.php';
 $val=$_GET["q"];
 if(isset($_GET['q']))
 {
-	mysql_select_db($dbname) or die(mysql_error());
+	// mysql_select_db($dbname) or die(mysql_error());
 	$sql = "UPDATE global_variables SET value='$val' WHERE variable_name='mqtt'";
 
-	if ($feeds=mysql_query($sql)) {
+	if ($feeds=mysqli_query($con, $sql)) {
 	    //echo "Record updated successfully";
 	} else {
 	    echo "<span class='text text-danger'>Error updating record: " . $feeds."</span>";

@@ -114,12 +114,12 @@ include_once 'settings/iotdb.php';
                             <select class='mobileSelect form-control' id='chartselect' name='chartselect' >
                                <!--  <option selected="true" disabled='disabled'>Choose</option> -->
                               <?php 
-                                mysql_select_db($dbname) or die(mysql_error());
+                                //mysqli_select_db($dbname) or die(mysqli_error());
                                 $query="SELECT * FROM groups"; //displaying groups
-                                $results=mysql_query($query);
-                                if (mysql_num_rows($results) > 0) 
+                                $results=mysqli_query($con, $query);
+                                if (mysqli_num_rows($results) > 0) 
                                     {       
-                                        while($row=mysql_fetch_assoc($results)) 
+                                        while($row=mysqli_fetch_assoc($results)) 
                                         {   //$id=$row['id'];
                                             $group=$row['name'];
                                             $id=$row['id'];
