@@ -1,12 +1,12 @@
 <?php //mqtt settings
 require 'settings/iotdb.php';
-mysql_select_db($dbname) or die(mysql_error());
+//mysql_select_db($dbname) or die(mysql_error());
 $query="SELECT * FROM global_variables where variable_name='mqtt'";
-$results=mysql_query($query);
+$results=mysqli_query($con, $query);
 $mqttaddress=null;
-if (mysql_num_rows($results) > 0) 
+if (mysqli_num_rows($results) > 0) 
 {
-	while($row = mysql_fetch_assoc($results))
+	while($row = mysqli_fetch_assoc($results))
 	{
 		$mqttaddress=$row['value'];
 	}

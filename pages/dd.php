@@ -11,7 +11,7 @@ $grp=$_GET["grp"]; //grp is the group id received
 $deviceId=$_GET["deviceId"]; //bat  is group id received fro battery status
 $deviceActivity=$_GET['deviceActivity'];
 if($grp!=null){
-	display($grp);
+	display($con, $grp);
 }
 if($deviceId!=null){
 
@@ -133,7 +133,7 @@ if($deviceActivity!=null){
 	}
 
 }
-function display($grp)
+function display($con, $grp)
 {
 	$jsonArray = array();//creating a json response
 	//echo "<button id='bat' type='button' onclick='checkbat(this.value)' value='$grp'>Check Battery status</button></br></br>";

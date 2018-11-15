@@ -576,7 +576,7 @@ if($deviceSetting!=null){
                                       <label for='groupid'>Select Group</label>
                                       <select class='form-control' id='groupid'>";
 	$groupquery="SELECT * FROM groups"; //displaying groups
-	$gresults=mysqli_query($groupquery);	
+	$gresults=mysqli_query($con, $groupquery);	
 	if (mysqli_num_rows($gresults) > 0) 
 		{
 		echo "<option disabled='disabled' value=''>Choose</option>";
