@@ -139,7 +139,7 @@ include_once 'settings/iotdb.php';
       var ws=null;
       $(function() { //websocket
           //var wscon=null;
-          ws = new WebSocket("ws://socket.k-yantra.org");//changer later for production release
+          ws = new WebSocket("ws://68.133.37.15:8180");//changer later for production release
           ws.onopen = function(e) {
             console.log('Connection to server opened');
           }
@@ -187,7 +187,7 @@ include_once 'settings/iotdb.php';
           setInterval(function () {
               if (ws.readyState != 1) {
                   document.getElementById('server').innerHTML="<span class='label label-warning'>No connection to MQTT server, retrying to connect, if problem persists, contact Jay</span>";
-                  ws = new WebSocket("ws://socket.k-yantra.org");
+                  ws = new WebSocket("ws://68.133.37.15:8180");
               }
               if (ws.readyState == 1) {
                 document.getElementById('server').innerHTML="";

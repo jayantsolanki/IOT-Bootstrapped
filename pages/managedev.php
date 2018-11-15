@@ -33,10 +33,10 @@ $updatesensorId=$_GET['updatesensorId'];
 if($q!=null)
 {
 	
-	mysql_select_db($dbname) or die(mysql_error());
+	//mysqli_select_db($dbname) or die(mysqli_error());
 	$query="SELECT * FROM groups where"."(name='$q')";
-	$results=mysql_query($query);
-	if (mysql_num_rows($results) > 0) 
+	$results=mysqli_query($GLOBALS["___mysqli_ston"], $query);
+	if (mysqli_num_rows($results) > 0) 
 	{
 	echo "<div class='alert alert-danger'>Enter Unique group name</div>";
 	}
@@ -44,8 +44,8 @@ if($q!=null)
 	{
 		$query="INSERT into groups VALUES(DEFAULT,'$q')";
 		
-		if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))
-			echo "INSERT failed: $query".mysql_error()."<br/>";
+		if(!mysqli_query($query,mysqli_connect($dbhost, $dbuser, $dbpass)))
+			echo "INSERT failed: $query".mysqli_error()."<br/>";
 		else
 			echo "<div class='alert alert-success'><strong>'$q' added</strong></div>";
 		
@@ -53,11 +53,11 @@ if($q!=null)
 	
 
 	$query="SELECT * FROM groups"; //displaying groups
-	$results=mysql_query($query);
-	if (mysql_num_rows($results) > 0) 
+	$results=mysqli_query($GLOBALS["___mysqli_ston"], $query);
+	if (mysqli_num_rows($results) > 0) 
 	{	$i=1;
 		echo "</br></br><h2>Groups available</h2>";		
-		while($row=mysql_fetch_assoc($results)) 
+		while($row=mysqli_fetch_assoc($results)) 
 		{	//$id=$row['id'];
 			$group=$row['name'];
 		
@@ -78,10 +78,10 @@ if($q!=null)
 if($sensor!=null)
 {
 	
-	mysql_select_db($dbname) or die(mysql_error());
+	mysqli_select_db($dbname) or die(mysqli_error());
 	$query="SELECT * FROM sensors where"."(name='$sensor')";
-	$results=mysql_query($query);
-	if (mysql_num_rows($results) > 0) 
+	$results=mysqli_query($GLOBALS["___mysqli_ston"], $query);
+	if (mysqli_num_rows($results) > 0) 
 	{
 	echo "<div class='alert alert-danger'>Enter Unique sensor name</div>";
 	}
@@ -89,8 +89,8 @@ if($sensor!=null)
 	{
 		$query="INSERT into sensors VALUES(DEFAULT,'$sensor')";
 		
-		if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))
-			echo "INSERT failed: $query".mysql_error()."<br/>";
+		if(!mysqli_query($query,mysqli_connect($dbhost, $dbuser, $dbpass)))
+			echo "INSERT failed: $query".mysqli_error()."<br/>";
 		else
 			echo "<div class='alert alert-success'><strong>'$sensor' added</strong></div>";
 		
@@ -98,11 +98,11 @@ if($sensor!=null)
 	
 
 	$query="SELECT * FROM sensors"; //displaying groups
-	$results=mysql_query($query);
-	if (mysql_num_rows($results) > 0) 
+	$results=mysqli_query($GLOBALS["___mysqli_ston"], $query);
+	if (mysqli_num_rows($results) > 0) 
 	{	$i=1;
 		echo "</br></br><h2>Device Types available</h2>";		
-		while($row=mysql_fetch_assoc($results)) 
+		while($row=mysqli_fetch_assoc($results)) 
 		{	//$id=$row['id'];
 			$sensor=$row['name'];
 		
@@ -122,35 +122,35 @@ if($sensor!=null)
 }
 if($editgrp!=null or $editSensor!=null)//editing the groupname or sensor name
 {
-	mysql_select_db($dbname) or die(mysql_error());
+	mysqli_select_db($dbname) or die(mysqli_error());
 	if($editgrp!=null){
 		$query="SELECT name FROM groups WHERE id='$editgrp'";
-		$groupname=mysql_query($query);
-		$gname=mysql_fetch_assoc($groupname);
+		$groupname=mysqli_query($GLOBALS["___mysqli_ston"], $query);
+		$gname=mysqli_fetch_assoc($groupname);
 		$name=$gname['name'];	
 		echo "<label>&nbsp;Group Name</label>&nbsp;<input type='text' id='gname' name='gname' placeholder='name the group' value='$name' required/> <button class='btn btn-danger' type='button' onclick='updateName($editgrp, 1)'>Update</button>";
 	}
 	if($editSensor!=null){
 		$query="SELECT name FROM sensors WHERE id='$editSensor'";
-		$sensorname=mysql_query($query);
-		$sname=mysql_fetch_assoc($sensorname);
+		$sensorname=mysqli_query($GLOBALS["___mysqli_ston"], $query);
+		$sname=mysqli_fetch_assoc($sensorname);
 		$name=$sname['name'];	
 		echo "<label>&nbsp;Device type</label>&nbsp;<input type='text' id='sname' name='sname' placeholder='name the device type' value='$name' required/> <button class='btn btn-danger' type='button' onclick='updateName($editSensor, 0)'>Update</button>";
 	}
 }
 if($updategrpName!=null or $updatesensorName!=null)//editing the groupname
 {
-	mysql_select_db($dbname) or die(mysql_error());
+	mysqli_select_db($dbname) or die(mysqli_error());
 	if($updategrpName!=null){//updating group
 		$query = "UPDATE groups SET groups.name = '$updategrpName' WHERE groups.id = '$updategrpId'"; //updating group name
-		if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))
-			echo "UPDATE failed: $query<br/>".mysql_error()."<br/><br/>";
+		if(!mysqli_query($query,mysqli_connect($dbhost, $dbuser, $dbpass)))
+			echo "UPDATE failed: $query<br/>".mysqli_error()."<br/><br/>";
 		$query="SELECT * FROM groups"; //displaying groups
-		$results=mysql_query($query);
-		if (mysql_num_rows($results) > 0) 
+		$results=mysqli_query($GLOBALS["___mysqli_ston"], $query);
+		if (mysqli_num_rows($results) > 0) 
 			{   $i=1;
 			  echo "</br></br><big>Groups available</big><hr/>";     
-			  while($row=mysql_fetch_assoc($results)) 
+			  while($row=mysqli_fetch_assoc($results)) 
 			  {   //$id=$row['id'];
 			      $id=$row['id'];
 			      $group=$row['name'];
@@ -169,14 +169,14 @@ if($updategrpName!=null or $updatesensorName!=null)//editing the groupname
 	}
 	if($updatesensorName!=null){//updating group
 		$query = "UPDATE sensors SET sensors.name = '$updatesensorName' WHERE sensors.id = '$updatesensorId'"; //updating group name
-		if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))
-			echo "UPDATE failed: $query<br/>".mysql_error()."<br/><br/>";
+		if(!mysqli_query($query,mysqli_connect($dbhost, $dbuser, $dbpass)))
+			echo "UPDATE failed: $query<br/>".mysqli_error()."<br/><br/>";
 		$query="SELECT * FROM sensors"; //displaying groups
-        $results=mysql_query($query);
-        if (mysql_num_rows($results) > 0) 
+        $results=mysqli_query($GLOBALS["___mysqli_ston"], $query);
+        if (mysqli_num_rows($results) > 0) 
 	        {   $i=1;
 	            echo "</br></br><big>Device Types available</big><hr/>";        
-	            while($row=mysql_fetch_assoc($results)) 
+	            while($row=mysqli_fetch_assoc($results)) 
 	            {   //$id=$row['id'];
 	                $id=$row['id'];
 	                $sensor=$row['name'];
@@ -198,17 +198,17 @@ if($updategrpName!=null or $updatesensorName!=null)//editing the groupname
 
 if($deviceId!=null and $switchId!=null)//show update fields for selected swtich
 {
-	mysql_select_db($dbname) or die(mysql_error());
+	mysqli_select_db($dbname) or die(mysqli_error());
 	$query="SELECT name FROM devices WHERE deviceId='$deviceId'";
-	$devnames=mysql_query($query);
-	$devrow=mysql_fetch_assoc($devnames);
+	$devnames=mysqli_query($GLOBALS["___mysqli_ston"], $query);
+	$devrow=mysqli_fetch_assoc($devnames);
 	$name=$devrow['name'];	
 	echo "<label>&nbsp;Name</label>&nbsp;<input type='text' id='dname' name='dname' placeholder='name the device' value='$name' required/> ".groups($switchId)."<button class='btn btn-danger' id='$deviceId' type='button' onclick="."update('$deviceId','$switchId')".">Update</button> <button class='btn btn-info' id='$deviceId' type='button' onclick="."update(0,0)".">Cancel</button>";
 }
 
 if($updatedev!=null and $updateswi!=null)//perform the updation task
 {
-	mysql_select_db($dbname) or die(mysql_error());
+	mysqli_select_db($dbname) or die(mysqli_error());
 	if($updatedev==0 and $updateswi==0){
 		display();
 	}
@@ -216,26 +216,26 @@ if($updatedev!=null and $updateswi!=null)//perform the updation task
 	if($gid!=null and $dname!=null and ($updatedev!='0' and $updateswi!='0')){//update only if both fields are not empty
 		// echo $updatedev." switch ".$updateswi." groupid ".$gid." dname ".$dname;
 		$query="SELECT name FROM groups WHERE id='$gid'";
-		$grps=mysql_query($query);
-		$grp=mysql_fetch_assoc($grps);
+		$grps=mysqli_query($GLOBALS["___mysqli_ston"], $query);
+		$grp=mysqli_fetch_assoc($grps);
 		$name=$grp['name'];
 		if($updateswi==0){//simply the device
 			$query = "UPDATE devices SET devices.groupId = '$gid', devices.status=0, devices.name='$dname' WHERE devices.deviceId = '$updatedev'"; //updating item such as sensors which dont have switches
-			if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))
-			echo "UPDATE failed: $query<br/>".mysql_error()."<br/><br/>";
+			if(!mysqli_query($query,mysqli_connect($dbhost, $dbuser, $dbpass)))
+			echo "UPDATE failed: $query<br/>".mysqli_error()."<br/><br/>";
 
 		}
 
 		else{//updating the switch and device
 
 			$query = "UPDATE switches SET switches.groupId = '$gid', switches.newSwitch=0 WHERE switches.deviceId = '$updatedev' and switches.switchId=$updateswi"; //updating switche with group Id
-			if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))
-				echo "UPDATE failed: $query<br/>".mysql_error()."<br/><br/>";
+			if(!mysqli_query($query,mysqli_connect($dbhost, $dbuser, $dbpass)))
+				echo "UPDATE failed: $query<br/>".mysqli_error()."<br/><br/>";
 			//updating the name
 			$query = "UPDATE devices SET devices.status=0, devices.name='$dname' WHERE devices.deviceId = '$updatedev'"; //updating item such as sensors which dont have switches
 					
-			if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))
-				echo "UPDATE failed: $query<br/>".mysql_error()."<br/><br/>";		
+			if(!mysqli_query($query,mysqli_connect($dbhost, $dbuser, $dbpass)))
+				echo "UPDATE failed: $query<br/>".mysqli_error()."<br/><br/>";		
 		}
 
 		display();
@@ -246,8 +246,8 @@ if($updatedev!=null and $updateswi!=null)//perform the updation task
 			$query="SELECT devices.name as dname, groups.name as name FROM groups inner join devices on devices.groupid=groups.id WHERE devices.deviceId='$deviceId'";
 		else
 			$query="SELECT devices.name as dname, groups.name as name FROM groups inner join switches on switches.groupid=groups.id inner join devices on devices.deviceId = switches.deviceId WHERE switches.deviceId='$deviceId' and switches.switchId=$switchId";
-		$grps=mysql_query($query);
-		$grp=mysql_fetch_assoc($grps);
+		$grps=mysqli_query($GLOBALS["___mysqli_ston"], $query);
+		$grp=mysqli_fetch_assoc($grps);
 		$name=$grp['name'];
 		$dname=$grp['name'];
 	}
@@ -276,18 +276,18 @@ if($del!=null)//perform deletion task for group
 	
 	$query = "DELETE FROM groups WHERE name='$del'";
 
-	if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))
-	echo "Deletion failed: $query<br/><div class='alert alert-danger'>".mysql_error()."</div><br/><br/>";
+	if(!mysqli_query($query,mysqli_connect($dbhost, $dbuser, $dbpass)))
+	echo "Deletion failed: $query<br/><div class='alert alert-danger'>".mysqli_error()."</div><br/><br/>";
 	else
 	{
 		echo "<div class='alert alert-success'><strong>'$del' deleted</strong></div>";		
 	}
 	$query="SELECT * FROM groups"; //displaying groups
-	$results=mysql_query($query);
-	if (mysql_num_rows($results) > 0) 
+	$results=mysqli_query($GLOBALS["___mysqli_ston"], $query);
+	if (mysqli_num_rows($results) > 0) 
 	{	$i=1;
 		echo "</br></br><h2>Groups available</h2>";		
-		while($row=mysql_fetch_assoc($results)) 
+		while($row=mysqli_fetch_assoc($results)) 
 		{	//$id=$row['id'];
 			$group=$row['name'];
 		
@@ -310,18 +310,18 @@ if($dels!=null) //for deleting selected sensor type
 	
 	$query = "DELETE FROM sensors WHERE name='$dels'";
 
-	if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))
-	echo "Deletion failed: $query<br/><div class='alert alert-danger'>".mysql_error()."</div><br/><br/>";
+	if(!mysqli_query($query,mysqli_connect($dbhost, $dbuser, $dbpass)))
+	echo "Deletion failed: $query<br/><div class='alert alert-danger'>".mysqli_error()."</div><br/><br/>";
 	else
 	{
 		echo "<div class='alert alert-success'><strong>'$dels' deleted</strong></div>";		
 	}
 	$query="SELECT * FROM sensors"; //displaying groups
-	$results=mysql_query($query);
-	if (mysql_num_rows($results) > 0) 
+	$results=mysqli_query($GLOBALS["___mysqli_ston"], $query);
+	if (mysqli_num_rows($results) > 0) 
 	{	$i=1;
 		echo "</br></br><h2>Device Types available</h2>";		
-		while($row=mysql_fetch_assoc($results)) 
+		while($row=mysqli_fetch_assoc($results)) 
 		{	//$id=$row['id'];
 			$sensor=$row['name'];
 		
@@ -343,16 +343,16 @@ if($ddeldev!=null and $ddelswi!=null) //for deleting selected device
 {
 	if($ddeldev!='0' and $ddelswi=='0'){//delete the device and its related switches
 		$query = "DELETE FROM devices WHERE devices.deviceId='$ddeldev'";
-		if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))
-		echo "Deletion failed: $query<br/><div class='alert alert-danger'>".mysql_error()."</div><br/><br/>";
+		if(!mysqli_query($query,mysqli_connect($dbhost, $dbuser, $dbpass)))
+		echo "Deletion failed: $query<br/><div class='alert alert-danger'>".mysqli_error()."</div><br/><br/>";
 		$query = "DELETE FROM switches WHERE switches.deviceId='$ddeldev'";//deleting all concerned device switches
-		if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))
-		echo "Deletion failed: $query<br/><div class='alert alert-danger'>".mysql_error()."</div><br/><br/>";
+		if(!mysqli_query($query,mysqli_connect($dbhost, $dbuser, $dbpass)))
+		echo "Deletion failed: $query<br/><div class='alert alert-danger'>".mysqli_error()."</div><br/><br/>";
 	}	
 	if($ddeldev!=0 and $ddelswi!=0){//delete the switches
 		$query = "DELETE FROM switches WHERE switches.deviceId='$ddeldev' and switches.switchId=$ddelswi";
-		if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))//deleting concerned device switch
-		echo "Deletion failed: $query<br/><div class='alert alert-danger'>".mysql_error()."</div><br/><br/>";
+		if(!mysqli_query($query,mysqli_connect($dbhost, $dbuser, $dbpass)))//deleting concerned device switch
+		echo "Deletion failed: $query<br/><div class='alert alert-danger'>".mysqli_error()."</div><br/><br/>";
 	}	
 	display();
 }
@@ -368,18 +368,18 @@ if($ddeldev!=null and $ddelswi!=null) //for deleting selected device
 function groups($switchId)
 {
 $dbname='IOT';
-mysql_select_db($dbname) or die(mysql_error());
+mysqli_select_db($dbname) or die(mysqli_error());
 $query="SELECT * FROM groups"; //displaying groups
-$results=mysql_query($query);
+$results=mysqli_query($GLOBALS["___mysqli_ston"], $query);
 if($switchId!=0)
 	echo "<label>Choose Group for the Switch $switchId</label>";	
 else 
 	echo "<label>Choose Group for the Device</label>";
 echo "<select lass='form-control' id='groupadd'>";	
-if (mysql_num_rows($results) > 0) 
+if (mysqli_num_rows($results) > 0) 
 	{
 	echo "<option selected='true' disabled='disabled' value=0>Choose</option>";
-	while($row=mysql_fetch_assoc($results)) 
+	while($row=mysqli_fetch_assoc($results)) 
 		{	//$id=$row['id'];
 			$group=$row['name'];
 			$id=$row['id'];
@@ -408,15 +408,15 @@ echo "</select>";
 function sensors()
 {
 $dbname='IOT';
-mysql_select_db($dbname) or die(mysql_error());
+mysqli_select_db($dbname) or die(mysqli_error());
 $query="SELECT * FROM sensors"; //displaying groups
-$results=mysql_query($query);
+$results=mysqli_query($GLOBALS["___mysqli_ston"], $query);
 echo "<label>Choose Type</label>";
 echo "<select lass='form-control' id='sensoradd'>";	
-if (mysql_num_rows($results) > 0) 
+if (mysqli_num_rows($results) > 0) 
 	{
 	echo "<option selected='true' disabled='disabled'>Choose</option>";
-	while($row=mysql_fetch_assoc($results)) 
+	while($row=mysqli_fetch_assoc($results)) 
 		{	//$id=$row['id'];
 			$name=$row['name'];
 			$id=$row['id'];
@@ -436,10 +436,10 @@ echo "</select>";
 }
 
 if($deviceSetting!=null){
-	mysql_select_db($dbname) or die(mysql_error());
+	mysqli_select_db($dbname) or die(mysqli_error());
 	$query = "SELECT * FROM devices WHERE deviceId='$deviceSetting'";
-	$device=mysql_query($query);
-	$dev=mysql_fetch_assoc($device);
+	$device=mysqli_query($GLOBALS["___mysqli_ston"], $query);
+	$dev=mysqli_fetch_assoc($device);
 	$deviceId=$dev['deviceId'];
 	$deviceName=$dev['name'];
 	$deviceDesc=$dev['description'];
@@ -460,8 +460,8 @@ if($deviceSetting!=null){
 	$created=$dev['created_at'];
 	$updated=$dev['updated_at'];
 	$query="SELECT name FROM groups WHERE id=$groupId";
-	$grps=mysql_query($query);
-	$grp=mysql_fetch_assoc($grps);
+	$grps=mysqli_query($GLOBALS["___mysqli_ston"], $query);
+	$grp=mysqli_fetch_assoc($grps);
 	$groupName=$grp['name'];
 
 	echo"
@@ -576,11 +576,11 @@ if($deviceSetting!=null){
                                       <label for='groupid'>Select Group</label>
                                       <select class='form-control' id='groupid'>";
 	$groupquery="SELECT * FROM groups"; //displaying groups
-	$gresults=mysql_query($groupquery);	
-	if (mysql_num_rows($gresults) > 0) 
+	$gresults=mysqli_query($groupquery);	
+	if (mysqli_num_rows($gresults) > 0) 
 		{
 		echo "<option disabled='disabled' value=''>Choose</option>";
-		while($row=mysql_fetch_assoc($gresults)) 
+		while($row=mysqli_fetch_assoc($gresults)) 
 			{	//$id=$row['id'];
 				$group=$row['name'];
 				$id=$row['id'];
@@ -689,11 +689,11 @@ if($deviceData!=null){//for device updating
 		$status=0;
 	else
 		$status=1;
-	mysql_select_db($dbname) or die(mysql_error());
+	mysqli_select_db($dbname) or die(mysqli_error());
 	$query="UPDATE devices SET devices.name='$name', description='$deviceInfo', groupId='$groupId', latitude='$latitude', longitude='$longitude', elevation='$elevation', field1='$field1', field2='$field2', field3='$field3', field4='$field4', field5='$field5', field6='$field6',status=$status, updated_at=now() WHERE devices.deviceId='$deviceId'";
 		
-	if(!mysql_query($query,mysql_connect($dbhost, $dbuser, $dbpass)))
-		echo "Update failed: $query".mysql_error();
+	if(!mysqli_query($query,mysqli_connect($dbhost, $dbuser, $dbpass)))
+		echo "Update failed: $query".mysqli_error();
 	else
 		echo "<div class='text-center alert alert-success'><strong>Device Data updated</strong></div>";
 }
@@ -708,10 +708,10 @@ if($deviceData!=null){//for device updating
 function display(){
       
       $query="SELECT devices.name as name,devices.groupId as dgroupId, devices.type as type, devices.status as status, devices.deviceId as deviceId, switches.switchId as switchId, switches.groupId as sgroupId, switches.newSwitch as newSwitch, switches.created_at as created_at FROM devices left join switches on switches.deviceId=devices.deviceId where devices.switches>=0"; //displaying groups
-      $results=mysql_query($query);
-      if (mysql_num_rows($results) > 0) 
+      $results=mysqli_query($GLOBALS["___mysqli_ston"], $query);
+      if (mysqli_num_rows($results) > 0) 
       {   $i=1;    
-          while($row=mysql_fetch_assoc($results)) 
+          while($row=mysqli_fetch_assoc($results)) 
           {   
               $deviceId=$row['deviceId'];//for switches
               $switchId=$row['switchId'];//for switches
@@ -726,8 +726,8 @@ function display(){
               
 
               $query="SELECT name FROM sensors WHERE id=$type";
-              $typename=mysql_query($query);
-              $typerow=mysql_fetch_assoc($typename);
+              $typename=mysqli_query($GLOBALS["___mysqli_ston"], $query);
+              $typerow=mysqli_fetch_assoc($typename);
               $type=$typerow['name'];
               $status=null;
               if($switchId==null){//if it is a switchless device like sensor node
@@ -740,8 +740,8 @@ function display(){
               else
                 $groupId=$sgroupId;
               $query="SELECT name FROM groups WHERE id=$groupId";
-              $grps=mysql_query($query);
-              $grp=mysql_fetch_assoc($grps);
+              $grps=mysqli_query($GLOBALS["___mysqli_ston"], $query);
+              $grp=mysqli_fetch_assoc($grps);
               $name=$grp['name'];
               if($switchId!=0 and $sstatus==1)
                 $status="<span data-toggle='tooltip' title='New Device' class='text-info fa fa-circle-o-notch fa-spin'></span>";
