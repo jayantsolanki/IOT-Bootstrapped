@@ -2,7 +2,7 @@
     include_once 'settings/iotdb.php';
   //echo "<h4>Valves grouped under <label class='badge'>".$gname."</label></h4>";
   $query="SELECT * FROM devices WHERE devices.status=1";//new dev
-  $results=mysqli_query($query);
+  $results=mysqli_query($GLOBALS["___mysqli_ston"], $query);
   $newdev=0;
   if(mysqli_num_rows($results)>0)
     $newdev=mysqli_num_rows($results);
