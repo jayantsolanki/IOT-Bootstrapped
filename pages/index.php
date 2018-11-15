@@ -190,7 +190,7 @@ $query="SELECT * FROM switches WHERE switches.newSwitch=1";//new switches
                 <!-- <div class="col-lg-4"> -->
                 
                 <div class="col-lg-8 col-md-8">
-                    <iframe id="forecast_embed" type="text/html" frameborder="0" height="245" width="100%" src="http://forecast.io/embed/#lat=19.130297&lon=72.915901&color=#113355&units=uk&name=KReSIT Building, IIT Powai"> 
+                    <iframe id="forecast_embed" type="text/html" frameborder="0" height="245" width="100%" src="http://forecast.io/embed/#lat=42.9532&lon=78.8263&color=#113355&units=uk&name=50 Heath Street, Buffalo, NY"> 
                     </iframe>
                 </div>
                 <div class="col-lg-4 col-md-4 col-lg-offset-0">
