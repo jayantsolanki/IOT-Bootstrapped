@@ -7,48 +7,48 @@
   if(mysqli_num_rows($results)>0)
     $newdev=mysqli_num_rows($results);
 $query="SELECT * FROM switches WHERE switches.newSwitch=1";//new switches
-  $results=mysqli_query($query);
+  $results=mysqli_query($GLOBALS["___mysqli_ston"], $query);
   $newSwitch=0;
   if(mysqli_num_rows($results)>0)
     $newSwitch=mysqli_num_rows($results);
   $query="SELECT * FROM tasks ";    
-  $results=mysqli_query($query);
+  $results=mysqli_query($GLOBALS["___mysqli_ston"], $query);
   $task=0;
   if(mysqli_num_rows($results)>0)
     $task=mysqli_num_rows($results);
  $query="SELECT * FROM tasks where active=2 ";    
-  $results=mysqli_query($query);
+  $results=mysqli_query($GLOBALS["___mysqli_ston"], $query);
   $newtask=0;
   if(mysqli_num_rows($results)>0)
     $newtask=mysqli_num_rows($newtask);
 
     $query="SELECT * FROM tasks where type=0";    
-      $results=mysqli_query($query);
+      $results=mysqli_query($GLOBALS["___mysqli_ston"], $query);
       $mantask=0;//manually started
       if(mysqli_num_rows($results)>0)
         $mantask=mysqli_num_rows($results);
 
     $query="SELECT * FROM tasks where active=1";    
-      $results=mysqli_query($query);
+      $results=mysqli_query($GLOBALS["___mysqli_ston"], $query);
       $runtask=0;//manually started
       if(mysqli_num_rows($results)>0)
         $runtask=mysqli_num_rows($results);
      $query="SELECT * FROM tasks where active=2";    
-      $results=mysqli_query($query);
+      $results=mysqli_query($GLOBALS["___mysqli_ston"], $query);
       $newtask=0;//manually started
       if(mysqli_num_rows($results)>0)
         $newtask=mysqli_num_rows($results);
 
-     /*$statusquery="SELECT deviceStatus.status from deviceStatus where id in (Select MAX(id) as cid from deviceStatus where deviceId in (Select deviceId from devices) group by deviceId) and deviceStatus.status=1";    
-      $results=mysqli_query($statusquery);
+     $statusquery="SELECT status from deviceStatus where id in (Select MAX(id) as cid from deviceStatus where deviceId in (Select deviceId from devices) group by deviceId) and status=1";    
+      $results=mysqli_query($GLOBALS["___mysqli_ston"], $statusquery);
       $online=0;//
-      if(mysqli_num_rows($results)>0)
+      if($results)
         $online=mysqli_num_rows($results);
     $statusquery="SELECT deviceStatus.status from deviceStatus where id in (Select MAX(id) as cid from deviceStatus where deviceId in (Select deviceId from devices) group by deviceId) and deviceStatus.status=0";    
-      $results=mysqli_query($statusquery);
+      $results=mysqli_query($GLOBALS["___mysqli_ston"], $statusquery);
       $offline=0;//manually started
-      if(mysqli_num_rows($results)>0)
-        $offline=mysqli_num_rows($results);*/
+      if($results)
+        $offline=mysqli_num_rows($results);
 
 
     ?>
