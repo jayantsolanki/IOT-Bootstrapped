@@ -8,7 +8,8 @@
 */
 include_once 'settings/iotdb.php';?>
 <?php
-date_default_timezone_set('Asia/Kolkata');//setting IST
+// date_default_timezone_set('Asia/Kolkata');//setting IST
+// date_default_timezone_set('Asia/Kolkata');//setting EDT
 //echo "Time is ".date('Hi');?>
 <!DOCTYPE html>
 <html lang="en">
