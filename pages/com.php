@@ -6,7 +6,7 @@
 */
 require 'settings/iotdb.php';
 require(__DIR__ . '/spMQTT.class.php');
-date_default_timezone_set('Asia/Kolkata');//setting IST
+// date_default_timezone_set('Asia/Kolkata');//setting IST
 spMQTTDebug::Enable();
 $q=$_GET["devId"]; //q is the macid received
 $s=$_GET["switchId"]; //q is the macid received
