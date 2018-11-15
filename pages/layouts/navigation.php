@@ -218,7 +218,8 @@
                             <a href='config.php'><i class='fa fa-wrench fa-fw'></i> Configuration</a>
                         </li>
                         <li>
-                            <a href='http://www.iitb.ac.in/'><img src='images/autumn.jpg' style="width:150px;height:150px"/></a>
+                            <!-- <a href='http://www.iitb.ac.in/'><img src='images/autumn.jpg' style="width:150px;height:150px"/></a> -->
+                            <a href='#'><img src='images/autumn.jpg'/></a>
                         </li>
                     </ul>
                 </div>
