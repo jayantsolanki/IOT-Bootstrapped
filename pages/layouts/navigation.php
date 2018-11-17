@@ -191,7 +191,7 @@
                         </li> -->
 
                         <li>
-                            <a href='index.php'><img src='images/kyantralogo.png' style="width:200px;height:100px"/></a>
+                            <a href='index.php'><img src='images/mosca.png'/></a>
                         </li>
                         <li>
                             <a href='index.php'><i class='fa fa-dashboard fa-fw'></i> Dashboard</a>
