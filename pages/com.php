@@ -5,6 +5,7 @@
 *sends manual on/off command to esp devices, and also sets timeout for them
 */
 require 'settings/iotdb.php';
+include_once 'settings/mqttsetting.php'; //environmental variable for mqtt address and websocket
 require(__DIR__ . '/spMQTT.class.php');
 // date_default_timezone_set('Asia/Kolkata');//setting IST
 spMQTTDebug::Enable();

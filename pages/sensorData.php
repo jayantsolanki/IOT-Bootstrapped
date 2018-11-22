@@ -7,6 +7,7 @@
 */
 session_start();
 include_once 'settings/iotdb.php';
+include_once 'settings/mqttsetting.php'; //environmental variable for mqtt address and websocket
 
 ?>
 <!DOCTYPE html>
@@ -298,7 +299,7 @@ include_once 'settings/iotdb.php';
       var ws=null;
       $(function() { //websocket
           //var wscon=null;
-          ws = new WebSocket("ws://10.129.139.139:8180");
+          ws = new WebSocket("ws://<?php echo $address; ?>:8180");
           ws.onopen = function(e) {
             console.log('Connection to server opened');
           }

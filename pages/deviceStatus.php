@@ -6,6 +6,8 @@
 *It is for displaying devices information
 */
 include_once 'settings/iotdb.php';
+include_once 'settings/mqttsetting.php'; //environmental variable for mqtt address and websocket
+
 ini_set('display_errors',1);
 ini_set('display_startup_errors',1);
 error_reporting(-1); //for suppressing errors and notices
@@ -207,7 +209,7 @@ error_reporting(-1); //for suppressing errors and notices
             $scope.batbtn=batbtn;
             $scope.ws=ws;
             $scope.wsConnect = function() {//establishing the websocket connection with the server
-                $scope.ws=$websocket.$new('ws://68.133.37.15:8180');
+                $scope.ws=$websocket.$new('ws://<?php echo $address; ?>:8180');
                 $scope.ws.$on('$open', function () {
                  console.log('Connection to server opened');
                 });

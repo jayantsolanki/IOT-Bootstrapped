@@ -6,6 +6,7 @@
 *It is called in JAX mode by devdis.php for displaying devices information
 */
 include 'settings/iotdb.php';
+include_once 'settings/mqttsetting.php'; //environmental variable for mqtt address and websocket
 $groups=$_GET["groups"]; //get groups
 $actions=$_GET["actions"]; //get action
 $name=$_GET["name"]; //get name

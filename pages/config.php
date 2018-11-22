@@ -1,5 +1,6 @@
 <?php
 require 'settings/iotdb.php';
+include_once 'settings/mqttsetting.php'; //environmental variable for mqtt address and websocket
 // mysqli_select_db($dbname) or die(mysqli_error());
 $query="SELECT * FROM global_variables where variable_name='mqtt'";
 $results=mysqli_query($con, $query);
@@ -62,13 +63,13 @@ if (mysqli_num_rows($results) > 0)
                     </div>
                     <!-- /.col-lg-12 -->
                     <div class='col-lg-6'>
-                    <label class='form-control'>Current Mqtt Address:&nbsp;</label><label id='mqttshow'><?php if($mqttaddress==null) echo 'No address saved'; else echo $mqttaddress; ?></label>
+                    <label class='form-control'>Current Server Address:&nbsp;</label><label id='serveraddress'><?php if($address==null) echo 'No address saved'; else echo $address; ?></label>
                         <div class="form-inline">
                           <div class="form-group row">
                             <div class="form-group">
                                 <div class="input-group">
-                                    <div class="input-group-addon" for="mqttaddress">MQTT Address</div>
-                                  <input type="text" class="form-control" id="mqttaddress" placeholder="tcp://10.129.28.181:1880/">
+                                    <div class="input-group-addon" for="address">MQTT Address</div>
+                                  <input type="text" class="form-control" id="address" placeholder="tcp://10.129.28.181:1880/">
                                 </div>
                               </div>
                               <button id='savebutton' class="btn btn-primary" onclick="update();">Save</button>
@@ -99,7 +100,7 @@ if (mysqli_num_rows($results) > 0)
     <script>
     function update(){
         
-    var value=document.getElementById("mqttaddress").value;
+    var value=document.getElementById("address").value;
     //alert(value);
     if (window.XMLHttpRequest)
       {
@@ -117,7 +118,7 @@ if (mysqli_num_rows($results) > 0)
           }
       if (xmlhttp.readyState==4 && xmlhttp.status==200)
         {
-        document.getElementById("mqttshow").innerHTML=xmlhttp.responseText;
+        document.getElementById("serveraddress").innerHTML=xmlhttp.responseText;
         document.getElementById("savebutton").innerHTML='Saved';
         }
       }

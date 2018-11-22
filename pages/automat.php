@@ -6,6 +6,7 @@
 *It is for displaying devices information
 */
 include_once 'settings/iotdb.php';
+include_once 'settings/mqttsetting.php'; //environmental variable for mqtt address and websocket
 ini_set('display_errors',1);
 ini_set('display_startup_errors',1);
 error_reporting(-1); //for suppressing errors and notices

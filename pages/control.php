@@ -7,6 +7,7 @@
 *this is the page called in AJAX mode, displaying all the manual switch controls for esp modules
 */
 include_once 'settings/iotdb.php';
+include_once 'settings/mqttsetting.php'; //environmental variable for mqtt address and websocket
 error_reporting(-1); //for suppressing errors and notices
 
 ?>
