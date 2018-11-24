@@ -109,22 +109,35 @@ include_once 'settings/mqttsetting.php'; //environmental variable for mqtt addre
                 </div>
                 <div class="row" id="devCharts">
                     <div class=" col-md-12 content">
-                        <label class="text text-info">Select group</label><span class="pull-right"><button id="back" class="btn btn-primary" ng-click="showDevice()" style="display:none;">Back</button></span>
+                        <label class="text text-info">Select device group</label><span class="pull-right"><button id="back" class="btn btn-primary" ng-click="showDevice()" style="display:none;">Back</button></span>
                         <div class="row">
                             <div class="col-md-6">
                             <select class='mobileSelect form-control' id='chartselect' name='chartselect' >
                                <!--  <option selected="true" disabled='disabled'>Choose</option> -->
                               <?php 
                                 //mysqli_select_db($dbname) or die(mysqli_error());
-                                $query="SELECT * FROM groups"; //displaying groups
+                                $query="SELECT * FROM groups order by name asc"; //displaying groups
                                 $results=mysqli_query($con, $query);
                                 if (mysqli_num_rows($results) > 0) 
                                     {       
+                                        // while($row=mysqli_fetch_assoc($results)) 
+                                        // {   //$id=$row['id'];
+                                        //     $group=$row['name'];
+                                        //     $id=$row['id'];
+                                        //     echo "<option value=$id>$group</option>";
+                                        // }
+                                        $flag=0;
                                         while($row=mysqli_fetch_assoc($results)) 
                                         {   //$id=$row['id'];
                                             $group=$row['name'];
-                                            $id=$row['id'];
-                                            echo "<option value=$id>$group</option>";
+                                            // $id=$row['id'];
+                                            if($flag==0)
+                                            {
+                                              echo " <option selected='selected' value='$group'>$group</option>";
+                                              $flag=1;
+                                            }
+                                            else
+                                              echo " <option value='$group'>$group</option>";
                                         }
                                     }
                                 ?>

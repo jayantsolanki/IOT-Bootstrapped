@@ -138,7 +138,8 @@ function display($con, $grp)
 	$jsonArray = array();//creating a json response
 	//echo "<button id='bat' type='button' onclick='checkbat(this.value)' value='$grp'>Check Battery status</button></br></br>";
 	//$query="SELECT * FROM devices";
-	$query="SELECT * FROM devices WHERE devices.groupId=$grp";
+	// $query="SELECT * FROM devices WHERE devices.groupId=$grp";
+	$query="SELECT * FROM devices WHERE devices.groupId in (SELECT id from groups where name=\"".$grp."\")";
 	$results=mysqli_query($con, $query);
 	if (mysqli_num_rows($results) > 0) 
 	{	

@@ -72,27 +72,31 @@ error_reporting(-1); //for suppressing errors and notices
                     </div>
                         <div class="panel panel-body">
 
-                          <b>Select group</b> <select name='groups' class='mobileSelect'>
+                          <b>Select device group</b> <select name='groups' class='mobileSelect'>
                           <!-- <option selected="true" disabled='disabled'>Choose</option> -->
                           <?php 
                           // mysqli_select_db($dbname) or die(mysqli_error());
-                          $query="SELECT * FROM groups"; //displaying groups
+                          $query="SELECT * FROM groups order by name asc"; //displaying groups
                           $results=mysqli_query($con, $query);
                           if (mysqli_num_rows($results) > 0) 
                               {       
-                                  while($row=mysqli_fetch_assoc($results)) 
-                                  {   //$id=$row['id'];
-                                      $group=$row['name'];
-                                      $id=$row['id'];
-                                      if($id==1)
-                                        echo " <option selected='selected' value=$id>$group</option>";
-                                      else
-                                        echo " <option value='$id'>$group</option>";
-                                  }
+                                $flag=0;
+                                while($row=mysqli_fetch_assoc($results)) 
+                                {   //$id=$row['id'];
+                                    $group=$row['name'];
+                                    // $id=$row['id'];
+                                    if($flag==0)
+                                    {
+                                      echo " <option selected='selected' value='$group'>$group</option>";
+                                      $flag=1;
+                                    }
+                                    else
+                                      echo " <option value='$group'>$group</option>";
+                                }
                               }
                           ?>
                           </select>&nbsp; &nbsp; <span id='battery'><button id='batterycheck' class='btn btn-success' ng-click="checkbattery()">{{batbtn}}</button></span><span class="pull-right"><button id="activity" class="btn btn-primary" ng-click="showChart()">Connection Activity</button>&nbsp;<button id="back" class="btn btn-primary" ng-click="showDevice()" style="display:none;">Back</button></span></br></br>
-                          <strong>Group Selected <big class ="label label-primary">{{devices[0].groupName}}</big></strong><hr/>
+                          <strong>You Selected <span class ="text text-success">{{devices[0].groupName}}</span></strong><hr/>
                           <div id='dev'>
                               <div class="row" ng-repeat="device in devices">
                                   <div class="col-md-2">
