@@ -269,7 +269,7 @@ if (typeof jQuery === 'undefined') {
             });
             // this.$e.val(selectedOptions);
             // console.log(this.$e.val(selectedOptions).prop("selected", true));
-            this.$e.val(selectedOptions).text();
+            this.$e.val(selectedOptions).attr('selected', 'selected');
         },
         hide: function () {
 
