@@ -24,7 +24,7 @@ if(isset($_GET['grp']))
 	// $gname=$rows['name'];
 	echo "<h4>You chose <label class='text text-success'>".$grp."</label></h4>";
 	// $query="SELECT * FROM switches WHERE switches.groupId=$grp";
-	$query="SELECT * FROM switches WHERE switches.groupId in (SELECT id from groups where name=\'$grp\')";
+	$query="SELECT * FROM switches WHERE switches.groupId in (SELECT id from groups where name=".$grp.")";
 	$results=mysqli_query($con,$query);
 
 	//echo " <button id='1' type='button' onclick='updateall(this.value)' value='1'>Switch all ON</button>";
