@@ -74,7 +74,7 @@ include_once 'settings/mqttsetting.php'; //environmental variable for mqtt addre
                             <ul class="dropdown-menu">
                               <?php 
                                 //mysqli_select_db($dbname) or die(mysqli_error());
-                                $query="SELECT * FROM groups"; //displaying groups
+                                $query="SELECT * FROM groups ORDER by name asc"; //displaying groups
                                 $results=mysqli_query($con,$query);
                                 if (mysqli_num_rows($results) > 0) 
                                     {       

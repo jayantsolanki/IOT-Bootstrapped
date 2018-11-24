@@ -75,7 +75,7 @@ include_once 'settings/iotdb.php';?>
                                         <option selected="true" disabled='disabled'>Choose</option>
                                         <?php
                                         // mysqli_select_db($dbname) or die(mysqli_error());
-                                        $query="SELECT * FROM groups"; //displaying groups
+                                        $query="SELECT * FROM groups order by name desc"; //displaying groups
                                         $results=mysqli_query($con, $query);
                                         if (mysqli_num_rows($results) > 0) 
                                             {       
