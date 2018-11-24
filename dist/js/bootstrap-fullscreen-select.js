@@ -268,7 +268,7 @@ if (typeof jQuery === 'undefined') {
                 selectedOptions.push($(this).data('value'));
             });
             // this.$e.val(selectedOptions);
-            console.log(selectedOptions);
+            console.log($(this).data('value'));
             this.$e.val(selectedOptions).attr("selected", true);
         },
         hide: function () {
