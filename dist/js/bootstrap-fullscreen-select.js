@@ -267,7 +267,8 @@ if (typeof jQuery === 'undefined') {
             this.$c.find('.selected').each(function () {
                 selectedOptions.push($(this).data('value'));
             });
-            this.$e.val(selectedOptions);
+            // this.$e.val(selectedOptions);
+            this.$e.val(selectedOptions).attr("selected", true);
         },
         hide: function () {
 
