@@ -18,12 +18,13 @@ if(isset($_GET['grp']))
 {
 	
 	//mysqli_select_db($dbname) or die(mysqli_error());
-	$query="SELECT name FROM groups WHERE id='$grp'";
-	$grps=mysqli_query($con,$query);
-	$rows=mysqli_fetch_assoc($grps);
-	$gname=$rows['name'];
-	echo "<h4>You chose <label class='text text-success'>".$gname."</label></h4>";
-	$query="SELECT * FROM switches WHERE switches.groupId=$grp";
+	// $query="SELECT name FROM groups WHERE id='$grp'";
+	// $grps=mysqli_query($con,$query);
+	// $rows=mysqli_fetch_assoc($grps);
+	// $gname=$rows['name'];
+	echo "<h4>You chose <label class='text text-success'>".$grp."</label></h4>";
+	// $query="SELECT * FROM switches WHERE switches.groupId=$grp";
+	$query="SELECT * FROM switches WHERE switches.groupId in (SELECT id from groups where name=$grp)";
 	$results=mysqli_query($con,$query);
 
 	//echo " <button id='1' type='button' onclick='updateall(this.value)' value='1'>Switch all ON</button>";

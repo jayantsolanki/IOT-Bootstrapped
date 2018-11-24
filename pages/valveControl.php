@@ -78,14 +78,18 @@ include_once 'settings/mqttsetting.php'; //environmental variable for mqtt addre
                                 $results=mysqli_query($con,$query);
                                 if (mysqli_num_rows($results) > 0) 
                                     {       
+                                        $flag=0;
                                         while($row=mysqli_fetch_assoc($results)) 
                                         {   //$id=$row['id'];
                                             $group=$row['name'];
-                                            $id=$row['id'];
-                                            if($id==1)
-                                              echo " <option selected='selected' value='$id'>$group</option>";
-                                              else
-                                              echo " <option value='$id'>$group</option>";
+                                            // $id=$row['id'];
+                                            if($flag==0)
+                                            {
+                                              echo " <option selected='selected' value='$group'>$group</option>";
+                                              $flag=1;
+                                            }
+                                            else
+                                              echo " <option value='$group'>$group</option>";
                                         }
                                     }
                                 ?>
