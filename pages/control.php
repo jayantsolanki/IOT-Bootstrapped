@@ -22,7 +22,7 @@ if(isset($_GET['grp']))
 	$grps=mysqli_query($con,$query);
 	$rows=mysqli_fetch_assoc($grps);
 	$gname=$rows['name'];
-	echo "<h4>Valves grouped under <label class='badge'>".$gname."</label></h4>";
+	echo "<h4>You chose <label class='text text-success'>".$gname."</label></h4>";
 	$query="SELECT * FROM switches WHERE switches.groupId=$grp";
 	$results=mysqli_query($con,$query);
 
