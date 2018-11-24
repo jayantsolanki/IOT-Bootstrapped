@@ -214,7 +214,7 @@ include_once 'settings/mqttsetting.php'; //environmental variable for mqtt addre
             },
             animation: 'scale',
             animationSpeed: 400,
-            theme: 'mac',
+            theme: 'white',
             onOpen: function () {
             },
             onClose: function () {
