@@ -673,9 +673,9 @@ if($deviceData!=null){//for device updating
 	$field5=$_POST['field5'];
 	$field6=$_POST['field6'];
 	if($latitude=='')
-		$latitude=null;
+		$latitude="NULL";
 	if($longitude=='')
-		$longitude=null;
+		$longitude="NULL";
 	if($field1=='')
 		$field1=null;
 	if($field2=='')
@@ -689,7 +689,7 @@ if($deviceData!=null){//for device updating
 	if($field6=='')
 		$field6=null;
 
-	if($name!='' || $groupId!='' || $deviceInfo!='' || $latitude!=null || $longitude!=null || $elevation!='')
+	if($name!='' || $groupId!='' || $deviceInfo!='' || $latitude!="NULL" || $longitude!="NULL" || $elevation!='')
 		$status=0;
 	else
 		$status=1;
