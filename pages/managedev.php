@@ -694,7 +694,7 @@ if($deviceData!=null){//for device updating
 	else
 		$status=1;
 	// mysqli_select_db($dbname) or die(mysqli_error());
-	$query="UPDATE devices SET devices.name='$name', description='$deviceInfo', groupId='$groupId', latitude='$latitude', longitude='$longitude', elevation='$elevation', field1='$field1', field2='$field2', field3='$field3', field4='$field4', field5='$field5', field6='$field6',status=$status, updated_at=now() WHERE devices.deviceId='$deviceId'";
+	$query="UPDATE devices SET devices.name='$name', description='$deviceInfo', groupId='$groupId', latitude=$latitude, longitude=$longitude, elevation='$elevation', field1='$field1', field2='$field2', field3='$field3', field4='$field4', field5='$field5', field6='$field6',status=$status, updated_at=now() WHERE devices.deviceId='$deviceId'";
 		
 	if(!mysqli_query($con, $query))
 		echo "Update failed: $query".mysqli_error();
