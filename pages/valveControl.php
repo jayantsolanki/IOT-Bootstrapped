@@ -268,6 +268,8 @@ xmlhttp.onreadystatechange=function()
         
     }
   }
+if (grp==1)
+  grp = $('.mobileSelect').val()
 xmlhttp.open('GET','control.php?grp='+grp,true);
 //alert(grp);
 xmlhttp.send();
