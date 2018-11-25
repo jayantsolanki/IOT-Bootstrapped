@@ -66,7 +66,8 @@ if($deviceId!=null){
 if($deviceActivity!=null){
 	$grpupId=$_GET['grpId'];
 	$jsonArray = array();
-	$query="SELECT * FROM devices WHERE groupId=$grpupId";
+	// $query="SELECT * FROM devices WHERE groupId=$grpupId";
+	$query="SELECT * FROM devices WHERE devices.groupId in (SELECT id from groups where name=\"".$grpupId."\")";
 	$results=mysqli_query($con, $query);
 	if (mysqli_num_rows($results) > 0) 
 	{	
