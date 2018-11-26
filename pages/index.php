@@ -1,11 +1,18 @@
 <?php
     include_once 'settings/iotdb.php';
   //echo "<h4>Valves grouped under <label class='badge'>".$gname."</label></h4>";
-  $query="SELECT * FROM devices WHERE devices.status=1";//new dev
+  $query="SELECT count(id) FROM devices WHERE devices.status=1";//new dev
   $results=mysqli_query($GLOBALS["___mysqli_ston"], $query);
   $newdev=0;
   if(mysqli_num_rows($results)>0)
     $newdev=mysqli_num_rows($results);
+
+$query="SELECT count(id) FROM devices";//new dev
+$results=mysqli_query($GLOBALS["___mysqli_ston"], $query);
+$Totaldev=0;
+if(mysqli_num_rows($results)>0)
+    $Totaldev=mysqli_num_rows($results);
+
 $query="SELECT * FROM switches WHERE switches.newSwitch=1";//new switches
   $results=mysqli_query($GLOBALS["___mysqli_ston"], $query);
   $newSwitch=0;
@@ -42,12 +49,12 @@ $query="SELECT * FROM switches WHERE switches.newSwitch=1";//new switches
      $statusquery="SELECT status from deviceStatus where id in (Select MAX(id) as cid from deviceStatus where deviceId in (Select deviceId from devices) group by deviceId) and status=1";    
       $results=mysqli_query($GLOBALS["___mysqli_ston"], $statusquery);
       $online=0;//
-      if($results)
+      if(mysqli_num_rows($results)>0)
         $online=mysqli_num_rows($results);
     $statusquery="SELECT deviceStatus.status from deviceStatus where id in (Select MAX(id) as cid from deviceStatus where deviceId in (Select deviceId from devices) group by deviceId) and deviceStatus.status=0";    
       $results=mysqli_query($GLOBALS["___mysqli_ston"], $statusquery);
       $offline=0;//manually started
-      if($results)
+      if(mysqli_num_rows($results)>0)
         $offline=mysqli_num_rows($results);
 
 
@@ -121,9 +128,9 @@ $query="SELECT * FROM switches WHERE switches.newSwitch=1";//new switches
                                 </div>
                             </div>
                         </div>
-                        <a href="deviceStatus.php">
+                        <a href="devManagement.php">
                             <div class="panel-footer">
-                                <span class="pull-left"><?php echo ($online+$offline)?> Devices</span>
+                                <span class="pull-left"><?php echo $Totaldev;?> Devices</span>
                                 <span class="pull-right">View Details <i class="fa fa-arrow-circle-right"></i></span>
                                 <span class="pull-right"></span>
                                 <div class="clearfix"></div>
@@ -244,11 +251,11 @@ $query="SELECT * FROM switches WHERE switches.newSwitch=1";//new switches
                     </div>
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <i class="fa fa-bell fa-fw"></i> KyantraIITB
+                            <i class="fa fa-bell fa-fw"></i> MoscaGuy
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
-                            <a class="twitter-timeline" href="https://twitter.com/kyantraIITB" data-widget-id="738695381995769857">Tweets by @kyantraIITB</a>
+                            <a class="twitter-timeline" href="https://twitter.com/MoscaGuy" data-widget-id="738695381995769857">Tweets by @MoscaGuy</a>
                              
                         </div>
                         <!-- /.panel-body -->
