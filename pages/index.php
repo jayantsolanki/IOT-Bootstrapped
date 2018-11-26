@@ -7,7 +7,7 @@
   if(mysqli_num_rows($results)>0)
     $newdev=mysqli_num_rows($results);
 
-$query="SELECT count(id) FROM devices";//new dev
+$query="SELECT id FROM devices";//new dev
 $results=mysqli_query($GLOBALS["___mysqli_ston"], $query);
 $Totaldev=0;
 if(mysqli_num_rows($results)>0)
